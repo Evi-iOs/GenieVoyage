@@ -9,14 +9,15 @@
 /* Begin PBXBuildFile section */
 		D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */; };
 		D0D192D42A6FFF9A000853B8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D32A6FFF9A000853B8 /* SceneDelegate.swift */; };
-		D0D192D62A6FFF9A000853B8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D52A6FFF9A000853B8 /* ViewController.swift */; };
-		D0D192D92A6FFF9A000853B8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0D192D72A6FFF9A000853B8 /* Main.storyboard */; };
+		D0D192D62A6FFF9A000853B8 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D52A6FFF9A000853B8 /* CalendarViewController.swift */; };
 		D0D192DC2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D0D192DA2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld */; };
 		D0D192DE2A6FFF9B000853B8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0D192DD2A6FFF9B000853B8 /* Assets.xcassets */; };
 		D0D192E12A6FFF9B000853B8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0D192DF2A6FFF9B000853B8 /* LaunchScreen.storyboard */; };
 		D0D192EC2A6FFF9B000853B8 /* GenieVoyageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192EB2A6FFF9B000853B8 /* GenieVoyageTests.swift */; };
 		D0D192F62A6FFF9B000853B8 /* GenieVoyageUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192F52A6FFF9B000853B8 /* GenieVoyageUITests.swift */; };
 		D0D192F82A6FFF9B000853B8 /* GenieVoyageUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192F72A6FFF9B000853B8 /* GenieVoyageUITestsLaunchTests.swift */; };
+		D0D193062A705F28000853B8 /* CalendarKit in Frameworks */ = {isa = PBXBuildFile; productRef = D0D193052A705F28000853B8 /* CalendarKit */; };
+		D0D193082A71AC36000853B8 /* EKWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D193072A71AC36000853B8 /* EKWrapper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,8 +41,7 @@
 		D0D192CE2A6FFF9A000853B8 /* GenieVoyage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GenieVoyage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D0D192D32A6FFF9A000853B8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		D0D192D52A6FFF9A000853B8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		D0D192D82A6FFF9A000853B8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		D0D192D52A6FFF9A000853B8 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		D0D192DB2A6FFF9A000853B8 /* GenieVoyage.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GenieVoyage.xcdatamodel; sourceTree = "<group>"; };
 		D0D192DD2A6FFF9B000853B8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D0D192E02A6FFF9B000853B8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -51,6 +51,7 @@
 		D0D192F12A6FFF9B000853B8 /* GenieVoyageUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GenieVoyageUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0D192F52A6FFF9B000853B8 /* GenieVoyageUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenieVoyageUITests.swift; sourceTree = "<group>"; };
 		D0D192F72A6FFF9B000853B8 /* GenieVoyageUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenieVoyageUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		D0D193072A71AC36000853B8 /* EKWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EKWrapper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0D193062A705F28000853B8 /* CalendarKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,8 +105,8 @@
 			children = (
 				D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */,
 				D0D192D32A6FFF9A000853B8 /* SceneDelegate.swift */,
-				D0D192D52A6FFF9A000853B8 /* ViewController.swift */,
-				D0D192D72A6FFF9A000853B8 /* Main.storyboard */,
+				D0D193072A71AC36000853B8 /* EKWrapper.swift */,
+				D0D192D52A6FFF9A000853B8 /* CalendarViewController.swift */,
 				D0D192DD2A6FFF9B000853B8 /* Assets.xcassets */,
 				D0D192DF2A6FFF9B000853B8 /* LaunchScreen.storyboard */,
 				D0D192E22A6FFF9B000853B8 /* Info.plist */,
@@ -146,6 +148,9 @@
 			dependencies = (
 			);
 			name = GenieVoyage;
+			packageProductDependencies = (
+				D0D193052A705F28000853B8 /* CalendarKit */,
+			);
 			productName = GenieVoyage;
 			productReference = D0D192CE2A6FFF9A000853B8 /* GenieVoyage.app */;
 			productType = "com.apple.product-type.application";
@@ -218,6 +223,9 @@
 				Base,
 			);
 			mainGroup = D0D192C52A6FFF9A000853B8;
+			packageReferences = (
+				D0D193042A705F28000853B8 /* XCRemoteSwiftPackageReference "CalendarKit" */,
+			);
 			productRefGroup = D0D192CF2A6FFF9A000853B8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -236,7 +244,6 @@
 			files = (
 				D0D192E12A6FFF9B000853B8 /* LaunchScreen.storyboard in Resources */,
 				D0D192DE2A6FFF9B000853B8 /* Assets.xcassets in Resources */,
-				D0D192D92A6FFF9A000853B8 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,10 +268,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0D192D62A6FFF9A000853B8 /* ViewController.swift in Sources */,
+				D0D192D62A6FFF9A000853B8 /* CalendarViewController.swift in Sources */,
 				D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */,
 				D0D192D42A6FFF9A000853B8 /* SceneDelegate.swift in Sources */,
 				D0D192DC2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld in Sources */,
+				D0D193082A71AC36000853B8 /* EKWrapper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,14 +309,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		D0D192D72A6FFF9A000853B8 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D0D192D82A6FFF9A000853B8 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		D0D192DF2A6FFF9B000853B8 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -443,9 +443,9 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GenieVoyage/Info.plist;
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "The app needs access to the calendar to display events";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -470,9 +470,9 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GenieVoyage/Info.plist;
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "The app needs access to the calendar to display events";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -600,6 +600,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D0D193042A705F28000853B8 /* XCRemoteSwiftPackageReference "CalendarKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/richardtop/CalendarKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D0D193052A705F28000853B8 /* CalendarKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D0D193042A705F28000853B8 /* XCRemoteSwiftPackageReference "CalendarKit" */;
+			productName = CalendarKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		D0D192DA2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld */ = {
