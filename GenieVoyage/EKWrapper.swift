@@ -11,23 +11,15 @@ import EventKit
 
 public final class EKWrapper: EventDescriptor {
     
-//    public var startDate: Date {
-//        get {
-//            return ekEvent.startDate
-//        }
-//        set {
-//            return ekEvent.startDate = newValue
-//        }
-//    }
-//    public var endDate: Date {
-//        get {
-//            return ekEvent.endDate
-//        }
-//        set {
-//            return ekEvent.endDate = newValue
-//        }
-//    }
-    public var dateInterval = DateInterval()
+    public var dateInterval: DateInterval {
+        get {
+            DateInterval(start: ekEvent.startDate, end: ekEvent.endDate)
+        }
+        set {
+            ekEvent.startDate = newValue.start
+            ekEvent.endDate = newValue.end
+        }
+    }
     
     public var isAllDay: Bool {
         get {
@@ -71,7 +63,9 @@ public final class EKWrapper: EventDescriptor {
     }
 
     public func makeEditable() -> EKWrapper {
-        fatalError()
+        let cloned = Self(eventKitEvent: ekEvent)
+        cloned.editedEvent = self
+        return cloned
     }
 
     public func commitEditing() {
