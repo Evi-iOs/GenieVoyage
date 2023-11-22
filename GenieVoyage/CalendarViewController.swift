@@ -19,6 +19,10 @@ class CalendarViewController: DayViewController, EKEventEditViewDelegate {
         title = "Calendar"
         requestAccessToCalendar()
         subscribeNotifications()
+        
+        print("\(CoreDataManager.schared.fetchTrips())")
+        CoreDataManager.schared.deleteTrip(with: 1)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
