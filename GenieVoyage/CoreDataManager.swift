@@ -23,7 +23,7 @@ final class CoreDataManager {
         appDelegate.persistentContainer.viewContext
     }
     
-    func createNewTrip(_ id: Int16, dateTrip: Date, returnTrip: Date?, destination: String, transferDate: Date?, returnTransferDate: Date?, lodginName: String?, hotelArrivalDate: Date?, hotelDepatureDate: Date?) {
+    func createNewTrip(id: Int16, dateTrip: Date, returnTrip: Date?, destination: String, transferDate: Date?, returnTransferDate: Date?, lodginName: String?, hotelArrivalDate: Date?, hotelDepatureDate: Date?) {
         
         guard let newTripEntityDesription = NSEntityDescription.entity(forEntityName: "NewTrip", in: context) else { return }
         
@@ -41,6 +41,12 @@ final class CoreDataManager {
         appDelegate.saveContext()
     }
     
+    func logCoreDataDBPath() {
+        if let url = appDelegate.persistentContainer.persistentStoreCoordinator.persistentStores.first?.url {
+            print("DB url - \(url)")
+        }
+    }
+    
     func fetchTrips() -> [NewTrip] {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "NewTrip")
         do {
@@ -50,7 +56,7 @@ final class CoreDataManager {
     
     func fetchTrip(with id: Int16) -> NewTrip? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "NewTrip")
-        let predicate = NSPredicate(format: "id == %@")
+        let predicate = NSPredicate(format: "id == %ld", id)
         fetchRequest.predicate = predicate
         do {
             let trips = try? context.fetch(fetchRequest) as? [NewTrip]
@@ -85,9 +91,9 @@ final class CoreDataManager {
         appDelegate.saveContext()
     }
     
-    func deleteTrip(with idTrip: Int16) {
+    func deleteTrip(with id: Int16) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "NewTrip")
-        fetchRequest.predicate = NSPredicate(format: "id == %@")
+        fetchRequest.predicate = NSPredicate(format: "id == %ld", id)
         do {
             guard let trips = try? context.fetch(fetchRequest) as? [NewTrip],
                   let trip = trips.first else { return }

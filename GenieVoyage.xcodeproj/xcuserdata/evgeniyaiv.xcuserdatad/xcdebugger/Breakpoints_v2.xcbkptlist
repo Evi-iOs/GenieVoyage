@@ -14,13 +14,13 @@
             filePath = "GenieVoyage/CalendarViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "131"
-            endingLineNumber = "131"
+            startingLineNumber = "133"
+            endingLineNumber = "133"
             landmarkName = "dayView(dayView:didLongPressTimelineAt:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "CCCAC776-035C-4035-BFB5-BB67ACFF8E82 - 55542c4c6296b45f"
+                  uuid = "CCCAC776-035C-4035-BFB5-BB67ACFF8E82 - 55542c4c6296b5fa"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -30,12 +30,12 @@
                   urlString = "file:///Users/evgeniyaiv/Documents/GenieVoyage/GenieVoyage/CalendarViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "131"
-                  endingLineNumber = "131"
-                  offsetFromSymbolStart = "96">
+                  startingLineNumber = "134"
+                  endingLineNumber = "134"
+                  offsetFromSymbolStart = "56">
                </Location>
                <Location
-                  uuid = "CCCAC776-035C-4035-BFB5-BB67ACFF8E82 - 55542c4c6296b45f"
+                  uuid = "CCCAC776-035C-4035-BFB5-BB67ACFF8E82 - 55542c4c6296b59d"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -45,8 +45,8 @@
                   urlString = "file:///Users/evgeniyaiv/Documents/GenieVoyage/GenieVoyage/CalendarViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "131"
-                  endingLineNumber = "131"
+                  startingLineNumber = "133"
+                  endingLineNumber = "133"
                   offsetFromSymbolStart = "56">
                </Location>
             </Locations>
@@ -62,8 +62,8 @@
             filePath = "GenieVoyage/CoreDataManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "54"
-            endingLineNumber = "54"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
             landmarkName = "fetchTrip(with:)"
             landmarkType = "7">
             <Locations>
@@ -118,215 +118,47 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "22428A50-1CE2-4754-B6D3-CFAF5363F4D0"
+            uuid = "8C2AAF90-1CA7-4841-B673-9E8499E9C30D"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "GenieVoyage/CoreDataManager.swift"
+            filePath = "GenieVoyage/StartViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "89"
-            endingLineNumber = "89"
-            landmarkName = "deleteTrip(with:)"
+            startingLineNumber = "15"
+            endingLineNumber = "15"
+            landmarkName = "viewDidLoad()"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "22428A50-1CE2-4754-B6D3-CFAF5363F4D0 - 8c8a8ddd7dc1d465"
+                  uuid = "8C2AAF90-1CA7-4841-B673-9E8499E9C30D - 8209bcfede3eba08"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "GenieVoyage.CoreDataManager.deleteTrip(with: Swift.Int16) -&gt; ()"
+                  symbolName = "GenieVoyage.StartViewController.viewDidLoad() -&gt; ()"
                   moduleName = "GenieVoyage"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/evgeniyaiv/Documents/GenieVoyage/GenieVoyage/CoreDataManager.swift"
+                  urlString = "file:///Users/evgeniyaiv/Documents/GenieVoyage/GenieVoyage/StartViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "89"
-                  endingLineNumber = "89"
-                  offsetFromSymbolStart = "64">
+                  startingLineNumber = "15"
+                  endingLineNumber = "15"
+                  offsetFromSymbolStart = "92">
                </Location>
                <Location
-                  uuid = "22428A50-1CE2-4754-B6D3-CFAF5363F4D0 - 8c8a8ddd7dc1d465"
+                  uuid = "8C2AAF90-1CA7-4841-B673-9E8499E9C30D - 8209bcfede3eba29"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "GenieVoyage.CoreDataManager.deleteTrip(with: Swift.Int16) -&gt; ()"
+                  symbolName = "GenieVoyage.StartViewController.viewDidLoad() -&gt; ()"
                   moduleName = "GenieVoyage"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/evgeniyaiv/Documents/GenieVoyage/GenieVoyage/CoreDataManager.swift"
+                  urlString = "file:///Users/evgeniyaiv/Documents/GenieVoyage/GenieVoyage/StartViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "89"
-                  endingLineNumber = "89"
-                  offsetFromSymbolStart = "84">
-               </Location>
-               <Location
-                  uuid = "22428A50-1CE2-4754-B6D3-CFAF5363F4D0 - 8c8a8ddd7dc1d465"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GenieVoyage.CoreDataManager.deleteTrip(with: Swift.Int16) -&gt; ()"
-                  moduleName = "GenieVoyage"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/evgeniyaiv/Documents/GenieVoyage/GenieVoyage/CoreDataManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "89"
-                  endingLineNumber = "89"
-                  offsetFromSymbolStart = "68">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "13944563-FCCF-43C5-8471-2334C51CB47A"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "GenieVoyage/CoreDataManager.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "93"
-            endingLineNumber = "93"
-            landmarkName = "deleteTrip(with:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "13944563-FCCF-43C5-8471-2334C51CB47A - 8c8a8ddd7dc1d7e9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GenieVoyage.CoreDataManager.deleteTrip(with: Swift.Int16) -&gt; ()"
-                  moduleName = "GenieVoyage"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/evgeniyaiv/Documents/GenieVoyage/GenieVoyage/CoreDataManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "93"
-                  endingLineNumber = "93"
-                  offsetFromSymbolStart = "460">
-               </Location>
-               <Location
-                  uuid = "13944563-FCCF-43C5-8471-2334C51CB47A - 8c8a8ddd7dc1d7e9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GenieVoyage.CoreDataManager.deleteTrip(with: Swift.Int16) -&gt; ()"
-                  moduleName = "GenieVoyage"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/evgeniyaiv/Documents/GenieVoyage/GenieVoyage/CoreDataManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "93"
-                  endingLineNumber = "93"
-                  offsetFromSymbolStart = "576">
-               </Location>
-               <Location
-                  uuid = "13944563-FCCF-43C5-8471-2334C51CB47A - 8c8a8ddd7dc1d7e9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GenieVoyage.CoreDataManager.deleteTrip(with: Swift.Int16) -&gt; ()"
-                  moduleName = "GenieVoyage"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/evgeniyaiv/Documents/GenieVoyage/GenieVoyage/CoreDataManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "93"
-                  endingLineNumber = "93"
-                  offsetFromSymbolStart = "716">
-               </Location>
-               <Location
-                  uuid = "13944563-FCCF-43C5-8471-2334C51CB47A - 8c8a8ddd7dc1d7e9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GenieVoyage.CoreDataManager.deleteTrip(with: Swift.Int16) -&gt; ()"
-                  moduleName = "GenieVoyage"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/evgeniyaiv/Documents/GenieVoyage/GenieVoyage/CoreDataManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "93"
-                  endingLineNumber = "93"
-                  offsetFromSymbolStart = "656">
-               </Location>
-               <Location
-                  uuid = "13944563-FCCF-43C5-8471-2334C51CB47A - 8c8a8ddd7dc1d7e9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GenieVoyage.CoreDataManager.deleteTrip(with: Swift.Int16) -&gt; ()"
-                  moduleName = "GenieVoyage"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/evgeniyaiv/Documents/GenieVoyage/GenieVoyage/CoreDataManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "93"
-                  endingLineNumber = "93"
-                  offsetFromSymbolStart = "772">
-               </Location>
-               <Location
-                  uuid = "13944563-FCCF-43C5-8471-2334C51CB47A - 8c8a8ddd7dc1d7e9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GenieVoyage.CoreDataManager.deleteTrip(with: Swift.Int16) -&gt; ()"
-                  moduleName = "GenieVoyage"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/evgeniyaiv/Documents/GenieVoyage/GenieVoyage/CoreDataManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "93"
-                  endingLineNumber = "93"
-                  offsetFromSymbolStart = "912">
-               </Location>
-               <Location
-                  uuid = "13944563-FCCF-43C5-8471-2334C51CB47A - 8c8a8ddd7dc1d7e9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GenieVoyage.CoreDataManager.deleteTrip(with: Swift.Int16) -&gt; ()"
-                  moduleName = "GenieVoyage"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/evgeniyaiv/Documents/GenieVoyage/GenieVoyage/CoreDataManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "93"
-                  endingLineNumber = "93"
-                  offsetFromSymbolStart = "512">
-               </Location>
-               <Location
-                  uuid = "13944563-FCCF-43C5-8471-2334C51CB47A - 8c8a8ddd7dc1d7e9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GenieVoyage.CoreDataManager.deleteTrip(with: Swift.Int16) -&gt; ()"
-                  moduleName = "GenieVoyage"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/evgeniyaiv/Documents/GenieVoyage/GenieVoyage/CoreDataManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "93"
-                  endingLineNumber = "93"
-                  offsetFromSymbolStart = "628">
-               </Location>
-               <Location
-                  uuid = "13944563-FCCF-43C5-8471-2334C51CB47A - 8c8a8ddd7dc1d7e9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GenieVoyage.CoreDataManager.deleteTrip(with: Swift.Int16) -&gt; ()"
-                  moduleName = "GenieVoyage"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/evgeniyaiv/Documents/GenieVoyage/GenieVoyage/CoreDataManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "93"
-                  endingLineNumber = "93"
-                  offsetFromSymbolStart = "768">
+                  startingLineNumber = "16"
+                  endingLineNumber = "16"
+                  offsetFromSymbolStart = "76">
                </Location>
             </Locations>
          </BreakpointContent>

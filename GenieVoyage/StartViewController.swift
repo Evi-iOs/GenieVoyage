@@ -12,7 +12,7 @@ class StartViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        CoreDataManager.schared.createNewTrip(1, dateTrip: Date(), returnTrip: Date(), destination: "ssss", transferDate: Date(), returnTransferDate: Date(), lodginName: "dsf", hotelArrivalDate: Date(), hotelDepatureDate: Date())
+        
     }
     
     

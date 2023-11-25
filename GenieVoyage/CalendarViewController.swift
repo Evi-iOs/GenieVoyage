@@ -19,9 +19,11 @@ class CalendarViewController: DayViewController, EKEventEditViewDelegate {
         title = "Calendar"
         requestAccessToCalendar()
         subscribeNotifications()
+                
+        let date = Date("2014-06-06")
         
-        print("\(CoreDataManager.schared.fetchTrips())")
-        CoreDataManager.schared.deleteTrip(with: 1)
+       
+       CoreDataManager.schared.deleteTrip(with: 5)
         
     }
     
