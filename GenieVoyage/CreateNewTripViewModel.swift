@@ -27,5 +27,9 @@ class CreateNewTripViewModel {
         self.hotelArrivalDate = hotelArrivalDate
         self.hotelDepartureDate = hotelDepartureDate
     }
+    
+    func createTripSelected() {
+        
+    }
 
 }

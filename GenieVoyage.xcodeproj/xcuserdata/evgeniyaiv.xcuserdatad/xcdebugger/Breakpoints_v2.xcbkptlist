@@ -14,13 +14,28 @@
             filePath = "GenieVoyage/CalendarViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "133"
-            endingLineNumber = "133"
+            startingLineNumber = "127"
+            endingLineNumber = "127"
             landmarkName = "dayView(dayView:didLongPressTimelineAt:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "CCCAC776-035C-4035-BFB5-BB67ACFF8E82 - 55542c4c6296b5fa"
+                  uuid = "CCCAC776-035C-4035-BFB5-BB67ACFF8E82 - 6052babe92b7740"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GenieVoyage.CalendarViewController.dayViewDidBeginDragging(dayView: CalendarKit.DayView) -&gt; ()"
+                  moduleName = "GenieVoyage"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/evgeniyaiv/Documents/GenieVoyage/GenieVoyage/CalendarViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "129"
+                  endingLineNumber = "129"
+                  offsetFromSymbolStart = "32">
+               </Location>
+               <Location
+                  uuid = "CCCAC776-035C-4035-BFB5-BB67ACFF8E82 - 55542c4c6296b4c0"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -30,12 +45,12 @@
                   urlString = "file:///Users/evgeniyaiv/Documents/GenieVoyage/GenieVoyage/CalendarViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "134"
-                  endingLineNumber = "134"
+                  startingLineNumber = "128"
+                  endingLineNumber = "128"
                   offsetFromSymbolStart = "56">
                </Location>
                <Location
-                  uuid = "CCCAC776-035C-4035-BFB5-BB67ACFF8E82 - 55542c4c6296b59d"
+                  uuid = "CCCAC776-035C-4035-BFB5-BB67ACFF8E82 - 55542c4c6296b4e3"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -45,8 +60,8 @@
                   urlString = "file:///Users/evgeniyaiv/Documents/GenieVoyage/GenieVoyage/CalendarViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "133"
-                  endingLineNumber = "133"
+                  startingLineNumber = "127"
+                  endingLineNumber = "127"
                   offsetFromSymbolStart = "56">
                </Location>
             </Locations>

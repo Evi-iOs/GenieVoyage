@@ -10,9 +10,9 @@
 		D0010B252AF6830D00BAEC46 /* NewTrip+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0010B232AF6830D00BAEC46 /* NewTrip+CoreDataProperties.swift */; };
 		D0010B2A2AF69F8D00BAEC46 /* CreateNewTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0010B292AF69F8D00BAEC46 /* CreateNewTripViewController.swift */; };
 		D0010B2C2B12A24200BAEC46 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0010B2B2B12A24200BAEC46 /* Extension.swift */; };
+		D0010B2E2B1BD10500BAEC46 /* CreateTripView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0010B2D2B1BD10500BAEC46 /* CreateTripView.xib */; };
+		D0010B302B1BD13300BAEC46 /* CreateTripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0010B2F2B1BD13300BAEC46 /* CreateTripView.swift */; };
 		D0949A302A8FFE0F005E310D /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0949A2F2A8FFE0F005E310D /* StartViewController.swift */; };
-		D0949A392AF2E207005E310D /* CreateNewTripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0949A382AF2E207005E310D /* CreateNewTripView.swift */; };
-		D0949A3B2AF2E24B005E310D /* CreateNewTrip.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0949A3A2AF2E24B005E310D /* CreateNewTrip.xib */; };
 		D0949A3D2AF2FB26005E310D /* CreateNewTripViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0949A3C2AF2FB26005E310D /* CreateNewTripViewModel.swift */; };
 		D0949A3F2AF32444005E310D /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0949A3E2AF32444005E310D /* CoreDataManager.swift */; };
 		D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */; };
@@ -49,9 +49,9 @@
 		D0010B232AF6830D00BAEC46 /* NewTrip+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NewTrip+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		D0010B292AF69F8D00BAEC46 /* CreateNewTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewTripViewController.swift; sourceTree = "<group>"; };
 		D0010B2B2B12A24200BAEC46 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		D0010B2D2B1BD10500BAEC46 /* CreateTripView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CreateTripView.xib; sourceTree = "<group>"; };
+		D0010B2F2B1BD13300BAEC46 /* CreateTripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTripView.swift; sourceTree = "<group>"; };
 		D0949A2F2A8FFE0F005E310D /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
-		D0949A382AF2E207005E310D /* CreateNewTripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewTripView.swift; sourceTree = "<group>"; };
-		D0949A3A2AF2E24B005E310D /* CreateNewTrip.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CreateNewTrip.xib; sourceTree = "<group>"; };
 		D0949A3C2AF2FB26005E310D /* CreateNewTripViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewTripViewModel.swift; sourceTree = "<group>"; };
 		D0949A3E2AF32444005E310D /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		D0D192CE2A6FFF9A000853B8 /* GenieVoyage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GenieVoyage.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,8 +100,8 @@
 			isa = PBXGroup;
 			children = (
 				D0010B292AF69F8D00BAEC46 /* CreateNewTripViewController.swift */,
-				D0949A382AF2E207005E310D /* CreateNewTripView.swift */,
-				D0949A3A2AF2E24B005E310D /* CreateNewTrip.xib */,
+				D0010B2D2B1BD10500BAEC46 /* CreateTripView.xib */,
+				D0010B2F2B1BD13300BAEC46 /* CreateTripView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -275,7 +275,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0D192E12A6FFF9B000853B8 /* LaunchScreen.storyboard in Resources */,
-				D0949A3B2AF2E24B005E310D /* CreateNewTrip.xib in Resources */,
+				D0010B2E2B1BD10500BAEC46 /* CreateTripView.xib in Resources */,
 				D0D192DE2A6FFF9B000853B8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -310,9 +310,9 @@
 				D0D192DC2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld in Sources */,
 				D0D193082A71AC36000853B8 /* EKWrapper.swift in Sources */,
 				D0010B2A2AF69F8D00BAEC46 /* CreateNewTripViewController.swift in Sources */,
+				D0010B302B1BD13300BAEC46 /* CreateTripView.swift in Sources */,
 				D0949A3F2AF32444005E310D /* CoreDataManager.swift in Sources */,
 				D0949A302A8FFE0F005E310D /* StartViewController.swift in Sources */,
-				D0949A392AF2E207005E310D /* CreateNewTripView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
