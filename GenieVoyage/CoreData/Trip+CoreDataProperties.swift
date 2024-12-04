@@ -12,7 +12,7 @@ import CoreData
 
 extension Trip {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Trip> {
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Trip> { 
         return NSFetchRequest<Trip>(entityName: "Trip")
     }
 
@@ -22,6 +22,7 @@ extension Trip {
     @NSManaged public var notes: String?
     @NSManaged public var startDate: Date?
     @NSManaged public var titel: String?
+    @NSManaged public var descriptionTrip: String?
     @NSManaged public var destination: NSSet?
 
 }

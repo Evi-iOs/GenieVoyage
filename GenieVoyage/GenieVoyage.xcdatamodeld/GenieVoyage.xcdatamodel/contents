@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22F82" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="NewTrip" representedClassName="NewTrip" syncable="YES">
-        <attribute name="dateTrip" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="destination" optional="YES" attributeType="String"/>
-        <attribute name="hotelArriveDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="hotelDepatureDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="lodging" optional="YES" attributeType="String"/>
-        <attribute name="returnTransfer" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="returnTrip" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="transferDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <relationship name="relationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NewTrip" inverseName="relationship" inverseEntity="NewTrip"/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23507" systemVersion="24B91" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Destination" representedClassName="Destination" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="details" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="location" optional="YES" attributeType="Transformable"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="notes" optional="YES" attributeType="String"/>
+        <relationship name="trip" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Trip" inverseName="destination" inverseEntity="Trip"/>
+    </entity>
+    <entity name="Trip" representedClassName="Trip" syncable="YES">
+        <attribute name="coverImage" optional="YES" attributeType="URI"/>
+        <attribute name="descriptionTrip" optional="YES" attributeType="String"/>
+        <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="notes" optional="YES" attributeType="String"/>
+        <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="titel" optional="YES" attributeType="String"/>
+        <relationship name="destination" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Destination" inverseName="trip" inverseEntity="Destination"/>
     </entity>
 </model>

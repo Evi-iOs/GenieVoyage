@@ -27,7 +27,7 @@ class CalendarViewController: DayViewController, EKEventEditViewDelegate {
     }
     
     func requestAccessToCalendar() {
-        eventStore.requestAccess(to: .event) { [weak self] granted, error in
+        eventStore.requestFullAccessToEvents(completion:) { [weak self] granted, error in
             DispatchQueue.main.async {
                 guard let self else { return }
                 self.initializeStore()

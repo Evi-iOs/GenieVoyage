@@ -22,5 +22,6 @@ extension Destination {
     @NSManaged public var name: String?
     @NSManaged public var notes: String?
     @NSManaged public var trip: Trip?
-
+    @NSManaged public var detail: String?
+    
 }
