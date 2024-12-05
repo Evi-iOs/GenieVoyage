@@ -10,6 +10,8 @@ import UIKit
 
 class MapViewController: UIViewController {
     var mapView: MKMapView!
+    
+    var onPlaceSelected: ((TripModel) -> Void)?
 
     override func viewDidLoad() {
         super.viewDidLoad()
