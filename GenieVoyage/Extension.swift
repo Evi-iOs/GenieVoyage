@@ -55,6 +55,7 @@ extension UIButton {
         self.layer.shadowOffset = CGSize(width: 0, height: 2)
         self.layer.shadowOpacity = 0.3
         self.layer.shadowRadius = 4
+        self.layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.layer.cornerRadius).cgPath
         
         if let textureImageName = textureImageName, let textureImage = UIImage(named: textureImageName) {
             self.layer.contents = textureImage.cgImage

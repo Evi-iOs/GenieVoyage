@@ -26,10 +26,11 @@ struct DestinationModel {
     var date: Date
     var notes: String
     var location: CLLocationCoordinate2D?
+    var category: DestinationCategory?
 }
 
 enum DestinationCategory: String {
-    case food, attraction, hotel, transport
+    case food, attraction, hotel, transport, shopping
 }
 
 

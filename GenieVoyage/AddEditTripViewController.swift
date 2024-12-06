@@ -16,14 +16,22 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
     //UI elements
     private let titleTextField = UITextField()
     private let descriptionTextView = UITextView()
+    
+    private let startDateLabel = UILabel()
+    private let endDateLabel = UILabel()
     private let startDatePicker = UIDatePicker()
     private let endDatePicker = UIDatePicker()
+    
     private let coverImageView = UIImageView()
     private let addCoverButton = UIButton(type: .system)
+    
+    private let routeLabel = UILabel()
     private let placesTableView = UITableView()
     private let addPlaceButton = UIButton(type: .system)
+    
     private let saveButton = UIButton(type: .system)
     private let cancelButton = UIButton(type: .system)
+    
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
@@ -53,7 +61,7 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
         navigationItem.title = trip == nil ? "Add Trip" : "Edit Trip"
         
         titleTextField.placeholder = "Title Trip"
-        titleTextField.font = UIFont.systemFont(ofSize: 18)
+        titleTextField.font = UIFont.boldSystemFont(ofSize: 20)
         titleTextField.borderStyle = .roundedRect
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
         
@@ -62,6 +70,14 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
         descriptionTextView.layer.borderColor = UIColor.lightGray.cgColor
         descriptionTextView.layer.cornerRadius = 6
         descriptionTextView.translatesAutoresizingMaskIntoConstraints = false
+        
+        startDateLabel.text = "Start Date Trip"
+        startDateLabel.font = UIFont.systemFont(ofSize: 18)
+        startDateLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        endDateLabel.text = "End Date Trip"
+        endDateLabel.font = UIFont.systemFont(ofSize: 18)
+        endDateLabel.translatesAutoresizingMaskIntoConstraints = false
         
         startDatePicker.datePickerMode = .date
         startDatePicker.preferredDatePickerStyle = .automatic
@@ -73,14 +89,18 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
         
         coverImageView.contentMode = .scaleAspectFill
         coverImageView.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
-        coverImageView.layer.cornerRadius = 10
+        coverImageView.layer.cornerRadius = 20
         coverImageView.clipsToBounds = true
         coverImageView.translatesAutoresizingMaskIntoConstraints = false
         
-        addCoverButton.setTitle("Add Cover", for: .normal)
+        addCoverButton.applyPaperStyleWithGloss(withText: "Add Cover")
         addCoverButton.addTarget(self, action: #selector(addCoverTapped), for: .touchUpInside)
         addCoverButton.translatesAutoresizingMaskIntoConstraints = false
-               
+             
+        routeLabel.text = "Route"
+        routeLabel.font = UIFont.boldSystemFont(ofSize: 28)
+        routeLabel.translatesAutoresizingMaskIntoConstraints = false
+        
         placesTableView.dataSource = self
         placesTableView.delegate = self
         placesTableView.layer.borderColor = UIColor.gray.cgColor
@@ -89,7 +109,7 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
         placesTableView.translatesAutoresizingMaskIntoConstraints = false
         placesTableView.isScrollEnabled = false
         
-        addPlaceButton.setTitle("Add Place", for: .normal)
+        addPlaceButton.applyPaperStyleWithGloss(withText: "Add Place")
         addPlaceButton.addTarget(self, action: #selector(addPlaceTapped), for: .touchUpInside)
         addPlaceButton.translatesAutoresizingMaskIntoConstraints = false
         
@@ -103,10 +123,13 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
         
         contentView.addSubview(titleTextField)
         contentView.addSubview(descriptionTextView)
+        contentView.addSubview(startDateLabel)
+        contentView.addSubview(endDateLabel)
         contentView.addSubview(startDatePicker)
         contentView.addSubview(endDatePicker)
         contentView.addSubview(coverImageView)
         contentView.addSubview(addCoverButton)
+        contentView.addSubview(routeLabel)
         contentView.addSubview(placesTableView)
         contentView.addSubview(addPlaceButton)
         contentView.addSubview(cancelButton)
@@ -160,39 +183,54 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
         
     private func setupConstraints() {
         NSLayoutConstraint.activate([
+            //Cover Image
+            coverImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            coverImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            coverImageView.trailingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -10),
+            coverImageView.heightAnchor.constraint(equalToConstant: 150),
+            
+            //Title
             titleTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            titleTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            titleTextField.leadingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 10),
             titleTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
             descriptionTextView.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 16),
-            descriptionTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            descriptionTextView.leadingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 10),
             descriptionTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             descriptionTextView.heightAnchor.constraint(equalToConstant: 50),
             
-            startDatePicker.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor, constant: 20),
-            startDatePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            // Add Cover Button
+            addCoverButton.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor, constant: 16),
+            addCoverButton.leadingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 10),
+            addCoverButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            
+            //Date Label
+            startDateLabel.bottomAnchor.constraint(equalTo: startDatePicker.bottomAnchor),
+            startDateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            
+            endDateLabel.bottomAnchor.constraint(equalTo: endDatePicker.bottomAnchor),
+            endDateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            
+            //Date Picker
+            startDatePicker.topAnchor.constraint(equalTo: addCoverButton.bottomAnchor, constant: 20),
+            startDatePicker.leadingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 10),
             
             endDatePicker.topAnchor.constraint(equalTo: startDatePicker.bottomAnchor, constant: 10),
-            endDatePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            
-            coverImageView.topAnchor.constraint(equalTo: endDatePicker.bottomAnchor, constant: 20),
-            coverImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            coverImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            coverImageView.heightAnchor.constraint(equalToConstant: 100),
-            
-            // Add Cover Button
-            addCoverButton.topAnchor.constraint(equalTo: coverImageView.bottomAnchor, constant: 10),
-            addCoverButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            endDatePicker.leadingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 10),
             
             // Places Table View
-            placesTableView.topAnchor.constraint(equalTo: addCoverButton.bottomAnchor, constant: 20),
+            routeLabel.topAnchor.constraint(equalTo: endDatePicker.bottomAnchor, constant: 25),
+            routeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            
+            placesTableView.topAnchor.constraint(equalTo: routeLabel.bottomAnchor, constant: 10),
             placesTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             placesTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             placesTableView.heightAnchor.constraint(equalToConstant: 100),
 
             // Add Place Button
-            addPlaceButton.topAnchor.constraint(equalTo: placesTableView.bottomAnchor, constant: 10),
-            addPlaceButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            addPlaceButton.topAnchor.constraint(equalTo: placesTableView.bottomAnchor, constant: 20),
+            addPlaceButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            addPlaceButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             
             // Save Button
             saveButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
