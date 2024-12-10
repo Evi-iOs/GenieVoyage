@@ -18,6 +18,8 @@
 		D0365DF52CFA723600D711A9 /* TripDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0365DF42CFA723600D711A9 /* TripDetailViewController.swift */; };
 		D0365DF72CFA737200D711A9 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0365DF62CFA737200D711A9 /* MapViewController.swift */; };
 		D0365DF92CFDC76F00D711A9 /* CalculateDistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0365DF82CFDC76F00D711A9 /* CalculateDistance.swift */; };
+		D03D08652D0730CE009F8E63 /* PlanDayDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03D08642D0730CE009F8E63 /* PlanDayDetailViewController.swift */; };
+		D03D08672D074316009F8E63 /* ItineraryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03D08662D074316009F8E63 /* ItineraryCell.swift */; };
 		D043B43D2CFF6DDE00151ED0 /* AddEditTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D043B43C2CFF6DDE00151ED0 /* AddEditTripViewController.swift */; };
 		D0949A3D2AF2FB26005E310D /* CreateNewTripViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0949A3C2AF2FB26005E310D /* CreateNewTripViewModel.swift */; };
 		D0949A3F2AF32444005E310D /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0949A3E2AF32444005E310D /* CoreDataManager.swift */; };
@@ -70,6 +72,8 @@
 		D0365DF42CFA723600D711A9 /* TripDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripDetailViewController.swift; sourceTree = "<group>"; };
 		D0365DF62CFA737200D711A9 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		D0365DF82CFDC76F00D711A9 /* CalculateDistance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateDistance.swift; sourceTree = "<group>"; };
+		D03D08642D0730CE009F8E63 /* PlanDayDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanDayDetailViewController.swift; sourceTree = "<group>"; };
+		D03D08662D074316009F8E63 /* ItineraryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryCell.swift; sourceTree = "<group>"; };
 		D043B43C2CFF6DDE00151ED0 /* AddEditTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditTripViewController.swift; sourceTree = "<group>"; };
 		D0949A3C2AF2FB26005E310D /* CreateNewTripViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewTripViewModel.swift; sourceTree = "<group>"; };
 		D0949A3E2AF32444005E310D /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
@@ -185,6 +189,8 @@
 				D0365DF02CFA6BE700D711A9 /* TripModel.swift */,
 				D0365DF22CFA6D3500D711A9 /* TripsViewController.swift */,
 				D043B43C2CFF6DDE00151ED0 /* AddEditTripViewController.swift */,
+				D03D08662D074316009F8E63 /* ItineraryCell.swift */,
+				D03D08642D0730CE009F8E63 /* PlanDayDetailViewController.swift */,
 				D0365DF42CFA723600D711A9 /* TripDetailViewController.swift */,
 				D0365DF62CFA737200D711A9 /* MapViewController.swift */,
 				D0365DF82CFDC76F00D711A9 /* CalculateDistance.swift */,
@@ -469,8 +475,10 @@
 				D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */,
 				D0D192D42A6FFF9A000853B8 /* SceneDelegate.swift in Sources */,
 				D043B43D2CFF6DDE00151ED0 /* AddEditTripViewController.swift in Sources */,
+				D03D08652D0730CE009F8E63 /* PlanDayDetailViewController.swift in Sources */,
 				D0D192DC2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld in Sources */,
 				D0365DF32CFA6D3500D711A9 /* TripsViewController.swift in Sources */,
+				D03D08672D074316009F8E63 /* ItineraryCell.swift in Sources */,
 				D0D193082A71AC36000853B8 /* EKWrapper.swift in Sources */,
 				D0010B2A2AF69F8D00BAEC46 /* CreateNewTripViewController.swift in Sources */,
 				D0010B302B1BD13300BAEC46 /* CreateTripView.swift in Sources */,

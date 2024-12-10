@@ -25,18 +25,19 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
     private let coverImageView = UIImageView()
     private let addCoverButton = UIButton(type: .system)
     
-    private let routeLabel = UILabel()
-    private let placesTableView = UITableView()
-    private let addPlaceButton = UIButton(type: .system)
+    private let itineraryLabel = UILabel()
+    private let itineraryTableView = UITableView()
+    private let addItineraryButton = UIButton(type: .system)
     
     private let saveButton = UIButton(type: .system)
     private let cancelButton = UIButton(type: .system)
     
     private let scrollView = UIScrollView()
     private let contentView = UIView()
+
     
     // MARK: - Data
-    private var places: [String] = []
+    private var itinerary: [DayPlan] = []
     
     init(trip: TripModel? = nil, onSave: ((TripModel) -> Void)? = nil) {
         self.trip = trip
@@ -96,22 +97,25 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
         addCoverButton.applyPaperStyleWithGloss(withText: "Add Cover")
         addCoverButton.addTarget(self, action: #selector(addCoverTapped), for: .touchUpInside)
         addCoverButton.translatesAutoresizingMaskIntoConstraints = false
-             
-        routeLabel.text = "Route"
-        routeLabel.font = UIFont.boldSystemFont(ofSize: 28)
-        routeLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        placesTableView.dataSource = self
-        placesTableView.delegate = self
-        placesTableView.layer.borderColor = UIColor.gray.cgColor
-        placesTableView.layer.borderWidth = 1
-        placesTableView.layer.cornerRadius = 10
-        placesTableView.translatesAutoresizingMaskIntoConstraints = false
-        placesTableView.isScrollEnabled = false
+        itineraryLabel.text = "Itinerary"
+        itineraryLabel.font = UIFont.boldSystemFont(ofSize: 28)
+        itineraryLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        addPlaceButton.applyPaperStyleWithGloss(withText: "Add Place")
-        addPlaceButton.addTarget(self, action: #selector(addPlaceTapped), for: .touchUpInside)
-        addPlaceButton.translatesAutoresizingMaskIntoConstraints = false
+        itineraryTableView.dataSource = self
+        itineraryTableView.delegate = self
+        itineraryTableView.register(ItineraryCell.self, forCellReuseIdentifier: "ItineraryCell")
+        itineraryTableView.layer.borderColor = UIColor.gray.cgColor
+        itineraryTableView.layer.borderWidth = 1
+        itineraryTableView.layer.cornerRadius = 10
+        itineraryTableView.translatesAutoresizingMaskIntoConstraints = false
+        itineraryTableView.estimatedRowHeight = 44
+        itineraryTableView.rowHeight = UITableView.automaticDimension
+        
+        
+        addItineraryButton.setTitle("Add Day", for: .normal)
+        addItineraryButton.addTarget(self, action: #selector(addDayTapped), for: .touchUpInside)
+        addItineraryButton.translatesAutoresizingMaskIntoConstraints = false
         
         cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
@@ -123,15 +127,19 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
         
         contentView.addSubview(titleTextField)
         contentView.addSubview(descriptionTextView)
+        
         contentView.addSubview(startDateLabel)
         contentView.addSubview(endDateLabel)
         contentView.addSubview(startDatePicker)
         contentView.addSubview(endDatePicker)
+        
         contentView.addSubview(coverImageView)
         contentView.addSubview(addCoverButton)
-        contentView.addSubview(routeLabel)
-        contentView.addSubview(placesTableView)
-        contentView.addSubview(addPlaceButton)
+        
+        contentView.addSubview(itineraryLabel)
+        contentView.addSubview(itineraryTableView)
+        contentView.addSubview(addItineraryButton)
+        
         contentView.addSubview(cancelButton)
         contentView.addSubview(saveButton)
     }
@@ -218,26 +226,24 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
             endDatePicker.topAnchor.constraint(equalTo: startDatePicker.bottomAnchor, constant: 10),
             endDatePicker.leadingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 10),
             
-            // Places Table View
-            routeLabel.topAnchor.constraint(equalTo: endDatePicker.bottomAnchor, constant: 25),
-            routeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            // Iteinerary Table View
+            itineraryLabel.topAnchor.constraint(equalTo: endDatePicker.bottomAnchor, constant: 25),
+            itineraryLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             
-            placesTableView.topAnchor.constraint(equalTo: routeLabel.bottomAnchor, constant: 10),
-            placesTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            placesTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            placesTableView.heightAnchor.constraint(equalToConstant: 100),
-
-            // Add Place Button
-            addPlaceButton.topAnchor.constraint(equalTo: placesTableView.bottomAnchor, constant: 20),
-            addPlaceButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            addPlaceButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            itineraryTableView.topAnchor.constraint(equalTo: itineraryLabel.bottomAnchor, constant: 20),
+            itineraryTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            itineraryTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            itineraryTableView.heightAnchor.constraint(equalToConstant: 200),
+            
+            addItineraryButton.topAnchor.constraint(equalTo: itineraryTableView.bottomAnchor, constant: 16),
+            addItineraryButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             // Save Button
             saveButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
             saveButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             saveButton.trailingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -10),
             saveButton.heightAnchor.constraint(equalToConstant: 44),
-
+            
             //Cancel Button
             cancelButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
             cancelButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
@@ -301,13 +307,10 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
     }
 
         
-        @objc private func addPlaceTapped() {
-            let mapViewController = MapViewController()
-                mapViewController.onPlaceSelected = { place in
-                    //self.places.append(place)
-                    self.placesTableView.reloadData()
-                }
-                navigationController?.pushViewController(mapViewController, animated: true)
+    @objc private func addDayTapped() {
+            let newDay = DayPlan(date: Date(), events: [])
+            itinerary.append(newDay)
+            itineraryTableView.reloadData()
         }
     
     @objc private func cancelButtonTapped() {
@@ -315,7 +318,6 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
             navigationController?.popViewController(animated: true)
         }
         
-    
     private func showAlert(message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
@@ -335,21 +337,31 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
         }
     
     // MARK: - UITableViewDataSource
-        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return places.count
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            return itinerary.count
         }
         
-        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = UITableViewCell(style: .default, reuseIdentifier: "PlaceCell")
-            cell.textLabel?.text = places[indexPath.row]
-            return cell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ItineraryCell", for: indexPath) as! ItineraryCell
+        let dayPlan = itinerary[indexPath.row]
+        cell.configure(with: dayPlan)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            let dayPlan = itinerary[indexPath.row]
+            let detailVC = PlanDayDetailViewController(dayPlan: dayPlan) { updatedDayPlan in
+                self.itinerary[indexPath.row] = updatedDayPlan
+                self.itineraryTableView.reloadData()
+            }
+            navigationController?.pushViewController(detailVC, animated: true)
         }
         
         // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            places.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            itinerary.remove(at: indexPath.row)
+            itineraryTableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
 }

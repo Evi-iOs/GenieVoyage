@@ -33,6 +33,18 @@ enum DestinationCategory: String {
     case food, attraction, hotel, transport, shopping
 }
 
+struct DayPlan {
+    let date: Date
+    var events: [Event]
+}
+
+struct Event {
+    let title: String
+    let time: Date
+    let description: String?
+    let destination: DestinationModel?
+}
+
 
 //TO DO next Version:
 
