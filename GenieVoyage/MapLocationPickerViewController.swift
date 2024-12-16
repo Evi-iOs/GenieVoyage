@@ -13,16 +13,18 @@ class MapLocationPickerViewController: UIViewController {
     // MARK: - Properties
     var onLocationSelected: ((CLLocationCoordinate2D) -> Void)?
     private let mapView = MKMapView()
+    private let searchController = UISearchController(searchResultsController: nil)
     private let confirmButton = UIButton(type: .system)
     private let locationManager = CLLocationManager()
     private var selectedCoordinate: CLLocationCoordinate2D?
 
-
+    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupConstraints()
         setupMap()
+        setupSearch()
     }
 
     // MARK: - UI Setup
@@ -57,7 +59,6 @@ class MapLocationPickerViewController: UIViewController {
     }
 
     private func setupMap() {
-        // Request location permission
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
@@ -66,24 +67,21 @@ class MapLocationPickerViewController: UIViewController {
         mapView.addGestureRecognizer(longPressGesture)
     }
 
+    private func setupSearch() {
+        searchController.searchBar.delegate = self
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.searchBar.placeholder = "Search for a place or address"
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+    }
+
     // MARK: - Actions
     @objc private func mapLongPressed(_ gesture: UILongPressGestureRecognizer) {
         guard gesture.state == .began else { return }
         let touchPoint = gesture.location(in: mapView)
         let coordinate = mapView.convert(touchPoint, toCoordinateFrom: mapView)
 
-        // Remove existing annotations
-        mapView.removeAnnotations(mapView.annotations)
-
-        // Add new annotation
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = coordinate
-        annotation.title = "Selected Location"
-        mapView.addAnnotation(annotation)
-
-        // Save the coordinate
-        selectedCoordinate = coordinate
-        confirmButton.isEnabled = true
+        addAnnotation(at: coordinate)
     }
 
     @objc private func confirmButtonTapped() {
@@ -92,9 +90,20 @@ class MapLocationPickerViewController: UIViewController {
             return
         }
 
-        // Pass the coordinate back and dismiss
         onLocationSelected?(coordinate)
         navigationController?.popViewController(animated: true)
+    }
+
+    private func addAnnotation(at coordinate: CLLocationCoordinate2D) {
+        mapView.removeAnnotations(mapView.annotations)
+
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        annotation.title = "Selected Location"
+        mapView.addAnnotation(annotation)
+
+        selectedCoordinate = coordinate
+        confirmButton.isEnabled = true
     }
 
     private func showAlert(message: String) {
@@ -120,18 +129,52 @@ extension MapLocationPickerViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.first else { return }
 
-        // Center map on user's location the first time
         let region = MKCoordinateRegion(
             center: location.coordinate,
             latitudinalMeters: 1000,
             longitudinalMeters: 1000
         )
         mapView.setRegion(region, animated: true)
-        locationManager.stopUpdatingLocation() // Stop further updates
+        locationManager.stopUpdatingLocation()
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         showAlert(message: "Failed to fetch location. Please try again.")
+    }
+}
+
+// MARK: - UISearchBarDelegate
+extension MapLocationPickerViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let query = searchBar.text, !query.isEmpty else { return }
+        searchForLocation(named: query)
+        searchController.dismiss(animated: true)
+    }
+
+    private func searchForLocation(named name: String) {
+        let request = MKLocalSearch.Request()
+        request.naturalLanguageQuery = name
+
+        let search = MKLocalSearch(request: request)
+        search.start { [weak self] response, error in
+            guard let self = self, let response = response else {
+                self?.showAlert(message: "Location not found. Please try again.")
+                return
+            }
+
+            let coordinate = response.mapItems.first?.placemark.coordinate
+            if let coordinate = coordinate {
+                self.mapView.setRegion(
+                    MKCoordinateRegion(
+                        center: coordinate,
+                        latitudinalMeters: 1000,
+                        longitudinalMeters: 1000
+                    ),
+                    animated: true
+                )
+                self.addAnnotation(at: coordinate)
+            }
+        }
     }
 }
 
