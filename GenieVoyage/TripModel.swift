@@ -43,7 +43,9 @@ struct Event {
     let time: Date
     let description: String?
     let destination: DestinationModel?
+    var files: [URL]
 }
+
 
 
 //TO DO next Version:

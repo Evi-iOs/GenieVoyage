@@ -90,7 +90,7 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
         
         coverImageView.contentMode = .scaleAspectFill
         coverImageView.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
-        coverImageView.layer.cornerRadius = 20
+        coverImageView.layer.cornerRadius = 25
         coverImageView.clipsToBounds = true
         coverImageView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -350,11 +350,9 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             let dayPlan = itinerary[indexPath.row]
-            let detailVC = PlanDayDetailViewController(dayPlan: dayPlan) { updatedDayPlan in
-                self.itinerary[indexPath.row] = updatedDayPlan
-                self.itineraryTableView.reloadData()
-            }
+            let detailVC = PlanDayDetailViewController(dayPlan: dayPlan)
             navigationController?.pushViewController(detailVC, animated: true)
+        
         }
         
         // MARK: - UITableViewDelegate

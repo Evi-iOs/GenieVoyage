@@ -31,18 +31,20 @@ extension UIView {
 }
 
 extension Date {
-    static let formatter: DateFormatter = {
+    func formattedDate() -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE, dd MMM yyyy HH:mm:ss Z"
-        return formatter
-    }()
-    var formatted: String {
-        return Date.formatter.string(from: self)
+        formatter.dateStyle = .medium
+        return formatter.string(from: self)
+    }
+
+    func formattedTime() -> String {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        return formatter.string(from: self)
     }
 }
 
 extension UIButton {
-    
     func applyPaperStyle(withText text: String, textureImageName: String? = nil) {
         self.setTitle(text, for: .normal)
         self.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .medium)
@@ -97,5 +99,18 @@ extension UIButton {
         
         self.layer.addSublayer(glossLayer)
     }
-
 }
+    
+extension DestinationCategory {
+    func icon() -> UIImage? {
+        switch self {
+        case .food: return UIImage(systemName: "fork.knife")
+        case .attraction: return UIImage(systemName: "star")
+        case .hotel: return UIImage(systemName: "bed.double")
+        case .transport: return UIImage(systemName: "car")
+        case .shopping: return UIImage(systemName: "bag")
+        }
+    }
+}
+
+
