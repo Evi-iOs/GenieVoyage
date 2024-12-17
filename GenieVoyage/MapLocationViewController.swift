@@ -9,7 +9,7 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class MapLocationPickerViewController: UIViewController {
+class MapLocationViewController: UIViewController {
     // MARK: - Properties
     var onLocationSelected: ((CLLocationCoordinate2D) -> Void)?
     private let mapView = MKMapView()
@@ -114,7 +114,7 @@ class MapLocationPickerViewController: UIViewController {
 }
 
 // MARK: - CLLocationManagerDelegate
-extension MapLocationPickerViewController: CLLocationManagerDelegate {
+extension MapLocationViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
         case .authorizedWhenInUse, .authorizedAlways:
@@ -144,7 +144,7 @@ extension MapLocationPickerViewController: CLLocationManagerDelegate {
 }
 
 // MARK: - UISearchBarDelegate
-extension MapLocationPickerViewController: UISearchBarDelegate {
+extension MapLocationViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let query = searchBar.text, !query.isEmpty else { return }
         searchForLocation(named: query)
@@ -179,7 +179,7 @@ extension MapLocationPickerViewController: UISearchBarDelegate {
 }
 
 // MARK: - MKMapViewDelegate
-extension MapLocationPickerViewController: MKMapViewDelegate {
+extension MapLocationViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         let identifier = "SelectedLocation"
         var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
