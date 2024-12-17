@@ -30,6 +30,9 @@ class EventViewController: UIViewController {
     private let filesTableView = UITableView()
     private let saveButton = UIButton()
     
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
+    
     // MARK: - UI Map
     private let mapView = MKMapView()
     private let selectLocationButton = UIButton(type: .system)
@@ -45,9 +48,40 @@ class EventViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupScrollView()
         setupConstraints()
     }
 
+    // MARK: - Setup Scroll View
+    private func setupScrollView() {
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(scrollView)
+        setupConstraintsForScrollView()
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(contentView)
+        setupConstraintsForContentView()
+    }
+    
+    private func setupConstraintsForContentView() {
+        NSLayoutConstraint.activate([
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            contentView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.heightAnchor)
+        ])
+    }
+    
+    private func setupConstraintsForScrollView() {
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+    
     // MARK: - UI Setup
     private func setupUI() {
         view.backgroundColor = .systemBackground
@@ -91,49 +125,49 @@ class EventViewController: UIViewController {
         mapView.translatesAutoresizingMaskIntoConstraints = false
         mapView.delegate = self
         mapView.mapType = .standard
-        view.addSubview(mapView)
-
-        view.addSubview(titleTextField)
-        view.addSubview(timePicker)
-        view.addSubview(descriptionTextView)
-        view.addSubview(addLocationButton)
-        view.addSubview(addFileButton)
-        view.addSubview(filesTableView)
-        view.addSubview(saveButton)
+        
+        contentView.addSubview(mapView)
+        contentView.addSubview(titleTextField)
+        contentView.addSubview(timePicker)
+        contentView.addSubview(descriptionTextView)
+        contentView.addSubview(addLocationButton)
+        contentView.addSubview(addFileButton)
+        contentView.addSubview(filesTableView)
+        contentView.addSubview(saveButton)
     }
 
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            titleTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            titleTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            titleTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            titleTextField.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 20),
+            titleTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            titleTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 
             timePicker.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 16),
-            timePicker.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            timePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
 
             descriptionTextView.topAnchor.constraint(equalTo: timePicker.bottomAnchor, constant: 16),
-            descriptionTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            descriptionTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            descriptionTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            descriptionTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             descriptionTextView.heightAnchor.constraint(equalToConstant: 100),
 
             addLocationButton.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor, constant: 16),
-            addLocationButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            addLocationButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             
             mapView.topAnchor.constraint(equalTo: addLocationButton.bottomAnchor, constant: 16),
-            mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            mapView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            mapView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             mapView.heightAnchor.constraint(equalToConstant: 272),
 
             addFileButton.topAnchor.constraint(equalTo: mapView.bottomAnchor, constant: 16),
-            addFileButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            addFileButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
 
             filesTableView.topAnchor.constraint(equalTo: addFileButton.bottomAnchor, constant: 16),
-            filesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            filesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            filesTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            filesTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             filesTableView.heightAnchor.constraint(equalToConstant: 200),
 
             saveButton.topAnchor.constraint(equalTo: filesTableView.bottomAnchor, constant: 20),
-            saveButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            saveButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
         ])
     }
 
