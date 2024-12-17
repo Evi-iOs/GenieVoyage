@@ -16,12 +16,11 @@
 		D0365DF12CFA6BEA00D711A9 /* TripModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0365DF02CFA6BE700D711A9 /* TripModel.swift */; };
 		D0365DF32CFA6D3500D711A9 /* TripsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0365DF22CFA6D3500D711A9 /* TripsViewController.swift */; };
 		D0365DF52CFA723600D711A9 /* TripDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0365DF42CFA723600D711A9 /* TripDetailViewController.swift */; };
-		D0365DF72CFA737200D711A9 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0365DF62CFA737200D711A9 /* MapViewController.swift */; };
 		D0365DF92CFDC76F00D711A9 /* CalculateDistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0365DF82CFDC76F00D711A9 /* CalculateDistance.swift */; };
 		D03D08652D0730CE009F8E63 /* PlanDayDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03D08642D0730CE009F8E63 /* PlanDayDetailViewController.swift */; };
 		D03D08672D074316009F8E63 /* ItineraryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03D08662D074316009F8E63 /* ItineraryCell.swift */; };
 		D03D08692D08544D009F8E63 /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03D08682D08544D009F8E63 /* EventViewController.swift */; };
-		D03D086B2D08C14F009F8E63 /* MapLocationPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03D086A2D08C14F009F8E63 /* MapLocationPickerViewController.swift */; };
+		D03D086B2D08C14F009F8E63 /* MapLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03D086A2D08C14F009F8E63 /* MapLocationViewController.swift */; };
 		D043B43D2CFF6DDE00151ED0 /* AddEditTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D043B43C2CFF6DDE00151ED0 /* AddEditTripViewController.swift */; };
 		D0949A3D2AF2FB26005E310D /* CreateNewTripViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0949A3C2AF2FB26005E310D /* CreateNewTripViewModel.swift */; };
 		D0949A3F2AF32444005E310D /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0949A3E2AF32444005E310D /* CoreDataManager.swift */; };
@@ -72,12 +71,11 @@
 		D0365DF02CFA6BE700D711A9 /* TripModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripModel.swift; sourceTree = "<group>"; };
 		D0365DF22CFA6D3500D711A9 /* TripsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripsViewController.swift; sourceTree = "<group>"; };
 		D0365DF42CFA723600D711A9 /* TripDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripDetailViewController.swift; sourceTree = "<group>"; };
-		D0365DF62CFA737200D711A9 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		D0365DF82CFDC76F00D711A9 /* CalculateDistance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateDistance.swift; sourceTree = "<group>"; };
 		D03D08642D0730CE009F8E63 /* PlanDayDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanDayDetailViewController.swift; sourceTree = "<group>"; };
 		D03D08662D074316009F8E63 /* ItineraryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryCell.swift; sourceTree = "<group>"; };
 		D03D08682D08544D009F8E63 /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
-		D03D086A2D08C14F009F8E63 /* MapLocationPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLocationPickerViewController.swift; sourceTree = "<group>"; };
+		D03D086A2D08C14F009F8E63 /* MapLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLocationViewController.swift; sourceTree = "<group>"; };
 		D043B43C2CFF6DDE00151ED0 /* AddEditTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditTripViewController.swift; sourceTree = "<group>"; };
 		D0949A3C2AF2FB26005E310D /* CreateNewTripViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewTripViewModel.swift; sourceTree = "<group>"; };
 		D0949A3E2AF32444005E310D /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
@@ -195,9 +193,8 @@
 				D043B43C2CFF6DDE00151ED0 /* AddEditTripViewController.swift */,
 				D03D08642D0730CE009F8E63 /* PlanDayDetailViewController.swift */,
 				D03D08682D08544D009F8E63 /* EventViewController.swift */,
-				D03D086A2D08C14F009F8E63 /* MapLocationPickerViewController.swift */,
+				D03D086A2D08C14F009F8E63 /* MapLocationViewController.swift */,
 				D0365DF42CFA723600D711A9 /* TripDetailViewController.swift */,
-				D0365DF62CFA737200D711A9 /* MapViewController.swift */,
 				D03D08662D074316009F8E63 /* ItineraryCell.swift */,
 				D0365DF82CFDC76F00D711A9 /* CalculateDistance.swift */,
 				D0010B1D2AF6788E00BAEC46 /* View */,
@@ -481,7 +478,7 @@
 				D03D08692D08544D009F8E63 /* EventViewController.swift in Sources */,
 				D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */,
 				D0D192D42A6FFF9A000853B8 /* SceneDelegate.swift in Sources */,
-				D03D086B2D08C14F009F8E63 /* MapLocationPickerViewController.swift in Sources */,
+				D03D086B2D08C14F009F8E63 /* MapLocationViewController.swift in Sources */,
 				D043B43D2CFF6DDE00151ED0 /* AddEditTripViewController.swift in Sources */,
 				D03D08652D0730CE009F8E63 /* PlanDayDetailViewController.swift in Sources */,
 				D0D192DC2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld in Sources */,
@@ -492,7 +489,6 @@
 				D0010B302B1BD13300BAEC46 /* CreateTripView.swift in Sources */,
 				D0365DF12CFA6BEA00D711A9 /* TripModel.swift in Sources */,
 				D0949A3F2AF32444005E310D /* CoreDataManager.swift in Sources */,
-				D0365DF72CFA737200D711A9 /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

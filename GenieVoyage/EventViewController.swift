@@ -25,11 +25,21 @@ class EventViewController: UIViewController {
     private let titleTextField = UITextField()
     private let timePicker = UIDatePicker()
     private let descriptionTextView = UITextView()
-    private let destinationPickerButton = UIButton(type: .system)
-    private let addLocationButton = UIButton(type: .system)
-    private let addFileButton = UIButton(type: .system)
+    private let addLocationButton = UIButton()
+    private let addFileButton = UIButton()
     private let filesTableView = UITableView()
-    private let saveButton = UIButton(type: .system)
+    private let saveButton = UIButton()
+    
+    // MARK: - UI Map
+    private let mapView = MKMapView()
+    private let selectLocationButton = UIButton(type: .system)
+    private var selectedLocation: CLLocationCoordinate2D? {
+           didSet {
+               updateMap()
+           }
+       }
+    private let locationManager = CLLocationManager()
+
 
     // MARK: - View Lifecycle
     override func viewDidLoad() {
@@ -54,30 +64,38 @@ class EventViewController: UIViewController {
         descriptionTextView.layer.cornerRadius = 6
         descriptionTextView.translatesAutoresizingMaskIntoConstraints = false
 
-        destinationPickerButton.setTitle("Select Destination", for: .normal)
-        destinationPickerButton.addTarget(self, action: #selector(selectDestinationTapped), for: .touchUpInside)
-        destinationPickerButton.translatesAutoresizingMaskIntoConstraints = false
-
-        addLocationButton.setTitle("Add Location on Map", for: .normal)
+        addLocationButton.setTitle("Go to Map", for: .normal)
         addLocationButton.addTarget(self, action: #selector(addLocationTapped), for: .touchUpInside)
+        addLocationButton.darkGrayButtonStyle()
         addLocationButton.translatesAutoresizingMaskIntoConstraints = false
 
-        addFileButton.setTitle("Add Image or PDF", for: .normal)
+        addFileButton.setTitle("Add File", for: .normal)
         addFileButton.addTarget(self, action: #selector(addFileTapped), for: .touchUpInside)
+        addFileButton.darkGrayButtonStyle()
         addFileButton.translatesAutoresizingMaskIntoConstraints = false
 
         saveButton.setTitle("Save", for: .normal)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        saveButton.darkGrayButtonStyle()
         saveButton.translatesAutoresizingMaskIntoConstraints = false
 
         filesTableView.dataSource = self
         filesTableView.register(UITableViewCell.self, forCellReuseIdentifier: "FileCell")
         filesTableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Map View
+        mapView.layer.cornerRadius = 8
+        mapView.layer.borderWidth = 1
+        mapView.layer.borderColor = UIColor.systemGray4.cgColor
+        mapView.isHidden = true
+        mapView.translatesAutoresizingMaskIntoConstraints = false
+        mapView.delegate = self
+        mapView.mapType = .standard
+        view.addSubview(mapView)
 
         view.addSubview(titleTextField)
         view.addSubview(timePicker)
         view.addSubview(descriptionTextView)
-        view.addSubview(destinationPickerButton)
         view.addSubview(addLocationButton)
         view.addSubview(addFileButton)
         view.addSubview(filesTableView)
@@ -92,21 +110,21 @@ class EventViewController: UIViewController {
 
             timePicker.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 16),
             timePicker.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            timePicker.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
 
             descriptionTextView.topAnchor.constraint(equalTo: timePicker.bottomAnchor, constant: 16),
             descriptionTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             descriptionTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             descriptionTextView.heightAnchor.constraint(equalToConstant: 100),
 
-            destinationPickerButton.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor, constant: 16),
-            destinationPickerButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            destinationPickerButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-
-            addLocationButton.topAnchor.constraint(equalTo: destinationPickerButton.bottomAnchor, constant: 16),
+            addLocationButton.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor, constant: 16),
             addLocationButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            
+            mapView.topAnchor.constraint(equalTo: addLocationButton.bottomAnchor, constant: 16),
+            mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            mapView.heightAnchor.constraint(equalToConstant: 272),
 
-            addFileButton.topAnchor.constraint(equalTo: addLocationButton.bottomAnchor, constant: 16),
+            addFileButton.topAnchor.constraint(equalTo: mapView.bottomAnchor, constant: 16),
             addFileButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
 
             filesTableView.topAnchor.constraint(equalTo: addFileButton.bottomAnchor, constant: 16),
@@ -125,7 +143,6 @@ class EventViewController: UIViewController {
         for destination in destinations {
             alert.addAction(UIAlertAction(title: destination.name, style: .default, handler: { _ in
                 self.selectedDestination = destination
-                self.destinationPickerButton.setTitle(destination.name, for: .normal)
             }))
         }
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
@@ -133,7 +150,7 @@ class EventViewController: UIViewController {
     }
 
     @objc private func addLocationTapped() {
-        let mapVC = MapLocationPickerViewController()
+        let mapVC = MapLocationViewController()
         mapVC.onLocationSelected = { [weak self] location in
             let newDestination = DestinationModel(
                 id: UUID(),
@@ -145,7 +162,8 @@ class EventViewController: UIViewController {
                 category: nil
             )
             self?.selectedDestination = newDestination
-            self?.destinationPickerButton.setTitle("Custom Location Selected", for: .normal)
+            self?.selectedLocation = location
+            self?.updateMap()
         }
         navigationController?.pushViewController(mapVC, animated: true)
     }
@@ -200,6 +218,26 @@ class EventViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }
+    
+    private func updateMap() {
+        guard let coordinate = selectedLocation else {
+            mapView.isHidden = true
+            return
+        }
+        
+        mapView.isHidden = false
+        mapView.removeAnnotations(mapView.annotations)
+        
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        annotation.title = "Selected Location"
+        mapView.addAnnotation(annotation)
+        
+        let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 500, longitudinalMeters: 500)
+        mapView.setRegion(region, animated: true)
+   
+        view.updateConstraints()
+    }
 }
 
 // MARK: - PHPickerViewControllerDelegate
@@ -236,5 +274,22 @@ extension EventViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FileCell", for: indexPath)
         cell.textLabel?.text = selectedFiles[indexPath.row].lastPathComponent
         return cell
+    }
+}
+
+// MARK: - MKMapViewDelegate
+extension EventViewController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        let identifier = "EventLocation"
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+
+        if annotationView == nil {
+            annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            annotationView?.canShowCallout = true
+        } else {
+            annotationView?.annotation = annotation
+        }
+
+        return annotationView
     }
 }

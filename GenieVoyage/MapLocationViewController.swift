@@ -14,7 +14,7 @@ class MapLocationViewController: UIViewController {
     var onLocationSelected: ((CLLocationCoordinate2D) -> Void)?
     private let mapView = MKMapView()
     private let searchController = UISearchController(searchResultsController: nil)
-    private let confirmButton = UIButton(type: .system)
+    private let confirmButton = UIButton()
     private let locationManager = CLLocationManager()
     private var selectedCoordinate: CLLocationCoordinate2D?
 
@@ -40,6 +40,7 @@ class MapLocationViewController: UIViewController {
         confirmButton.setTitle("Confirm Location", for: .normal)
         confirmButton.isEnabled = false
         confirmButton.addTarget(self, action: #selector(confirmButtonTapped), for: .touchUpInside)
+        confirmButton.bigBlackButtonStyle()
         confirmButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(confirmButton)
     }

@@ -45,6 +45,28 @@ extension Date {
 }
 
 extension UIButton {
+    func darkGrayButtonStyle() {
+        self.backgroundColor = .darkGray
+        self.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        self.titleLabel?.textColor = .white
+        self.titleLabel?.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
+        self.titleLabel?.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16).isActive = true
+        self.layer.cornerRadius = 8
+        self.heightAnchor.constraint(equalToConstant: 32).isActive = true
+    }
+    
+    func bigBlackButtonStyle() {
+        self.backgroundColor = .black
+        self.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        self.titleLabel?.textColor = .white
+        self.titleLabel?.textAlignment = .center
+        self.layer.cornerRadius = 8
+        self.heightAnchor.constraint(equalToConstant: 52).isActive = true
+        self.widthAnchor.constraint(equalToConstant: 343).isActive = true
+        self.titleLabel?.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
+        self.titleLabel?.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16).isActive = true
+    }
+        
     func applyPaperStyle(withText text: String, textureImageName: String? = nil) {
         self.setTitle(text, for: .normal)
         self.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .medium)
