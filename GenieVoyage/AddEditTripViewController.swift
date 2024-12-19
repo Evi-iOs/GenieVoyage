@@ -349,11 +349,16 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            let dayPlan = itinerary[indexPath.row]
-            let detailVC = PlanDayDetailViewController(dayPlan: dayPlan)
-            navigationController?.pushViewController(detailVC, animated: true)
-        
+        let dayPlan = itinerary[indexPath.row]
+        let planDayVC = PlanDayDetailViewController(dayPlan: dayPlan)
+        planDayVC.onSave = { [weak self] dayPlan in
+            if let index = self?.itinerary.firstIndex(where: { $0.date == dayPlan.date }){
+                self?.itinerary[index] = dayPlan
+                self?.itineraryTableView.reloadData()
+            }
         }
+        navigationController?.pushViewController(planDayVC, animated: true)
+    }
         
         // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

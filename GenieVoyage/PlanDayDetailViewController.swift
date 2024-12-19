@@ -35,7 +35,8 @@ class PlanDayDetailViewController: UIViewController, UITableViewDelegate, UITabl
     private func setupUI() {
         view.backgroundColor = .systemBackground
         title = "Plan Day \(dayPlan.date.formattedDate())"
-        navigationController?.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: #selector(backButtonAction))
+        let backButton = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(backButtonAction))
+        navigationItem.leftBarButtonItem = backButton
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -80,6 +81,7 @@ class PlanDayDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
     @objc private func backButtonAction() {
         onSave?(dayPlan)
+        navigationController?.popViewController(animated: true)
     }
 
     // MARK: - UITableViewDataSource
