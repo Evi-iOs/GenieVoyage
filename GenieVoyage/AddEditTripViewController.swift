@@ -28,6 +28,7 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
     private let itineraryLabel = UILabel()
     private let itineraryTableView = UITableView()
     private let addItineraryButton = UIButton(type: .system)
+    private var itineraryTableViewHeightConstraint: NSLayoutConstraint!
     
     private let saveButton = UIButton(type: .system)
     private let cancelButton = UIButton(type: .system)
@@ -55,6 +56,11 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
         setupUI()
         configureUI()
         setupConstraints()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateTableViewHeight()
     }
     
     private func setupUI() {
@@ -111,7 +117,9 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
         itineraryTableView.translatesAutoresizingMaskIntoConstraints = false
         itineraryTableView.estimatedRowHeight = 44
         itineraryTableView.rowHeight = UITableView.automaticDimension
-        
+        itineraryTableView.isScrollEnabled = false
+        itineraryTableViewHeightConstraint = itineraryTableView.heightAnchor.constraint(equalToConstant: 0)
+        itineraryTableViewHeightConstraint.isActive = true
         
         addItineraryButton.setTitle("Add Day", for: .normal)
         addItineraryButton.addTarget(self, action: #selector(addDayTapped), for: .touchUpInside)
@@ -157,6 +165,11 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
                 endDatePicker.date = endDate
             }
         }
+    }
+    
+    private func updateTableViewHeight() {
+        itineraryTableView.layoutIfNeeded()
+        itineraryTableViewHeightConstraint.constant = itineraryTableView.contentSize.height
     }
     
     // MARK: - Setup Scroll View
@@ -233,19 +246,18 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
             itineraryTableView.topAnchor.constraint(equalTo: itineraryLabel.bottomAnchor, constant: 20),
             itineraryTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             itineraryTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            itineraryTableView.heightAnchor.constraint(equalToConstant: 200),
-            
+
             addItineraryButton.topAnchor.constraint(equalTo: itineraryTableView.bottomAnchor, constant: 16),
             addItineraryButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             // Save Button
-            saveButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
+            saveButton.topAnchor.constraint(equalTo: addItineraryButton.bottomAnchor, constant: 20),
             saveButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             saveButton.trailingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -10),
             saveButton.heightAnchor.constraint(equalToConstant: 44),
             
             //Cancel Button
-            cancelButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
+            cancelButton.topAnchor.constraint(equalTo: addItineraryButton.bottomAnchor, constant: 20),
             cancelButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             cancelButton.leadingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 10),
             cancelButton.heightAnchor.constraint(equalToConstant: 44)
@@ -306,17 +318,17 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
         present(picker, animated: true)
     }
 
-        
     @objc private func addDayTapped() {
-            let newDay = DayPlan(date: Date(), events: [])
-            itinerary.append(newDay)
-            itineraryTableView.reloadData()
-        }
+        let newDay = DayPlan(date: Date(), events: [])
+        itinerary.append(newDay)
+        itineraryTableView.reloadData()
+        updateTableViewHeight()
+    }
     
     @objc private func cancelButtonTapped() {
-            print("Cancel editing")
-            navigationController?.popViewController(animated: true)
-        }
+        print("Cancel editing")
+        navigationController?.popViewController(animated: true)
+    }
         
     private func showAlert(message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
@@ -355,6 +367,7 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
             if let index = self?.itinerary.firstIndex(where: { $0.date == dayPlan.date }){
                 self?.itinerary[index] = dayPlan
                 self?.itineraryTableView.reloadData()
+                self?.updateTableViewHeight()
             }
         }
         navigationController?.pushViewController(planDayVC, animated: true)
@@ -365,6 +378,8 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
         if editingStyle == .delete {
             itinerary.remove(at: indexPath.row)
             itineraryTableView.deleteRows(at: [indexPath], with: .fade)
+            itineraryTableView.reloadData()
+            updateTableViewHeight()
         }
     }
 }
