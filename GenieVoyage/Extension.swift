@@ -55,11 +55,12 @@ extension UIButton {
         self.heightAnchor.constraint(equalToConstant: 32).isActive = true
     }
     
-    func bigBlackButtonStyle() {
+    func bigBlackButtonStyle(text: String) {
         self.backgroundColor = .black
-        self.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        self.titleLabel?.textColor = .white
+        self.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         self.titleLabel?.textAlignment = .center
+        self.setTitle(text, for: .normal)
+        self.setTitleColor(.white, for: .normal)
         self.layer.cornerRadius = 8
         self.heightAnchor.constraint(equalToConstant: 52).isActive = true
         self.widthAnchor.constraint(equalToConstant: 343).isActive = true
@@ -132,6 +133,17 @@ extension DestinationCategory {
         case .transport: return UIImage(systemName: "car")
         case .shopping: return UIImage(systemName: "bag")
         }
+    }
+}
+
+extension UITextField {
+    func setPlaceholder(text: String, color: UIColor) {
+        self.attributedPlaceholder = NSAttributedString(
+            string: text,
+            attributes: [
+                .foregroundColor: color
+            ]
+        )
     }
 }
 

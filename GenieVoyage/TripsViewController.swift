@@ -30,12 +30,9 @@ class TripsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     @objc func addTrip() {
-        let addTripVC = AddEditTripViewController()
-        addTripVC.onSave = { [weak self] newTrip in
-            self?.trips.append(newTrip)
-            self?.tableView.reloadData()
-        }
-        self.navigationController?.pushViewController(addTripVC, animated: true)
+        let startPlanningVC = StartPlanningViewController()
+        
+        self.navigationController?.pushViewController(startPlanningVC, animated: true)
     }
     
     // MARK: - UITableViewDataSource

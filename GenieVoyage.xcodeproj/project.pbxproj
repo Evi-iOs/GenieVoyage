@@ -22,6 +22,7 @@
 		D03D08692D08544D009F8E63 /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03D08682D08544D009F8E63 /* EventViewController.swift */; };
 		D03D086B2D08C14F009F8E63 /* MapLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03D086A2D08C14F009F8E63 /* MapLocationViewController.swift */; };
 		D043B43D2CFF6DDE00151ED0 /* AddEditTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D043B43C2CFF6DDE00151ED0 /* AddEditTripViewController.swift */; };
+		D07B678A2D2C6D8000842293 /* StartPlanningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07B67892D2C6D8000842293 /* StartPlanningViewController.swift */; };
 		D0949A3D2AF2FB26005E310D /* CreateNewTripViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0949A3C2AF2FB26005E310D /* CreateNewTripViewModel.swift */; };
 		D0949A3F2AF32444005E310D /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0949A3E2AF32444005E310D /* CoreDataManager.swift */; };
 		D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */; };
@@ -77,6 +78,7 @@
 		D03D08682D08544D009F8E63 /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
 		D03D086A2D08C14F009F8E63 /* MapLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLocationViewController.swift; sourceTree = "<group>"; };
 		D043B43C2CFF6DDE00151ED0 /* AddEditTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditTripViewController.swift; sourceTree = "<group>"; };
+		D07B67892D2C6D8000842293 /* StartPlanningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartPlanningViewController.swift; sourceTree = "<group>"; };
 		D0949A3C2AF2FB26005E310D /* CreateNewTripViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewTripViewModel.swift; sourceTree = "<group>"; };
 		D0949A3E2AF32444005E310D /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		D0D192CE2A6FFF9A000853B8 /* GenieVoyage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GenieVoyage.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -192,6 +194,7 @@
 				D0365DF22CFA6D3500D711A9 /* TripsViewController.swift */,
 				D043B43C2CFF6DDE00151ED0 /* AddEditTripViewController.swift */,
 				D03D08642D0730CE009F8E63 /* PlanDayDetailViewController.swift */,
+				D07B67892D2C6D8000842293 /* StartPlanningViewController.swift */,
 				D03D08682D08544D009F8E63 /* EventViewController.swift */,
 				D03D086A2D08C14F009F8E63 /* MapLocationViewController.swift */,
 				D0365DF42CFA723600D711A9 /* TripDetailViewController.swift */,
@@ -474,6 +477,7 @@
 				D0949A3D2AF2FB26005E310D /* CreateNewTripViewModel.swift in Sources */,
 				D0D192D62A6FFF9A000853B8 /* CalendarViewController.swift in Sources */,
 				D0365DF92CFDC76F00D711A9 /* CalculateDistance.swift in Sources */,
+				D07B678A2D2C6D8000842293 /* StartPlanningViewController.swift in Sources */,
 				D0010B2C2B12A24200BAEC46 /* Extension.swift in Sources */,
 				D03D08692D08544D009F8E63 /* EventViewController.swift in Sources */,
 				D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */,

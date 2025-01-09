@@ -37,10 +37,9 @@ class MapLocationViewController: UIViewController {
         mapView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(mapView)
 
-        confirmButton.setTitle("Confirm Location", for: .normal)
         confirmButton.isEnabled = false
         confirmButton.addTarget(self, action: #selector(confirmButtonTapped), for: .touchUpInside)
-        confirmButton.bigBlackButtonStyle()
+        confirmButton.bigBlackButtonStyle(text: "Confirm Location")
         confirmButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(confirmButton)
     }
