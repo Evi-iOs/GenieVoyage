@@ -79,18 +79,13 @@ class StartPlanningViewController: UIViewController {
             showAlert(message: "Enter title Trip")
             return
         }
-        let startDate = startDatePicker.date
-        let endDate = endDatePicker.date
+        let trip = TripModel(id: UUID(), title: title, startDate: startDatePicker.date, endDate: endDatePicker.date)
         
-//        let addTripVC = AddEditTripViewController()
-//        addTripVC.onSave = { [weak self] newTrip in
-//            self?.trips.append(newTrip)
-//            self?.tableView.reloadData()
-//        }
-      //  self.navigationController?.pushViewController(addTripVC, animated: true)
+        let addTripVC = AddEditTripViewController(trip: trip)
+
+        self.navigationController?.pushViewController(addTripVC, animated: true)
     
         //TODO: save CoreData
-        navigationController?.popViewController(animated: true)
     }
     
     private func showAlert(message: String) {

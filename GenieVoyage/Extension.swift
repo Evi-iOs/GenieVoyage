@@ -34,6 +34,7 @@ extension Date {
     func formattedDate() -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
+        formatter.dateFormat = "dd MMM"
         return formatter.string(from: self)
     }
 
@@ -70,8 +71,8 @@ extension UIButton {
         
     func applyPaperStyle(withText text: String, textureImageName: String? = nil) {
         self.setTitle(text, for: .normal)
-        self.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        self.setTitleColor(.black, for: .normal)
+        self.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        self.setTitleColor(.gray, for: .normal)
         
         self.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
         self.layer.cornerRadius = 10
