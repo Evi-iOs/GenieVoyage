@@ -8,14 +8,14 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "766B3CA6-1E82-45F5-8236-FF396811232C"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GenieVoyage/AddEditTripViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "318"
-            endingLineNumber = "318"
+            startingLineNumber = "327"
+            endingLineNumber = "327"
             landmarkName = "addCoverTapped()"
             landmarkType = "7">
          </BreakpointContent>
@@ -37,21 +37,12 @@
          BreakpointExtensionID = "Xcode.Breakpoint.SymbolicBreakpoint">
          <BreakpointContent
             uuid = "482AA4B3-2D9F-4FB6-B356-29DB84EEDAC6"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             symbolName = "UIViewAlertForUnsatisfiableConstraints"
             moduleName = "">
             <Locations>
-               <Location
-                  uuid = "482AA4B3-2D9F-4FB6-B356-29DB84EEDAC6 - ba3ad5676a792f38"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "UIViewAlertForUnsatisfiableConstraints"
-                  moduleName = "UIKitCore"
-                  usesParentBreakpointCondition = "Yes">
-               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>

@@ -37,7 +37,8 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
     
     private let scrollView = UIScrollView()
     private let contentView = UIView()
-
+    
+    lazy var daysView = DaysTripCollectionView(frame: .zero, startDate: trip?.startDate, endDate: trip?.endDate)
     
     // MARK: - Data
     private var itinerary: [DayPlan] = []
@@ -111,6 +112,8 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
         addCoverButton.addTarget(self, action: #selector(addCoverTapped), for: .touchUpInside)
         addCoverButton.translatesAutoresizingMaskIntoConstraints = false
         
+        daysView.translatesAutoresizingMaskIntoConstraints = false
+        
         itineraryLabel.text = "Itinerary"
         itineraryLabel.font = UIFont.boldSystemFont(ofSize: 28)
         itineraryLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -152,6 +155,7 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
         contentView.addSubview(coverImageView)
         coverImageView.addSubview(addCoverButton)
         
+        contentView.addSubview(daysView)
         contentView.addSubview(itineraryLabel)
         contentView.addSubview(itineraryTableView)
         contentView.addSubview(addItineraryButton)
@@ -250,7 +254,12 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
             stackView.topAnchor.constraint(equalTo: coverImageView.bottomAnchor, constant: 20),
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            stackView.heightAnchor.constraint(equalToConstant: 48),
+            
+            daysView.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 25),
+            daysView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            daysView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            daysView.heightAnchor.constraint(equalToConstant: 250),
+
             
 //            descriptionTextView.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 16),
 //            descriptionTextView.leadingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 10),
@@ -271,7 +280,7 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
 //            endDatePicker.leadingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 10),
 //            
             // Iteinerary Table View
-            itineraryLabel.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 25),
+            itineraryLabel.topAnchor.constraint(equalTo: daysView.bottomAnchor, constant: 25),
             itineraryLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             
             itineraryTableView.topAnchor.constraint(equalTo: itineraryLabel.bottomAnchor, constant: 20),
