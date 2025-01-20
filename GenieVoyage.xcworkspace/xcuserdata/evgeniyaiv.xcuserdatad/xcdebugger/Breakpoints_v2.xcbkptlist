@@ -14,8 +14,8 @@
             filePath = "GenieVoyage/AddEditTripViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "327"
-            endingLineNumber = "327"
+            startingLineNumber = "279"
+            endingLineNumber = "279"
             landmarkName = "addCoverTapped()"
             landmarkType = "7">
          </BreakpointContent>

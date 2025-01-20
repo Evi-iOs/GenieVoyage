@@ -8,7 +8,7 @@
 import UIKit
 import Photos
 
-class AddEditTripViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class AddEditTripViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     var trip: TripModel?
     var onSave: ((TripModel) -> Void)?
@@ -16,7 +16,6 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
     //UI elements
     private let destinationLabel = UILabel()
     private let titleTextField = UITextField()
-    private let descriptionTextView = UITextView()
     private let stackView = UIStackView()
     
     private let startDateLabel = UILabel()
@@ -27,21 +26,34 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
     private let coverImageView = UIImageView()
     private let addCoverButton = UIButton(type: .system)
     
-    private let itineraryLabel = UILabel()
-    private let itineraryTableView = UITableView()
-    private let addItineraryButton = UIButton(type: .system)
-    private var itineraryTableViewHeightConstraint: NSLayoutConstraint!
-    
     private let saveButton = UIButton(type: .system)
     private let cancelButton = UIButton(type: .system)
     
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
-    lazy var daysView = DaysTripCollectionView(frame: .zero, startDate: trip?.startDate, endDate: trip?.endDate)
+    private let viewModel = ItineraryViewModel()
+    
+    // MARK: - UI Elements
+        private let segmentedControl: UISegmentedControl = {
+            let control = UISegmentedControl()
+            control.translatesAutoresizingMaskIntoConstraints = false
+            return control
+        }()
+        
+        private let collectionView: UICollectionView = {
+            let layout = UICollectionViewFlowLayout()
+            layout.scrollDirection = .vertical
+            layout.minimumLineSpacing = 16
+            layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+            
+            let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+            collectionView.translatesAutoresizingMaskIntoConstraints = false
+            return collectionView
+        }()
     
     // MARK: - Data
-    private var itinerary: [DayPlan] = []
+    lazy var days: [String] = generateDatesArray(from: trip?.startDate ?? Date(), to: trip?.endDate ?? Date())
     
     init(trip: TripModel? = nil, onSave: ((TripModel) -> Void)? = nil) {
         self.trip = trip
@@ -50,8 +62,8 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
     }
     
     required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,11 +72,13 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
         setupUI()
         setupIconButtons()
         setupConstraints()
+        configureSegmentedControl()
+        configureCollectionView()
+        bindViewModel()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        updateTableViewHeight()
     }
     
     private func setupUI() {
@@ -75,16 +89,10 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
         destinationLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         destinationLabel.textColor = UIColor.gray
         destinationLabel.translatesAutoresizingMaskIntoConstraints = false
-
+        
         titleTextField.placeholder = trip?.title ?? "Title"
         titleTextField.font = UIFont.boldSystemFont(ofSize: 20)
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
-        
-        descriptionTextView.font = UIFont.systemFont(ofSize: 16)
-        descriptionTextView.layer.borderWidth = 1
-        descriptionTextView.layer.borderColor = UIColor.lightGray.cgColor
-        descriptionTextView.layer.cornerRadius = 6
-        descriptionTextView.translatesAutoresizingMaskIntoConstraints = false
         
         startDateLabel.text = "\((trip != nil) ? trip!.startDate.formattedDate() : startDatePicker.date.formattedDate()) - \((trip != nil) ? trip!.endDate.formattedDate() : endDatePicker.date.formattedDate())"
         startDateLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
@@ -112,29 +120,6 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
         addCoverButton.addTarget(self, action: #selector(addCoverTapped), for: .touchUpInside)
         addCoverButton.translatesAutoresizingMaskIntoConstraints = false
         
-        daysView.translatesAutoresizingMaskIntoConstraints = false
-        
-        itineraryLabel.text = "Itinerary"
-        itineraryLabel.font = UIFont.boldSystemFont(ofSize: 28)
-        itineraryLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        itineraryTableView.dataSource = self
-        itineraryTableView.delegate = self
-        itineraryTableView.register(ItineraryCell.self, forCellReuseIdentifier: "ItineraryCell")
-        itineraryTableView.layer.borderColor = UIColor.gray.cgColor
-        itineraryTableView.layer.borderWidth = 1
-        itineraryTableView.layer.cornerRadius = 10
-        itineraryTableView.translatesAutoresizingMaskIntoConstraints = false
-        itineraryTableView.estimatedRowHeight = 44
-        itineraryTableView.rowHeight = UITableView.automaticDimension
-        itineraryTableView.isScrollEnabled = false
-        itineraryTableViewHeightConstraint = itineraryTableView.heightAnchor.constraint(equalToConstant: 0)
-        itineraryTableViewHeightConstraint.isActive = true
-        
-        addItineraryButton.setTitle("Add Day", for: .normal)
-        addItineraryButton.addTarget(self, action: #selector(addDayTapped), for: .touchUpInside)
-        addItineraryButton.translatesAutoresizingMaskIntoConstraints = false
-        
         cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         cancelButton.applyPaperStyleWithGloss(withText: "Cancel")
@@ -145,23 +130,21 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
         
         contentView.addSubview(destinationLabel)
         contentView.addSubview(titleTextField)
-       // contentView.addSubview(descriptionTextView)
+        // contentView.addSubview(descriptionTextView)
         
         contentView.addSubview(startDateLabel)
-//        contentView.addSubview(endDateLabel)
-//        contentView.addSubview(startDatePicker)
-//        contentView.addSubview(endDatePicker)
-//        
+        //        contentView.addSubview(endDateLabel)
+        //        contentView.addSubview(startDatePicker)
+        //        contentView.addSubview(endDatePicker)
+        //
         contentView.addSubview(coverImageView)
         coverImageView.addSubview(addCoverButton)
         
-        contentView.addSubview(daysView)
-        contentView.addSubview(itineraryLabel)
-        contentView.addSubview(itineraryTableView)
-        contentView.addSubview(addItineraryButton)
-        
+        contentView.addSubview(collectionView)
         contentView.addSubview(cancelButton)
         contentView.addSubview(saveButton)
+        contentView.addSubview(segmentedControl)
+
     }
     
     private func setupIconButtons() {
@@ -190,11 +173,6 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
                 endDatePicker.date = endDate
             }
         }
-    }
-    
-    private func updateTableViewHeight() {
-        itineraryTableView.layoutIfNeeded()
-        itineraryTableViewHeightConstraint.constant = itineraryTableView.contentSize.height
     }
     
     // MARK: - Setup Scroll View
@@ -226,7 +204,7 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
             contentView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.heightAnchor)
         ])
     }
-        
+    
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             //Cover Image
@@ -244,7 +222,7 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
             //Title
             destinationLabel.leadingAnchor.constraint(equalTo: coverImageView.trailingAnchor, constant: 20),
             destinationLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-
+            
             titleTextField.topAnchor.constraint(equalTo: destinationLabel.bottomAnchor, constant: 10),
             titleTextField.leadingAnchor.constraint(equalTo: coverImageView.trailingAnchor, constant: 20),
             
@@ -255,49 +233,24 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
-            daysView.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 25),
-            daysView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            daysView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            daysView.heightAnchor.constraint(equalToConstant: 250),
-
+            segmentedControl.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 20),
+            segmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
-//            descriptionTextView.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 16),
-//            descriptionTextView.leadingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 10),
-//            descriptionTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-//            descriptionTextView.heightAnchor.constraint(equalToConstant: 50),
-            
-           
-            //Date Label
-//            
-//            endDateLabel.bottomAnchor.constraint(equalTo: endDatePicker.bottomAnchor),
-//            endDateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-//            
-//            //Date Picker
-//            startDatePicker.topAnchor.constraint(equalTo: addCoverButton.bottomAnchor, constant: 20),
-//            startDatePicker.leadingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 10),
-//            
-//            endDatePicker.topAnchor.constraint(equalTo: startDatePicker.bottomAnchor, constant: 10),
-//            endDatePicker.leadingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 10),
-//            
-            // Iteinerary Table View
-            itineraryLabel.topAnchor.constraint(equalTo: daysView.bottomAnchor, constant: 25),
-            itineraryLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            
-            itineraryTableView.topAnchor.constraint(equalTo: itineraryLabel.bottomAnchor, constant: 20),
-            itineraryTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            itineraryTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-
-            addItineraryButton.topAnchor.constraint(equalTo: itineraryTableView.bottomAnchor, constant: 16),
-            addItineraryButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            // CollectionView below segmented control
+            collectionView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 16),
+            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
             // Save Button
-            saveButton.topAnchor.constraint(equalTo: addItineraryButton.bottomAnchor, constant: 20),
+            saveButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
             saveButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             saveButton.trailingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -10),
             saveButton.heightAnchor.constraint(equalToConstant: 44),
             
             //Cancel Button
-            cancelButton.topAnchor.constraint(equalTo: addItineraryButton.bottomAnchor, constant: 20),
+            cancelButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
             cancelButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             cancelButton.leadingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 10),
             cancelButton.heightAnchor.constraint(equalToConstant: 44)
@@ -311,7 +264,6 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
             showAlert(message: "Enter title Trip")
             return
         }
-        let description = descriptionTextView.text ?? ""
         let startDate = startDatePicker.date
         let endDate = endDatePicker.date
         
@@ -365,84 +317,104 @@ class AddEditTripViewController: UIViewController, UITableViewDataSource, UITabl
         button.backgroundColor = .white
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.lightGray.cgColor
-                        
-        let icon = UIImage(systemName: iconName) ?? UIImage(systemName: "circle")!
+        
+        let icon = UIImage(systemName: "airplane")
         button.setImage(icon, for: .normal)
         
         button.imageView?.contentMode = .scaleAspectFit
         
         return button
     }
-
+    
     private func openPhotoPicker() {
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.sourceType = .photoLibrary
         present(picker, animated: true)
     }
-
-    @objc private func addDayTapped() {
-        let newDay = DayPlan(date: Date(), events: [])
-        itinerary.append(newDay)
-        itineraryTableView.reloadData()
-        updateTableViewHeight()
-    }
     
     @objc private func cancelButtonTapped() {
         print("Cancel editing")
         navigationController?.popViewController(animated: true)
     }
-        
+    
+    @objc private func segmentedControlValueChanged(_ sender: UISegmentedControl) {
+        viewModel.selectedDayIndex = sender.selectedSegmentIndex
+    }
+    
     private func showAlert(message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }
     
-    // MARK: - UIImagePickerControllerDelegate
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-            if let selectedImage = info[.originalImage] as? UIImage {
-                coverImageView.image = selectedImage
-            }
-            dismiss(animated: true, completion: nil)
+    private func configureSegmentedControl() {
+        segmentedControl.removeAllSegments()
+        for index in 0..<viewModel.numberOfDays() {
+            segmentedControl.insertSegment(withTitle: viewModel.titleForDay(at: index), at: index, animated: false)
         }
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
+    }
         
-        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-            dismiss(animated: true, completion: nil)
-        }
+    private func configureCollectionView() {
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(ItineraryItemCell.self, forCellWithReuseIdentifier: ItineraryItemCell.identifier)
+    }
     
-    // MARK: - UITableViewDataSource
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return itinerary.count
+    // MARK: - Binding
+    private func bindViewModel() {
+        viewModel.onDayChanged = { [weak self] in
+            self?.collectionView.reloadData()
         }
+    }
+    
+    // MARK: - UIImagePickerControllerDelegate
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let selectedImage = info[.originalImage] as? UIImage {
+            coverImageView.image = selectedImage
+        }
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    //MARK: - Additional func
+    private func generateDatesArray(from startDate: Date, to endDate: Date) -> [String] {
+        var dates: [String] = []
+        let calendar = Calendar.current
+        let normalizedStartDate = calendar.startOfDay(for: startDate)
+        let normalizedEndDate = calendar.startOfDay(for: endDate)
         
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ItineraryCell", for: indexPath) as! ItineraryCell
-        let dayPlan = itinerary[indexPath.row]
-        cell.configure(with: dayPlan)
+        var currentDate = normalizedStartDate
+        while currentDate <= normalizedEndDate {
+            let dateString = currentDate.formatted()
+            dates.append(dateString)
+            currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
+        }
+        return dates
+    }
+}
+
+// MARK: - UICollectionView DataSource & Delegate
+extension AddEditTripViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return viewModel.numberOfItemsForSelectedDay()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ItineraryItemCell.identifier, for: indexPath) as? ItineraryItemCell else {
+            return UICollectionViewCell()
+        }
+        let item = viewModel.itemForIndex(indexPath.item)
+        cell.configure(with: item)
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let dayPlan = itinerary[indexPath.row]
-        let planDayVC = PlanDayDetailViewController(dayPlan: dayPlan)
-        planDayVC.onSave = { [weak self] dayPlan in
-            if let index = self?.itinerary.firstIndex(where: { $0.date == dayPlan.date }){
-                self?.itinerary[index] = dayPlan
-                self?.itineraryTableView.reloadData()
-                self?.updateTableViewHeight()
-            }
-        }
-        navigationController?.pushViewController(planDayVC, animated: true)
-    }
-        
-        // MARK: - UITableViewDelegate
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            itinerary.remove(at: indexPath.row)
-            itineraryTableView.deleteRows(at: [indexPath], with: .fade)
-            itineraryTableView.reloadData()
-            updateTableViewHeight()
-        }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.bounds.width - 32, height: 80)
     }
 }
