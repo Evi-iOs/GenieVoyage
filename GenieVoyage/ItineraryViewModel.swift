@@ -11,7 +11,7 @@ import UIKit
 class ItineraryViewModel {
     
     // MARK: - Properties
-    private(set) var days: [String] = []
+    private var days: [String]
     private var itineraryData: [[ItineraryItem]] = []
     
     var selectedDayIndex: Int = 0 {
@@ -24,14 +24,13 @@ class ItineraryViewModel {
     var onDayChanged: (() -> Void)?
     
     // MARK: - Initializer
-    init() {
+    init(days: [String]) {
+        self.days = days
         setupData()
     }
     
     // MARK: - Data Setup
     private func setupData() {
-        // Generate days (e.g., Mon 10/12, Tue 11/12)
-        days = generateDatesArray(from: Date(), to: Calendar.current.date(byAdding: .day, value: 3, to: Date())!)
         
         // Example itinerary data
         itineraryData = [
@@ -47,22 +46,6 @@ class ItineraryViewModel {
                 ItineraryItem(time: "15:00", title: "Dinner", icon: UIImage(systemName: "fork.knife"))
             ]
         ]
-    }
-    
-    private func generateDatesArray(from startDate: Date, to endDate: Date) -> [String] {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE dd/MM"
-        
-        var dates: [String] = []
-        let calendar = Calendar.current
-        var currentDate = calendar.startOfDay(for: startDate)
-        let normalizedEndDate = calendar.startOfDay(for: endDate)
-        
-        while currentDate <= normalizedEndDate {
-            dates.append(formatter.string(from: currentDate))
-            currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
-        }
-        return dates
     }
     
     // MARK: - Public Methods

@@ -8,11 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1B28A79DB26C7026E5FD14EA /* Pods_GenieVoyage_GenieVoyageUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B04908D54247C8A3BBBE049A /* Pods_GenieVoyage_GenieVoyageUITests.framework */; };
-		46B51A8D93A6571B017C1B0B /* Pods_GenieVoyage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 071C3747FA4F0ADB75D5CC99 /* Pods_GenieVoyage.framework */; };
-		D0010B2A2AF69F8D00BAEC46 /* CreateNewTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0010B292AF69F8D00BAEC46 /* CreateNewTripViewController.swift */; };
 		D0010B2C2B12A24200BAEC46 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0010B2B2B12A24200BAEC46 /* Extension.swift */; };
-		D0010B2E2B1BD10500BAEC46 /* CreateTripView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0010B2D2B1BD10500BAEC46 /* CreateTripView.xib */; };
-		D0010B302B1BD13300BAEC46 /* CreateTripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0010B2F2B1BD13300BAEC46 /* CreateTripView.swift */; };
 		D0365DF12CFA6BEA00D711A9 /* TripModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0365DF02CFA6BE700D711A9 /* TripModel.swift */; };
 		D0365DF32CFA6D3500D711A9 /* TripsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0365DF22CFA6D3500D711A9 /* TripsViewController.swift */; };
 		D0365DF52CFA723600D711A9 /* TripDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0365DF42CFA723600D711A9 /* TripDetailViewController.swift */; };
@@ -25,8 +21,9 @@
 		D04945B32D3A451B00232F26 /* ItineraryItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04945B22D3A451B00232F26 /* ItineraryItemCell.swift */; };
 		D04945B52D3A46FA00232F26 /* ItineraryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04945B42D3A46FA00232F26 /* ItineraryItem.swift */; };
 		D04945B92D3EB26900232F26 /* ItineraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04945B82D3EB26900232F26 /* ItineraryViewModel.swift */; };
+		D0605DF82D3FF24C00465BD2 /* Pods_GenieVoyage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 071C3747FA4F0ADB75D5CC99 /* Pods_GenieVoyage.framework */; };
+		D0605DF92D3FF24C00465BD2 /* Pods_GenieVoyage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 071C3747FA4F0ADB75D5CC99 /* Pods_GenieVoyage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D07B678A2D2C6D8000842293 /* StartPlanningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07B67892D2C6D8000842293 /* StartPlanningViewController.swift */; };
-		D0949A3D2AF2FB26005E310D /* CreateNewTripViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0949A3C2AF2FB26005E310D /* CreateNewTripViewModel.swift */; };
 		D0949A3F2AF32444005E310D /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0949A3E2AF32444005E310D /* CoreDataManager.swift */; };
 		D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */; };
 		D0D192D42A6FFF9A000853B8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D32A6FFF9A000853B8 /* SceneDelegate.swift */; };
@@ -59,6 +56,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		D0605DFA2D3FF24C00465BD2 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				D0605DF92D3FF24C00465BD2 /* Pods_GenieVoyage.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		071C3747FA4F0ADB75D5CC99 /* Pods_GenieVoyage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GenieVoyage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1251502AC92FBF204C8D5ACA /* Pods-GenieVoyage-GenieVoyageUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GenieVoyage-GenieVoyageUITests.debug.xcconfig"; path = "Target Support Files/Pods-GenieVoyage-GenieVoyageUITests/Pods-GenieVoyage-GenieVoyageUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -68,10 +79,7 @@
 		890A253B57967C505085FD95 /* Pods_GenieVoyageTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GenieVoyageTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9987FB9B0F0ED0A38BD352E5 /* Pods-GenieVoyage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GenieVoyage.release.xcconfig"; path = "Target Support Files/Pods-GenieVoyage/Pods-GenieVoyage.release.xcconfig"; sourceTree = "<group>"; };
 		B04908D54247C8A3BBBE049A /* Pods_GenieVoyage_GenieVoyageUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GenieVoyage_GenieVoyageUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D0010B292AF69F8D00BAEC46 /* CreateNewTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewTripViewController.swift; sourceTree = "<group>"; };
 		D0010B2B2B12A24200BAEC46 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
-		D0010B2D2B1BD10500BAEC46 /* CreateTripView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CreateTripView.xib; sourceTree = "<group>"; };
-		D0010B2F2B1BD13300BAEC46 /* CreateTripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTripView.swift; sourceTree = "<group>"; };
 		D0365DF02CFA6BE700D711A9 /* TripModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripModel.swift; sourceTree = "<group>"; };
 		D0365DF22CFA6D3500D711A9 /* TripsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripsViewController.swift; sourceTree = "<group>"; };
 		D0365DF42CFA723600D711A9 /* TripDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripDetailViewController.swift; sourceTree = "<group>"; };
@@ -85,7 +93,6 @@
 		D04945B42D3A46FA00232F26 /* ItineraryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryItem.swift; sourceTree = "<group>"; };
 		D04945B82D3EB26900232F26 /* ItineraryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryViewModel.swift; sourceTree = "<group>"; };
 		D07B67892D2C6D8000842293 /* StartPlanningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartPlanningViewController.swift; sourceTree = "<group>"; };
-		D0949A3C2AF2FB26005E310D /* CreateNewTripViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewTripViewModel.swift; sourceTree = "<group>"; };
 		D0949A3E2AF32444005E310D /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		D0D192CE2A6FFF9A000853B8 /* GenieVoyage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GenieVoyage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -109,8 +116,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0605DF82D3FF24C00465BD2 /* Pods_GenieVoyage.framework in Frameworks */,
 				D0D193062A705F28000853B8 /* CalendarKit in Frameworks */,
-				46B51A8D93A6571B017C1B0B /* Pods_GenieVoyage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -156,16 +163,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		D0010B1D2AF6788E00BAEC46 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				D0010B292AF69F8D00BAEC46 /* CreateNewTripViewController.swift */,
-				D0010B2D2B1BD10500BAEC46 /* CreateTripView.xib */,
-				D0010B2F2B1BD13300BAEC46 /* CreateTripView.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
 		D0D192C52A6FFF9A000853B8 = {
 			isa = PBXGroup;
 			children = (
@@ -199,9 +196,9 @@
 				D0D192D52A6FFF9A000853B8 /* CalendarViewController.swift */,
 				D0365DF22CFA6D3500D711A9 /* TripsViewController.swift */,
 				D043B43C2CFF6DDE00151ED0 /* AddEditTripViewController.swift */,
+				D04945B82D3EB26900232F26 /* ItineraryViewModel.swift */,
 				D04945B22D3A451B00232F26 /* ItineraryItemCell.swift */,
 				D04945B42D3A46FA00232F26 /* ItineraryItem.swift */,
-				D04945B82D3EB26900232F26 /* ItineraryViewModel.swift */,
 				D03D08642D0730CE009F8E63 /* PlanDayDetailViewController.swift */,
 				D07B67892D2C6D8000842293 /* StartPlanningViewController.swift */,
 				D03D08682D08544D009F8E63 /* EventViewController.swift */,
@@ -209,8 +206,6 @@
 				D0365DF42CFA723600D711A9 /* TripDetailViewController.swift */,
 				D03D08662D074316009F8E63 /* ItineraryCell.swift */,
 				D0365DF82CFDC76F00D711A9 /* CalculateDistance.swift */,
-				D0010B1D2AF6788E00BAEC46 /* View */,
-				D0949A3C2AF2FB26005E310D /* CreateNewTripViewModel.swift */,
 				D0949A3E2AF32444005E310D /* CoreDataManager.swift */,
 				D0D192DD2A6FFF9B000853B8 /* Assets.xcassets */,
 				D0D192DF2A6FFF9B000853B8 /* LaunchScreen.storyboard */,
@@ -248,7 +243,7 @@
 				D0D192CA2A6FFF9A000853B8 /* Sources */,
 				D0D192CB2A6FFF9A000853B8 /* Frameworks */,
 				D0D192CC2A6FFF9A000853B8 /* Resources */,
-				B0AC175D0075E2F0827568C1 /* [CP] Embed Pods Frameworks */,
+				D0605DFA2D3FF24C00465BD2 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -289,7 +284,6 @@
 				D0D192ED2A6FFF9B000853B8 /* Sources */,
 				D0D192EE2A6FFF9B000853B8 /* Frameworks */,
 				D0D192EF2A6FFF9B000853B8 /* Resources */,
-				543EE68B40A079A255DEE794 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -353,7 +347,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0D192E12A6FFF9B000853B8 /* LaunchScreen.storyboard in Resources */,
-				D0010B2E2B1BD10500BAEC46 /* CreateTripView.xib in Resources */,
 				D0D192DE2A6FFF9B000853B8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -375,23 +368,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		543EE68B40A079A255DEE794 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GenieVoyage-GenieVoyageUITests/Pods-GenieVoyage-GenieVoyageUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GenieVoyage-GenieVoyageUITests/Pods-GenieVoyage-GenieVoyageUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GenieVoyage-GenieVoyageUITests/Pods-GenieVoyage-GenieVoyageUITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		54DF311B17387453174FC2ED /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -436,23 +412,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B0AC175D0075E2F0827568C1 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GenieVoyage/Pods-GenieVoyage-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GenieVoyage/Pods-GenieVoyage-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GenieVoyage/Pods-GenieVoyage-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		FF669B1A667A4F663D15C543 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -483,7 +442,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0365DF52CFA723600D711A9 /* TripDetailViewController.swift in Sources */,
-				D0949A3D2AF2FB26005E310D /* CreateNewTripViewModel.swift in Sources */,
 				D0D192D62A6FFF9A000853B8 /* CalendarViewController.swift in Sources */,
 				D0365DF92CFDC76F00D711A9 /* CalculateDistance.swift in Sources */,
 				D04945B52D3A46FA00232F26 /* ItineraryItem.swift in Sources */,
@@ -500,8 +458,6 @@
 				D0365DF32CFA6D3500D711A9 /* TripsViewController.swift in Sources */,
 				D03D08672D074316009F8E63 /* ItineraryCell.swift in Sources */,
 				D0D193082A71AC36000853B8 /* EKWrapper.swift in Sources */,
-				D0010B2A2AF69F8D00BAEC46 /* CreateNewTripViewController.swift in Sources */,
-				D0010B302B1BD13300BAEC46 /* CreateTripView.swift in Sources */,
 				D0365DF12CFA6BEA00D711A9 /* TripModel.swift in Sources */,
 				D04945B92D3EB26900232F26 /* ItineraryViewModel.swift in Sources */,
 				D0949A3F2AF32444005E310D /* CoreDataManager.swift in Sources */,

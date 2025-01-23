@@ -16,7 +16,5 @@ target 'GenieVoyage' do
     # Pods for testing
   end
 
- pod 'RxSwift', '~> 5.0'
-  pod 'RxCocoa', '~> 5.0'
 
 end

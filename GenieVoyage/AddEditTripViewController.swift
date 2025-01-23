@@ -32,7 +32,7 @@ class AddEditTripViewController: UIViewController, UIImagePickerControllerDelega
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
-    private let viewModel = ItineraryViewModel()
+    private lazy var viewModel = ItineraryViewModel(days: days)
     
     // MARK: - UI Elements
         private let segmentedControl: UISegmentedControl = {
@@ -155,7 +155,7 @@ class AddEditTripViewController: UIViewController, UIImagePickerControllerDelega
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
         for index in 1...5 {
-            let button = createIconButton(iconName: "plane")
+            let button = createIconButton(iconName: "airplane")
             stackView.addArrangedSubview(button)
         }
         contentView.addSubview(stackView)
@@ -318,7 +318,7 @@ class AddEditTripViewController: UIViewController, UIImagePickerControllerDelega
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.lightGray.cgColor
         
-        let icon = UIImage(systemName: "airplane")
+        let icon = UIImage(systemName: iconName)?.withTintColor(.darkGray)
         button.setImage(icon, for: .normal)
         
         button.imageView?.contentMode = .scaleAspectFit
