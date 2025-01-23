@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class TripsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class AllTripsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var trips: [TripModel] = []
     
@@ -55,7 +55,7 @@ class TripsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     //Edit Trip
-//    //let editTripVC = AddEditTripViewController()
+//    //let editTripVC = TripViewController()
 //    editTripVC.trip = existingTrip
 //    editTripVC.onSave = { updatedTrip in
 //        print("Обновлённая поездка: \(updatedTrip)")

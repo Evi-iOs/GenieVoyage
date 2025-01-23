@@ -81,7 +81,7 @@ class StartPlanningViewController: UIViewController {
         }
         let trip = TripModel(id: UUID(), title: title, startDate: startDatePicker.date, endDate: endDatePicker.date)
         
-        let addTripVC = AddEditTripViewController(trip: trip)
+        let addTripVC = TripViewController(trip: trip)
 
         self.navigationController?.pushViewController(addTripVC, animated: true)
     

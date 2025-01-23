@@ -1,5 +1,5 @@
 //
-//  AddEditTripViewController.swift
+//  TripViewController.swift
 //  GenieVoyage
 //
 //  Created by Evgeniya  Iv on 03.12.2024.
@@ -8,7 +8,7 @@
 import UIKit
 import Photos
 
-class AddEditTripViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class TripViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     var trip: TripModel?
     var onSave: ((TripModel) -> Void)?
@@ -34,12 +34,50 @@ class AddEditTripViewController: UIViewController, UIImagePickerControllerDelega
     
     private lazy var viewModel = ItineraryViewModel(days: days)
     
-    // MARK: - UI Elements
-        private let segmentedControl: UISegmentedControl = {
-            let control = UISegmentedControl()
-            control.translatesAutoresizingMaskIntoConstraints = false
-            return control
-        }()
+    
+    // MARK: - SegmentControl
+    
+    private let segmentedControl: UISegmentedControl = {
+        let control = UISegmentedControl()
+        control.selectedSegmentIndex = 0
+        control.backgroundColor = .clear
+        control.setBackgroundImage(UIImage(), for: .normal, barMetrics: .default)
+        control.setBackgroundImage(UIImage(), for: .selected, barMetrics: .default)
+        control.setDividerImage(UIImage(), forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
+        control.tintColor = .clear
+        
+        control.setTitleTextAttributes([.foregroundColor: UIColor.black, .font: UIFont.systemFont(ofSize: 17, weight: .regular)], for: .normal)
+        control.setTitleTextAttributes([.foregroundColor: UIColor.black, .font: UIFont.systemFont(ofSize: 17, weight: .bold)], for: .selected)
+        control.translatesAutoresizingMaskIntoConstraints = false
+        return control
+    }()
+    
+    private let underlineViewSegmentControl: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black
+        return view
+    }()
+    
+    private func setupUnderlineView() {
+        contentView.addSubview(underlineViewSegmentControl)
+        underlineViewSegmentControl.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            underlineViewSegmentControl.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 2),
+            underlineViewSegmentControl.heightAnchor.constraint(equalToConstant: 2),
+            underlineViewSegmentControl.widthAnchor.constraint(equalTo: segmentedControl.widthAnchor, multiplier: 1.0 / CGFloat(segmentedControl.numberOfSegments), constant: -32),
+            underlineViewSegmentControl.leadingAnchor.constraint(equalTo: segmentedControl.leadingAnchor, constant: 16)
+        ])
+    }
+    
+    private func configureSegmentedControl() {
+        segmentedControl.removeAllSegments()
+        for index in 0..<viewModel.numberOfDays() {
+            segmentedControl.insertSegment(withTitle: viewModel.titleForDay(at: index), at: index, animated: false)
+        }
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
+    }
+        
         
         private let collectionView: UICollectionView = {
             let layout = UICollectionViewFlowLayout()
@@ -75,6 +113,7 @@ class AddEditTripViewController: UIViewController, UIImagePickerControllerDelega
         configureSegmentedControl()
         configureCollectionView()
         bindViewModel()
+        setupUnderlineView()
     }
     
     override func viewDidLayoutSubviews() {
@@ -130,7 +169,6 @@ class AddEditTripViewController: UIViewController, UIImagePickerControllerDelega
         
         contentView.addSubview(destinationLabel)
         contentView.addSubview(titleTextField)
-        // contentView.addSubview(descriptionTextView)
         
         contentView.addSubview(startDateLabel)
         //        contentView.addSubview(endDateLabel)
@@ -144,6 +182,7 @@ class AddEditTripViewController: UIViewController, UIImagePickerControllerDelega
         contentView.addSubview(cancelButton)
         contentView.addSubview(saveButton)
         contentView.addSubview(segmentedControl)
+        contentView.addSubview(underlineViewSegmentControl)
 
     }
     
@@ -234,15 +273,16 @@ class AddEditTripViewController: UIViewController, UIImagePickerControllerDelega
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
             segmentedControl.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 20),
-            segmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            segmentedControl.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            segmentedControl.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            segmentedControl.widthAnchor.constraint(equalToConstant: 300),
+            segmentedControl.heightAnchor.constraint(equalToConstant: 40),
             
             // CollectionView below segmented control
             collectionView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 16),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            
+                    
             // Save Button
             saveButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
             saveButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
@@ -340,21 +380,18 @@ class AddEditTripViewController: UIViewController, UIImagePickerControllerDelega
     
     @objc private func segmentedControlValueChanged(_ sender: UISegmentedControl) {
         viewModel.selectedDayIndex = sender.selectedSegmentIndex
+        let selectedIndex = CGFloat(segmentedControl.selectedSegmentIndex)
+        let segmentWidth = (segmentedControl.frame.width - 32) / CGFloat(segmentedControl.numberOfSegments)
+        
+        UIView.animate(withDuration: 0.3) {
+            self.underlineViewSegmentControl.frame.origin.x = self.segmentedControl.frame.origin.x + 16 + segmentWidth * selectedIndex
+        }
     }
     
     private func showAlert(message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
-    }
-    
-    private func configureSegmentedControl() {
-        segmentedControl.removeAllSegments()
-        for index in 0..<viewModel.numberOfDays() {
-            segmentedControl.insertSegment(withTitle: viewModel.titleForDay(at: index), at: index, animated: false)
-        }
-        segmentedControl.selectedSegmentIndex = 0
-        segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
     }
         
     private func configureCollectionView() {
@@ -391,7 +428,7 @@ class AddEditTripViewController: UIViewController, UIImagePickerControllerDelega
         
         var currentDate = normalizedStartDate
         while currentDate <= normalizedEndDate {
-            let dateString = currentDate.formatted()
+            let dateString = currentDate.formattedDate()
             dates.append(dateString)
             currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
         }
@@ -400,7 +437,7 @@ class AddEditTripViewController: UIViewController, UIImagePickerControllerDelega
 }
 
 // MARK: - UICollectionView DataSource & Delegate
-extension AddEditTripViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension TripViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.numberOfItemsForSelectedDay()
     }
