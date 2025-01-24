@@ -31,11 +31,18 @@ extension UIView {
 }
 
 extension Date {
-    func formattedDate() -> String {
+    func formattedDateWeekDay() -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
-        formatter.dateFormat = "dd MMM"
+        formatter.dateFormat = "E dd/MM"
+        formatter.locale = Locale(identifier: "en_US")
         return formatter.string(from: self)
+    }
+    
+    func formattedDate() -> String {
+        let dateFormater = DateFormatter()
+        dateFormater.dateFormat = "dd/MM/yyyy"
+        return dateFormater.string(from: self)
     }
 
     func formattedTime() -> String {

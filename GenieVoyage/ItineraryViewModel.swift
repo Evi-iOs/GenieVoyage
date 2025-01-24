@@ -50,7 +50,8 @@ class ItineraryViewModel {
     
     // MARK: - Public Methods
     func numberOfItemsForSelectedDay() -> Int {
-        return itineraryData[selectedDayIndex].count
+        return itineraryData[0].count
+       // return itineraryData[selectedDayIndex].count
     }
     
     func itemForIndex(_ index: Int) -> ItineraryItem {

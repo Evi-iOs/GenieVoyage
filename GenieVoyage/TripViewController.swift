@@ -76,7 +76,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         titleTextField.font = UIFont.boldSystemFont(ofSize: 20)
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
         
-        startDateLabel.text = "\((trip != nil) ? trip!.startDate.formattedDate() : startDatePicker.date.formattedDate()) - \((trip != nil) ? trip!.endDate.formattedDate() : endDatePicker.date.formattedDate())"
+        startDateLabel.text = "\((trip != nil) ? trip!.startDate.formattedDateWeekDay() : startDatePicker.date.formattedDateWeekDay()) - \((trip != nil) ? trip!.endDate.formattedDateWeekDay() : endDatePicker.date.formattedDateWeekDay())"
         startDateLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         startDateLabel.translatesAutoresizingMaskIntoConstraints = false
         
@@ -136,7 +136,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         stackView.spacing = 16
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
-        for index in 1...5 {
+        for index in 1...4 {
             let button = createIconButton(iconName: "airplane")
             stackView.addArrangedSubview(button)
         }
@@ -425,7 +425,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         var currentDate = normalizedStartDate
         while currentDate <= normalizedEndDate {
-            let dateString = currentDate.formattedDate()
+            let dateString = currentDate.formattedDateWeekDay()
             dates.append(dateString)
             currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
         }

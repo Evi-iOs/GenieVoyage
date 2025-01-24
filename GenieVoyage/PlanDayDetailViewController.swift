@@ -34,7 +34,7 @@ class PlanDayDetailViewController: UIViewController, UITableViewDelegate, UITabl
 
     private func setupUI() {
         view.backgroundColor = .systemBackground
-        title = "Plan Day \(dayPlan.date.formattedDate())"
+        title = "Plan Day \(dayPlan.date.formattedDateWeekDay())"
         let backButton = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(backButtonAction))
         navigationItem.leftBarButtonItem = backButton
         
