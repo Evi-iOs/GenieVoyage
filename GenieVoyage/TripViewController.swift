@@ -13,7 +13,11 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     var trip: TripModel?
     var onSave: ((TripModel) -> Void)?
     
-    //UI elements
+    // MARK: - Data
+    lazy var days: [String] = generateDatesArray(from: trip?.startDate ?? Date(), to: trip?.endDate ?? Date())
+    private lazy var viewModel = ItineraryViewModel(days: days)
+    
+    // MARK: UI elements
     private let destinationLabel = UILabel()
     private let titleTextField = UITextField()
     private let stackView = UIStackView()
@@ -31,67 +35,6 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     private let scrollView = UIScrollView()
     private let contentView = UIView()
-    
-    private lazy var viewModel = ItineraryViewModel(days: days)
-    
-    
-    // MARK: - SegmentControl
-    
-    private let segmentedControl: UISegmentedControl = {
-        let control = UISegmentedControl()
-        control.selectedSegmentIndex = 0
-        control.backgroundColor = .clear
-        control.setBackgroundImage(UIImage(), for: .normal, barMetrics: .default)
-        control.setBackgroundImage(UIImage(), for: .selected, barMetrics: .default)
-        control.setDividerImage(UIImage(), forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
-        control.tintColor = .clear
-        
-        control.setTitleTextAttributes([.foregroundColor: UIColor.black, .font: UIFont.systemFont(ofSize: 17, weight: .regular)], for: .normal)
-        control.setTitleTextAttributes([.foregroundColor: UIColor.black, .font: UIFont.systemFont(ofSize: 17, weight: .bold)], for: .selected)
-        control.translatesAutoresizingMaskIntoConstraints = false
-        return control
-    }()
-    
-    private let underlineViewSegmentControl: UIView = {
-        let view = UIView()
-        view.backgroundColor = .black
-        return view
-    }()
-    
-    private func setupUnderlineView() {
-        contentView.addSubview(underlineViewSegmentControl)
-        underlineViewSegmentControl.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            underlineViewSegmentControl.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 2),
-            underlineViewSegmentControl.heightAnchor.constraint(equalToConstant: 2),
-            underlineViewSegmentControl.widthAnchor.constraint(equalTo: segmentedControl.widthAnchor, multiplier: 1.0 / CGFloat(segmentedControl.numberOfSegments), constant: -32),
-            underlineViewSegmentControl.leadingAnchor.constraint(equalTo: segmentedControl.leadingAnchor, constant: 16)
-        ])
-    }
-    
-    private func configureSegmentedControl() {
-        segmentedControl.removeAllSegments()
-        for index in 0..<viewModel.numberOfDays() {
-            segmentedControl.insertSegment(withTitle: viewModel.titleForDay(at: index), at: index, animated: false)
-        }
-        segmentedControl.selectedSegmentIndex = 0
-        segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
-    }
-        
-        
-        private let collectionView: UICollectionView = {
-            let layout = UICollectionViewFlowLayout()
-            layout.scrollDirection = .vertical
-            layout.minimumLineSpacing = 16
-            layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-            
-            let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-            collectionView.translatesAutoresizingMaskIntoConstraints = false
-            return collectionView
-        }()
-    
-    // MARK: - Data
-    lazy var days: [String] = generateDatesArray(from: trip?.startDate ?? Date(), to: trip?.endDate ?? Date())
     
     init(trip: TripModel? = nil, onSave: ((TripModel) -> Void)? = nil) {
         self.trip = trip
@@ -183,7 +126,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         contentView.addSubview(saveButton)
         contentView.addSubview(segmentedControl)
         contentView.addSubview(underlineViewSegmentControl)
-
+        
     }
     
     private func setupIconButtons() {
@@ -212,6 +155,29 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 endDatePicker.date = endDate
             }
         }
+    }
+    
+    private func createIconButton(iconName: String) -> UIButton {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            button.widthAnchor.constraint(equalToConstant: 48),
+            button.heightAnchor.constraint(equalToConstant: 48)
+        ])
+        
+        button.layer.cornerRadius = 24
+        button.layer.masksToBounds = true
+        button.backgroundColor = .white
+        button.layer.borderWidth = 1
+        button.layer.borderColor = UIColor.lightGray.cgColor
+        
+        let icon = UIImage(systemName: iconName)?.withTintColor(.darkGray)
+        button.setImage(icon, for: .normal)
+        
+        button.imageView?.contentMode = .scaleAspectFit
+        
+        return button
     }
     
     // MARK: - Setup Scroll View
@@ -244,6 +210,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         ])
     }
     
+    // MARK: - Setup Constraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             //Cover Image
@@ -282,7 +249,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             collectionView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 16),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-                    
+            
             // Save Button
             saveButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
             saveButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
@@ -297,8 +264,67 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         ])
     }
     
-    //MARK: - Actions
+    // MARK: - SegmentControl
+    private let segmentedControl: UISegmentedControl = {
+        let control = UISegmentedControl()
+        control.selectedSegmentIndex = 0
+        control.backgroundColor = .clear
+        control.setBackgroundImage(UIImage(), for: .normal, barMetrics: .default)
+        control.setBackgroundImage(UIImage(), for: .selected, barMetrics: .default)
+        control.setDividerImage(UIImage(), forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
+        control.tintColor = .clear
+        
+        control.setTitleTextAttributes([.foregroundColor: UIColor.black, .font: UIFont.systemFont(ofSize: 17, weight: .regular)], for: .normal)
+        control.setTitleTextAttributes([.foregroundColor: UIColor.black, .font: UIFont.systemFont(ofSize: 17, weight: .bold)], for: .selected)
+        control.translatesAutoresizingMaskIntoConstraints = false
+        return control
+    }()
     
+    private let underlineViewSegmentControl: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black
+        return view
+    }()
+    
+    private func setupUnderlineView() {
+        contentView.addSubview(underlineViewSegmentControl)
+        underlineViewSegmentControl.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            underlineViewSegmentControl.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 2),
+            underlineViewSegmentControl.heightAnchor.constraint(equalToConstant: 2),
+            underlineViewSegmentControl.widthAnchor.constraint(equalTo: segmentedControl.widthAnchor, multiplier: 1.0 / CGFloat(segmentedControl.numberOfSegments), constant: -32),
+            underlineViewSegmentControl.leadingAnchor.constraint(equalTo: segmentedControl.leadingAnchor, constant: 16)
+        ])
+    }
+    
+    private func configureSegmentedControl() {
+        segmentedControl.removeAllSegments()
+        for index in 0..<viewModel.numberOfDays() {
+            segmentedControl.insertSegment(withTitle: viewModel.titleForDay(at: index), at: index, animated: false)
+        }
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
+    }
+    
+    // MARK: - Collection View
+    private func configureCollectionView() {
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(ItineraryItemCell.self, forCellWithReuseIdentifier: ItineraryItemCell.identifier)
+    }
+    
+    private let collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 16
+        layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        return collectionView
+    }()
+    
+    // MARK: - Actions
     @objc private func saveButtonTapped() {
         guard let title = titleTextField.text, !title.isEmpty else {
             showAlert(message: "Enter title Trip")
@@ -343,29 +369,6 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         }
     }
     
-    private func createIconButton(iconName: String) -> UIButton {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            button.widthAnchor.constraint(equalToConstant: 48),
-            button.heightAnchor.constraint(equalToConstant: 48)
-        ])
-        
-        button.layer.cornerRadius = 24
-        button.layer.masksToBounds = true
-        button.backgroundColor = .white
-        button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.lightGray.cgColor
-        
-        let icon = UIImage(systemName: iconName)?.withTintColor(.darkGray)
-        button.setImage(icon, for: .normal)
-        
-        button.imageView?.contentMode = .scaleAspectFit
-        
-        return button
-    }
-    
     private func openPhotoPicker() {
         let picker = UIImagePickerController()
         picker.delegate = self
@@ -393,12 +396,6 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }
-        
-    private func configureCollectionView() {
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.register(ItineraryItemCell.self, forCellWithReuseIdentifier: ItineraryItemCell.identifier)
-    }
     
     // MARK: - Binding
     private func bindViewModel() {
@@ -419,7 +416,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         dismiss(animated: true, completion: nil)
     }
     
-    //MARK: - Additional func
+    // MARK: - Additional func
     private func generateDatesArray(from startDate: Date, to endDate: Date) -> [String] {
         var dates: [String] = []
         let calendar = Calendar.current
