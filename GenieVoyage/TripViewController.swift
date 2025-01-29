@@ -13,17 +13,14 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     var trip: TripModel?
     var onSave: ((TripModel) -> Void)?
     
-    // MARK: - Data
-    lazy var days: [String] = generateDatesArray(from: trip?.startDate ?? Date(), to: trip?.endDate ?? Date())
-    private lazy var viewModel = ItineraryViewModel(days: days)
+    private lazy var viewModel = ItineraryViewModel(trip: trip)
     
     // MARK: UI elements
     private let destinationLabel = UILabel()
     private let titleTextField = UITextField()
     private let stackView = UIStackView()
     
-    private let startDateLabel = UILabel()
-    private let endDateLabel = UILabel()
+    private let datesLabel = UILabel()
     private let startDatePicker = UIDatePicker()
     private let endDatePicker = UIDatePicker()
     
@@ -71,9 +68,6 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         setupUnderlineViewForSegmentControll()
         setupConstraints()
         bindViewModel()
-        
-        let segmentWidth = segmentedControl.frame.width / CGFloat(segmentedControl.numberOfSegments)
-        underlineViewSegmentControl.frame = CGRect(x: 0, y: segmentedControl.frame.maxY - 2, width: segmentWidth, height: 2)
     }
     
     override func viewDidLayoutSubviews() {
@@ -95,13 +89,9 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         titleTextField.font = UIFont.boldSystemFont(ofSize: 20)
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
         
-        startDateLabel.text = "\((trip != nil) ? trip!.startDate.formattedDateWeekDay() : startDatePicker.date.formattedDateWeekDay()) - \((trip != nil) ? trip!.endDate.formattedDateWeekDay() : endDatePicker.date.formattedDateWeekDay())"
-        startDateLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        startDateLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        endDateLabel.text = "End Date Trip"
-        endDateLabel.font = UIFont.systemFont(ofSize: 18)
-        endDateLabel.translatesAutoresizingMaskIntoConstraints = false
+        datesLabel.text = "\((trip != nil) ? trip!.startDate.formattedDateWeekDay() : startDatePicker.date.formattedDateWeekDay()) - \((trip != nil) ? trip!.endDate.formattedDateWeekDay() : endDatePicker.date.formattedDateWeekDay())"
+        datesLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        datesLabel.translatesAutoresizingMaskIntoConstraints = false
         
         startDatePicker.datePickerMode = .date
         startDatePicker.preferredDatePickerStyle = .automatic
@@ -132,8 +122,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         contentView.addSubview(destinationLabel)
         contentView.addSubview(titleTextField)
         
-        contentView.addSubview(startDateLabel)
-        //        contentView.addSubview(endDateLabel)
+        contentView.addSubview(datesLabel)
         //        contentView.addSubview(startDatePicker)
         //        contentView.addSubview(endDatePicker)
         //
@@ -253,8 +242,8 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             titleTextField.topAnchor.constraint(equalTo: destinationLabel.bottomAnchor, constant: 10),
             titleTextField.leadingAnchor.constraint(equalTo: coverImageView.trailingAnchor, constant: 20),
             
-            startDateLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            startDateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            datesLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            datesLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
             stackView.topAnchor.constraint(equalTo: coverImageView.bottomAnchor, constant: 20),
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
@@ -376,31 +365,18 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         navigationController?.popViewController(animated: true)
     }
     
-    @objc private func  addCoverTapped() {
+    @objc private func addCoverTapped() {
         let status = PHPhotoLibrary.authorizationStatus()
-        
-        switch status {
-        case .notDetermined:
+        if status == .authorized || status == .limited {
+            openPhotoPicker()
+        } else if status == .notDetermined {
             PHPhotoLibrary.requestAuthorization { newStatus in
-                if newStatus == .authorized || newStatus == .limited {
-                    DispatchQueue.main.async {
-                        self.openPhotoPicker()
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        self.showAlert(message: "Access to the photo library was denied.")
-                    }
+                DispatchQueue.main.async {
+                    newStatus == .authorized || newStatus == .limited ? self.openPhotoPicker() : self.showAlert(message: "Access to the photo library was denied.")
                 }
             }
-            
-        case .authorized, .limited:
-            openPhotoPicker()
-            
-        case .denied, .restricted:
+        } else {
             showAlert(message: "Access to the photo library is restricted.")
-            
-        @unknown default:
-            showAlert(message: "Unknown photo library authorization status.")
         }
     }
     
@@ -462,22 +438,6 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
-    }
-    
-    // MARK: - Additional func
-    private func generateDatesArray(from startDate: Date, to endDate: Date) -> [String] {
-        var dates: [String] = []
-        let calendar = Calendar.current
-        let normalizedStartDate = calendar.startOfDay(for: startDate)
-        let normalizedEndDate = calendar.startOfDay(for: endDate)
-        
-        var currentDate = normalizedStartDate
-        while currentDate <= normalizedEndDate {
-            let dateString = currentDate.formattedDateWeekDay()
-            dates.append(dateString)
-            currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
-        }
-        return dates
     }
 }
 

@@ -11,8 +11,10 @@ import UIKit
 class ItineraryViewModel {
     
     // MARK: - Properties
-    var days: [String]
+    var days: [String] = []
+    
     private var itineraryData: [[ItineraryItem]] = []
+    private let trip: TripModel?
     
     var selectedDayIndex: Int = 0 {
         didSet {
@@ -24,14 +26,15 @@ class ItineraryViewModel {
     var onDayChanged: (() -> Void)?
     
     // MARK: - Initializer
-    init(days: [String]) {
-        self.days = days
+    init(trip: TripModel? = nil) {
+        self.trip = trip
         setupData()
     }
     
     // MARK: - Data Setup
     private func setupData() {
         
+        configureDays(trip: trip)
         // Example itinerary data
         itineraryData = [
             [
@@ -46,6 +49,29 @@ class ItineraryViewModel {
                 ItineraryItem(time: "15:00", title: "Dinner", icon: UIImage(systemName: "fork.knife"))
             ]
         ]
+    }
+    
+    private func configureDays(trip: TripModel?) {
+        guard let trip = trip else {
+            days = []
+            return
+        }
+        days = generateDatesArray(from: trip.startDate, to: trip.endDate)
+    }
+    
+    private func generateDatesArray(from startDate: Date, to endDate: Date) -> [String] {
+        var dates: [String] = []
+        let calendar = Calendar.current
+        let normalizedStartDate = calendar.startOfDay(for: startDate)
+        let normalizedEndDate = calendar.startOfDay(for: endDate)
+        
+        var currentDate = normalizedStartDate
+        while currentDate <= normalizedEndDate {
+            let dateString = currentDate.formattedDateWeekDay()
+            dates.append(dateString)
+            currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
+        }
+        return dates
     }
     
     // MARK: - Public Methods
