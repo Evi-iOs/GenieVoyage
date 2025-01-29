@@ -11,7 +11,7 @@ import UIKit
 class ItineraryViewModel {
     
     // MARK: - Properties
-    private var days: [String]
+    var days: [String]
     private var itineraryData: [[ItineraryItem]] = []
     
     var selectedDayIndex: Int = 0 {
@@ -55,7 +55,8 @@ class ItineraryViewModel {
     }
     
     func itemForIndex(_ index: Int) -> ItineraryItem {
-        return itineraryData[selectedDayIndex][index]
+        return itineraryData[0][0]
+        //return itineraryData[selectedDayIndex][index]
     }
     
     func numberOfDays() -> Int {
