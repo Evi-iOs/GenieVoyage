@@ -27,6 +27,8 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     private let coverImageView = UIImageView()
     private let addCoverButton = UIButton(type: .system)
     
+    private let itineraryLabel = UILabel()
+    
     private let saveButton = UIButton(type: .system)
     private let cancelButton = UIButton(type: .system)
     
@@ -111,6 +113,11 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         addCoverButton.addTarget(self, action: #selector(addCoverTapped), for: .touchUpInside)
         addCoverButton.translatesAutoresizingMaskIntoConstraints = false
         
+        itineraryLabel.text = "Itinerary:"
+        itineraryLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        itineraryLabel.textColor = UIColor.darkGray
+        itineraryLabel.translatesAutoresizingMaskIntoConstraints = false
+        
         cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         cancelButton.applyPaperStyleWithGloss(withText: "Cancel")
@@ -129,6 +136,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         contentView.addSubview(coverImageView)
         coverImageView.addSubview(addCoverButton)
         
+        contentView.addSubview(itineraryLabel)
         contentView.addSubview(collectionView)
         contentView.addSubview(cancelButton)
     }
@@ -254,8 +262,12 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             horizontalScrollView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             horizontalScrollView.heightAnchor.constraint(equalToConstant: 60),
             
+            itineraryLabel.topAnchor.constraint(equalTo: horizontalScrollView.bottomAnchor, constant: 18),
+            itineraryLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            itineraryLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+           
             // CollectionView below segmented control
-            collectionView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 16),
+            collectionView.topAnchor.constraint(equalTo: itineraryLabel.bottomAnchor, constant: 16),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             collectionView.heightAnchor.constraint(equalToConstant: 100),
