@@ -32,21 +32,13 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     private let saveButton = UIButton(type: .system)
     private let cancelButton = UIButton(type: .system)
     
-    private let verticalScrollView:  UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.showsVerticalScrollIndicator = true
-        return scrollView
-    }()
-    
     private let horizontalScrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.backgroundColor = .white
         scrollView.showsHorizontalScrollIndicator = true
         return scrollView
     }()
-    
-    private let contentView = UIView()
-    
+        
     init(trip: TripModel? = nil, onSave: ((TripModel) -> Void)? = nil) {
         self.trip = trip
         self.onSave = onSave
@@ -59,27 +51,45 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupVerticalScrollView()
         configureUI()
         setupUI()
         setupIconButtons()
         setupHorizontalScrollView()
         configureSegmentedControl()
         configureCollectionView()
-        setupConstraintsForSegmentedControl()
-        setupUnderlineViewForSegmentControll()
-        setupConstraints()
         bindViewModel()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         let segmentWidth = segmentedControl.frame.width / CGFloat(segmentedControl.numberOfSegments)
         underlineViewSegmentControl.frame = CGRect(x: 0, y: segmentedControl.frame.maxY - 2, width: segmentWidth, height: 2)
+        
+        setupConstraints()
+        setupConstraintsForSegmentedControl()
+        setupUnderlineViewForSegmentControll()
     }
     
     private func setupUI() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .white
+        navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.tintColor = .darkGray
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .white
+        appearance.shadowColor = nil
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        
         navigationItem.title = trip == nil ? "Add Trip" : "Trip to \(trip?.title ?? "Trip")"
         
         destinationLabel.text = "Destination"
@@ -126,20 +136,20 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         
-        contentView.addSubview(destinationLabel)
-        contentView.addSubview(titleTextField)
+        view.addSubview(destinationLabel)
+        view.addSubview(titleTextField)
         
-        contentView.addSubview(datesLabel)
+        view.addSubview(datesLabel)
         //        contentView.addSubview(startDatePicker)
         //        contentView.addSubview(endDatePicker)
         //
-        contentView.addSubview(coverImageView)
+        view.addSubview(coverImageView)
         coverImageView.addSubview(addCoverButton)
         
-        contentView.addSubview(itineraryLabel)
-        contentView.addSubview(collectionView)
-        contentView.addSubview(cancelButton)
-        contentView.addSubview(saveButton)
+        view.addSubview(itineraryLabel)
+        view.addSubview(collectionView)
+        view.addSubview(cancelButton)
+        view.addSubview(saveButton)
     }
     
     private func setupIconButtons() {
@@ -152,7 +162,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             let button = createIconButton(iconName: "airplane")
             stackView.addArrangedSubview(button)
         }
-        contentView.addSubview(stackView)
+        view.addSubview(stackView)
     }
     
     private func configureUI() {
@@ -193,37 +203,9 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     // MARK: - Setup Scroll View
-    private func setupVerticalScrollView() {
-        verticalScrollView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(verticalScrollView)
-        setupConstraintsForVerticalScrollView()
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        verticalScrollView.addSubview(contentView)
-        setupConstraintsForContentView()
-    }
-    
-    private func setupConstraintsForVerticalScrollView() {
-        NSLayoutConstraint.activate([
-            verticalScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            verticalScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            verticalScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            verticalScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-    }
-    
-    private func setupConstraintsForContentView() {
-        NSLayoutConstraint.activate([
-            contentView.topAnchor.constraint(equalTo: verticalScrollView.topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: verticalScrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: verticalScrollView.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: verticalScrollView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: verticalScrollView.widthAnchor),
-            //contentView.heightAnchor.constraint(greaterThanOrEqualTo: verticalScrollView.heightAnchor)
-        ])
-    }
     
     private func setupHorizontalScrollView() {
-        contentView.addSubview(horizontalScrollView)
+        view.addSubview(horizontalScrollView)
         horizontalScrollView.sizeToFit()
         horizontalScrollView.translatesAutoresizingMaskIntoConstraints = false
         horizontalScrollView.contentSize = CGSize(width: 1000, height: horizontalScrollView.frame.height)
@@ -233,8 +215,8 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             //Cover Image
-            coverImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            coverImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            coverImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+            coverImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             coverImageView.heightAnchor.constraint(equalToConstant: 85),
             coverImageView.widthAnchor.constraint(equalToConstant: 85),
             
@@ -246,43 +228,43 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             
             //Title
             destinationLabel.leadingAnchor.constraint(equalTo: coverImageView.trailingAnchor, constant: 20),
-            destinationLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            destinationLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
             
             titleTextField.topAnchor.constraint(equalTo: destinationLabel.bottomAnchor, constant: 10),
             titleTextField.leadingAnchor.constraint(equalTo: coverImageView.trailingAnchor, constant: 20),
             
-            datesLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            datesLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            datesLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+            datesLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
             stackView.topAnchor.constraint(equalTo: coverImageView.bottomAnchor, constant: 20),
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
             horizontalScrollView.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 20),
-            horizontalScrollView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            horizontalScrollView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            horizontalScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            horizontalScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             horizontalScrollView.heightAnchor.constraint(equalToConstant: 60),
             
             itineraryLabel.topAnchor.constraint(equalTo: horizontalScrollView.bottomAnchor, constant: 18),
-            itineraryLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            itineraryLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            itineraryLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            itineraryLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
            
             // CollectionView below segmented control
             collectionView.topAnchor.constraint(equalTo: itineraryLabel.bottomAnchor, constant: 16),
-            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.heightAnchor.constraint(equalToConstant: 100),
             
             // Save Button
             saveButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
-            saveButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            saveButton.trailingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -10),
+            saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            saveButton.trailingAnchor.constraint(equalTo: view.centerXAnchor, constant: -10),
             saveButton.heightAnchor.constraint(equalToConstant: 44),
             
             //Cancel Button
             cancelButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
-            cancelButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            cancelButton.leadingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 10),
+            cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            cancelButton.leadingAnchor.constraint(equalTo: view.centerXAnchor, constant: 10),
             cancelButton.heightAnchor.constraint(equalToConstant: 44)
         ])
     }
