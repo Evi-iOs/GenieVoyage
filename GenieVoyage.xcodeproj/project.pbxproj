@@ -21,6 +21,7 @@
 		D04945B32D3A451B00232F26 /* ItineraryItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04945B22D3A451B00232F26 /* ItineraryItemCell.swift */; };
 		D04945B52D3A46FA00232F26 /* ItineraryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04945B42D3A46FA00232F26 /* ItineraryItem.swift */; };
 		D04945B92D3EB26900232F26 /* ItineraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04945B82D3EB26900232F26 /* ItineraryViewModel.swift */; };
+		D05D92E62D4B8CB10022C734 /* DayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05D92E52D4B8CB10022C734 /* DayCell.swift */; };
 		D0605DF82D3FF24C00465BD2 /* Pods_GenieVoyage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 071C3747FA4F0ADB75D5CC99 /* Pods_GenieVoyage.framework */; };
 		D0605DF92D3FF24C00465BD2 /* Pods_GenieVoyage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 071C3747FA4F0ADB75D5CC99 /* Pods_GenieVoyage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D07B678A2D2C6D8000842293 /* StartPlanningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07B67892D2C6D8000842293 /* StartPlanningViewController.swift */; };
@@ -92,6 +93,7 @@
 		D04945B22D3A451B00232F26 /* ItineraryItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryItemCell.swift; sourceTree = "<group>"; };
 		D04945B42D3A46FA00232F26 /* ItineraryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryItem.swift; sourceTree = "<group>"; };
 		D04945B82D3EB26900232F26 /* ItineraryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryViewModel.swift; sourceTree = "<group>"; };
+		D05D92E52D4B8CB10022C734 /* DayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCell.swift; sourceTree = "<group>"; };
 		D07B67892D2C6D8000842293 /* StartPlanningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartPlanningViewController.swift; sourceTree = "<group>"; };
 		D0949A3E2AF32444005E310D /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		D0D192CE2A6FFF9A000853B8 /* GenieVoyage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GenieVoyage.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -198,6 +200,7 @@
 				D043B43C2CFF6DDE00151ED0 /* TripViewController.swift */,
 				D04945B82D3EB26900232F26 /* ItineraryViewModel.swift */,
 				D04945B22D3A451B00232F26 /* ItineraryItemCell.swift */,
+				D05D92E52D4B8CB10022C734 /* DayCell.swift */,
 				D04945B42D3A46FA00232F26 /* ItineraryItem.swift */,
 				D03D08642D0730CE009F8E63 /* PlanDayDetailViewController.swift */,
 				D07B67892D2C6D8000842293 /* StartPlanningViewController.swift */,
@@ -451,6 +454,7 @@
 				D04945B32D3A451B00232F26 /* ItineraryItemCell.swift in Sources */,
 				D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */,
 				D0D192D42A6FFF9A000853B8 /* SceneDelegate.swift in Sources */,
+				D05D92E62D4B8CB10022C734 /* DayCell.swift in Sources */,
 				D03D086B2D08C14F009F8E63 /* MapLocationViewController.swift in Sources */,
 				D043B43D2CFF6DDE00151ED0 /* TripViewController.swift in Sources */,
 				D03D08652D0730CE009F8E63 /* PlanDayDetailViewController.swift in Sources */,

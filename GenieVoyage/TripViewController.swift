@@ -139,6 +139,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         contentView.addSubview(itineraryLabel)
         contentView.addSubview(collectionView)
         contentView.addSubview(cancelButton)
+        contentView.addSubview(saveButton)
     }
     
     private func setupIconButtons() {
@@ -217,7 +218,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             contentView.trailingAnchor.constraint(equalTo: verticalScrollView.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: verticalScrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: verticalScrollView.widthAnchor),
-            contentView.heightAnchor.constraint(greaterThanOrEqualTo: verticalScrollView.heightAnchor)
+            //contentView.heightAnchor.constraint(greaterThanOrEqualTo: verticalScrollView.heightAnchor)
         ])
     }
     
@@ -343,20 +344,22 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     // MARK: - Collection View
     private func configureCollectionView() {
-        contentView.addSubview(saveButton)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(ItineraryItemCell.self, forCellWithReuseIdentifier: ItineraryItemCell.identifier)
+        collectionView.register(DayCell.self, forCellWithReuseIdentifier: "DayCell")
     }
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 16
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 20
         layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.showsHorizontalScrollIndicator = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.isPagingEnabled = true
         return collectionView
     }()
     
@@ -456,15 +459,12 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
 // MARK: - UICollectionView DataSource & Delegate
 extension TripViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.numberOfItemsForSelectedDay()
+        return viewModel.numberOfDays()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ItineraryItemCell.identifier, for: indexPath) as? ItineraryItemCell else {
-            return UICollectionViewCell()
-        }
-        let item = viewModel.itemForIndex(indexPath.item)
-        cell.configure(with: item)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DayCell", for: indexPath) as! DayCell
+        cell.configure(with: viewModel.getDay(at: indexPath.item))
         return cell
     }
     

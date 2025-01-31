@@ -8,6 +8,11 @@
 import Foundation
 import UIKit
 
+struct TripDay {
+    let date: String
+    let itineraryItems: [ItineraryItem]
+}
+
 struct ItineraryItem {
     let time: String
     let title: String
