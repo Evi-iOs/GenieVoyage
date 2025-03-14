@@ -46,7 +46,19 @@ class ItineraryViewModel {
         TripDay(date: days[selectedDayIndex],
                               itineraryItems: [
             ItineraryItem(time: "14:00", title: "Restaurant", icon: UIImage(systemName: "fork.knife")),
-            ItineraryItem(time: "11:00", title: "Shopping", icon: UIImage(systemName: "bag"))])]
+            ItineraryItem(time: "11:00", title: "Shopping", icon: UIImage(systemName: "bag"))]),
+                      TripDay(date: days[selectedDayIndex],
+                                            itineraryItems: [
+                          ItineraryItem(time: "10:00", title: "Fly", icon: UIImage(systemName: "airplane")),
+                          ItineraryItem(time: "13:00", title: "Hotel", icon: UIImage(systemName: "house")),
+                          ItineraryItem(time: "14:00", title: "Restaurant", icon: UIImage(systemName: "fork.knife")),
+                          ItineraryItem(time: "11:00", title: "Shopping", icon: UIImage(systemName: "bag"))
+                                            ]),
+                      TripDay(date: days[selectedDayIndex],
+                                            itineraryItems: [
+                          ItineraryItem(time: "14:00", title: "Restaurant", icon: UIImage(systemName: "fork.knife")),
+                          ItineraryItem(time: "11:00", title: "Shopping", icon: UIImage(systemName: "bag"))])
+        ]
     }
     
     private func configureDays(trip: TripModel?) {
@@ -73,9 +85,8 @@ class ItineraryViewModel {
     }
     
     // MARK: - Public Methods
-    func numberOfItemsForSelectedDay() -> Int {
-        return days.count
-       // return itineraryData[selectedDayIndex].count
+    func numberOfItemsForSelectedDay(day: Int) -> Int {
+        return [sampleDays[day]].count
     }
     
     func getDay(at index: Int) -> TripDay {

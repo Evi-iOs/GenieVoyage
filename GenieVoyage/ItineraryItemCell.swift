@@ -29,6 +29,7 @@ final class ItineraryItemCell: UICollectionViewCell {
     private let iconImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = .darkGray
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -38,10 +39,7 @@ final class ItineraryItemCell: UICollectionViewCell {
         contentView.addSubview(timeLabel)
         contentView.addSubview(titleLabel)
         contentView.addSubview(iconImageView)
-        contentView.layer.borderWidth = 1
-        contentView.layer.borderColor = UIColor.lightGray.cgColor
-        contentView.layer.cornerRadius = 8
-        
+       
         NSLayoutConstraint.activate([
             iconImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
             iconImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),

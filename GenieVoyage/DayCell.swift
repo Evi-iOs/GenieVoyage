@@ -16,7 +16,6 @@ class DayCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionViewD
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
-        layer.cornerRadius = 12
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOpacity = 0.1
         layer.shadowRadius = 5
@@ -27,15 +26,15 @@ class DayCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionViewD
         contentView.addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: frame.width - 20, height: 40)
-        layout.minimumLineSpacing = 5
+        layout.itemSize = CGSize(width: frame.width - 20, height: 50)
+        layout.minimumLineSpacing = 8
         
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
@@ -47,7 +46,7 @@ class DayCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionViewD
         contentView.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
+            collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)

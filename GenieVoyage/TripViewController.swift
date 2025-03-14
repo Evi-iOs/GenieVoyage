@@ -253,8 +253,8 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             collectionView.topAnchor.constraint(equalTo: itineraryLabel.bottomAnchor, constant: 16),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.heightAnchor.constraint(equalToConstant: 100),
-            
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -35),
+
             // Save Button
             saveButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
             saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -325,6 +325,9 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     // MARK: - Collection View
+    
+    private var collectionViewHeightConstraint: NSLayoutConstraint!
+
     private func configureCollectionView() {
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -335,13 +338,13 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 20
-        layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.isPagingEnabled = true
+        collectionView.decelerationRate = .fast
+        collectionView.isPagingEnabled = false
         return collectionView
     }()
     
@@ -441,16 +444,32 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
 // MARK: - UICollectionView DataSource & Delegate
 extension TripViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.numberOfDays()
+        return viewModel.days.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DayCell", for: indexPath) as! DayCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DayCell", for: indexPath) as? DayCell else {
+            return UICollectionViewCell()
+        }
         cell.configure(with: viewModel.getDay(at: indexPath.item))
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.bounds.width - 32, height: 80)
+        return CGSize(width: collectionView.frame.width * 0.9, height: collectionView.frame.height * 0.9)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        let cellWidth = collectionView.frame.width * 0.9
+        let inset = (collectionView.frame.width - cellWidth) / 2
+        return UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
+    }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        let cellWidth = collectionView.frame.width * 0.9 + layout.minimumLineSpacing
+        
+        let estimatedIndex = round((targetContentOffset.pointee.x + collectionView.contentInset.left) / cellWidth)
+        targetContentOffset.pointee = CGPoint(x: estimatedIndex * cellWidth - collectionView.contentInset.left, y: 0)
     }
 }
