@@ -8,7 +8,7 @@
 import UIKit
 import Photos
 
-class TripViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class TripViewController: UIViewController, UIImagePickerControllerDelegate, SegmentedControlDelegate, UINavigationControllerDelegate {
     
     var trip: TripModel?
     var onSave: ((TripModel) -> Void)?
@@ -32,13 +32,6 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     private let saveButton = UIButton(type: .system)
     private let cancelButton = UIButton(type: .system)
     
-    private let horizontalScrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.backgroundColor = .white
-        scrollView.showsHorizontalScrollIndicator = true
-        return scrollView
-    }()
-        
     init(trip: TripModel? = nil, onSave: ((TripModel) -> Void)? = nil) {
         self.trip = trip
         self.onSave = onSave
@@ -54,10 +47,11 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         configureUI()
         setupUI()
         setupIconButtons()
-        setupHorizontalScrollView()
-        configureSegmentedControl()
         configureCollectionView()
         bindViewModel()
+        
+        segmentedControl.delegate = self
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -68,12 +62,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let segmentWidth = segmentedControl.frame.width / CGFloat(segmentedControl.numberOfSegments)
-        underlineViewSegmentControl.frame = CGRect(x: 0, y: segmentedControl.frame.maxY - 2, width: segmentWidth, height: 2)
-        
         setupConstraints()
-        setupConstraintsForSegmentedControl()
-        setupUnderlineViewForSegmentControll()
     }
     
     private func setupUI() {
@@ -86,7 +75,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         appearance.backgroundColor = .white
         appearance.shadowColor = nil
         appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
-
+        
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         
@@ -145,7 +134,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         //
         view.addSubview(coverImageView)
         coverImageView.addSubview(addCoverButton)
-        
+        view.addSubview(segmentedControl)
         view.addSubview(itineraryLabel)
         view.addSubview(collectionView)
         view.addSubview(cancelButton)
@@ -202,15 +191,6 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         return button
     }
     
-    // MARK: - Setup Scroll View
-    
-    private func setupHorizontalScrollView() {
-        view.addSubview(horizontalScrollView)
-        horizontalScrollView.sizeToFit()
-        horizontalScrollView.translatesAutoresizingMaskIntoConstraints = false
-        horizontalScrollView.contentSize = CGSize(width: 1000, height: horizontalScrollView.frame.height)
-    }
-    
     // MARK: - Setup Constraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
@@ -240,21 +220,21 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
-            horizontalScrollView.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 20),
-            horizontalScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            horizontalScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            horizontalScrollView.heightAnchor.constraint(equalToConstant: 60),
+            segmentedControl.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 20),
+            segmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            segmentedControl.heightAnchor.constraint(equalToConstant: 60),
             
-            itineraryLabel.topAnchor.constraint(equalTo: horizontalScrollView.bottomAnchor, constant: 18),
+            itineraryLabel.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 18),
             itineraryLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             itineraryLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-           
+            
             // CollectionView below segmented control
-            collectionView.topAnchor.constraint(equalTo: itineraryLabel.bottomAnchor, constant: 16),
+            collectionView.topAnchor.constraint(equalTo: itineraryLabel.bottomAnchor, constant: 10),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -35),
-
+            
             // Save Button
             saveButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
             saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -270,64 +250,12 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     // MARK: - SegmentControl
-    private let segmentedControl: UISegmentedControl = {
-        let control = UISegmentedControl()
-        control .sizeToFit()
-        control.selectedSegmentIndex = 0
-        control.backgroundColor = .clear
-        control.setBackgroundImage(UIImage(), for: .normal, barMetrics: .default)
-        control.setBackgroundImage(UIImage(), for: .selected, barMetrics: .default)
-        control.setDividerImage(UIImage(), forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
-        control.tintColor = .clear
-        
-        control.setTitleTextAttributes([.foregroundColor: UIColor.black, .font: UIFont.systemFont(ofSize: 17, weight: .regular)], for: .normal)
-        control.setTitleTextAttributes([.foregroundColor: UIColor.black, .font: UIFont.systemFont(ofSize: 17, weight: .bold)], for: .selected)
-        control.translatesAutoresizingMaskIntoConstraints = false
-        return control
-    }()
-    
-    private func setupConstraintsForSegmentedControl() {
-        horizontalScrollView.addSubview(segmentedControl)
-        horizontalScrollView.contentSize = segmentedControl.frame.size
-        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            segmentedControl.leadingAnchor.constraint(equalTo: horizontalScrollView.leadingAnchor),
-            segmentedControl.trailingAnchor.constraint(equalTo: horizontalScrollView.trailingAnchor),
-            segmentedControl.topAnchor.constraint(equalTo: horizontalScrollView.topAnchor),
-            segmentedControl.heightAnchor.constraint(equalToConstant: 44),
-        ])
-    }
-    
-    private let underlineViewSegmentControl: UIView = {
-        let view = UIView()
-        view.backgroundColor = .black
-        return view
-    }()
-    
-    private func setupUnderlineViewForSegmentControll() {
-        horizontalScrollView.addSubview(underlineViewSegmentControl)
-        
-        underlineViewSegmentControl.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            underlineViewSegmentControl.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 2),
-            underlineViewSegmentControl.heightAnchor.constraint(equalToConstant: 2),
-            underlineViewSegmentControl.widthAnchor.constraint(equalTo: segmentedControl.widthAnchor, multiplier: 1.0 / CGFloat(segmentedControl.numberOfSegments))
-        ])
-    }
-    
-    private func configureSegmentedControl() {
-        segmentedControl.removeAllSegments()
-        for index in 0..<viewModel.numberOfDays() {
-            segmentedControl.insertSegment(withTitle: viewModel.titleForDay(at: index), at: index, animated: false)
-        }
-        segmentedControl.selectedSegmentIndex = 0
-        segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
-    }
+    private lazy var segmentedControl = SegmentedControlView(items: viewModel.days)
     
     // MARK: - Collection View
     
     private var collectionViewHeightConstraint: NSLayoutConstraint!
-
+    
     private func configureCollectionView() {
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -392,29 +320,6 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         navigationController?.popViewController(animated: true)
     }
     
-    @objc private func segmentedControlValueChanged(_ sender: UISegmentedControl) {
-        viewModel.selectedDayIndex = sender.selectedSegmentIndex
-        
-        let selectedIndex = CGFloat(sender.selectedSegmentIndex)
-        let segmentWidth = segmentedControl.frame.width / CGFloat(segmentedControl.numberOfSegments)
-        let selectedSegmentX = segmentWidth * selectedIndex
-        
-        let offsetX = selectedSegmentX - (horizontalScrollView.frame.width / 2) + (segmentWidth / 2)
-        let maxOffsetX = horizontalScrollView.contentSize.width - horizontalScrollView.frame.width
-        let offset = min(max(offsetX, 0), maxOffsetX)
-        
-        if viewModel.days.count > 3 {
-            horizontalScrollView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
-        }
-        horizontalScrollView.layoutIfNeeded()
-        
-        UIView.animate(withDuration: 0.3, animations: { [weak self] in
-            guard let self = self else { return }
-            let selectedSegmentX = segmentWidth * CGFloat(selectedIndex)
-            underlineViewSegmentControl.frame.origin.x = selectedSegmentX + 16
-        })
-    }
-    
     private func showAlert(message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
@@ -438,6 +343,16 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let pageIndex = Int(scrollView.contentOffset.x / view.frame.width)
+        segmentedControl.selectSegment(at: pageIndex)
+    }
+    
+    func didSelectSegment(at index: Int) {
+        let indexPath = IndexPath(item: index, section: 0)
+        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
     }
 }
 

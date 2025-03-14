@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		1B28A79DB26C7026E5FD14EA /* Pods_GenieVoyage_GenieVoyageUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B04908D54247C8A3BBBE049A /* Pods_GenieVoyage_GenieVoyageUITests.framework */; };
 		D0010B2C2B12A24200BAEC46 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0010B2B2B12A24200BAEC46 /* Extension.swift */; };
+		D026365C2D84ADBB0070D28C /* SegmentedControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D026365B2D84ADBB0070D28C /* SegmentedControlView.swift */; };
+		D026365E2D84AE0D0070D28C /* SegmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D026365D2D84AE0D0070D28C /* SegmentCell.swift */; };
 		D0365DF12CFA6BEA00D711A9 /* TripModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0365DF02CFA6BE700D711A9 /* TripModel.swift */; };
 		D0365DF32CFA6D3500D711A9 /* AllTripsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0365DF22CFA6D3500D711A9 /* AllTripsViewController.swift */; };
 		D0365DF52CFA723600D711A9 /* TripDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0365DF42CFA723600D711A9 /* TripDetailViewController.swift */; };
@@ -81,6 +83,8 @@
 		9987FB9B0F0ED0A38BD352E5 /* Pods-GenieVoyage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GenieVoyage.release.xcconfig"; path = "Target Support Files/Pods-GenieVoyage/Pods-GenieVoyage.release.xcconfig"; sourceTree = "<group>"; };
 		B04908D54247C8A3BBBE049A /* Pods_GenieVoyage_GenieVoyageUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GenieVoyage_GenieVoyageUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0010B2B2B12A24200BAEC46 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		D026365B2D84ADBB0070D28C /* SegmentedControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedControlView.swift; sourceTree = "<group>"; };
+		D026365D2D84AE0D0070D28C /* SegmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentCell.swift; sourceTree = "<group>"; };
 		D0365DF02CFA6BE700D711A9 /* TripModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripModel.swift; sourceTree = "<group>"; };
 		D0365DF22CFA6D3500D711A9 /* AllTripsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTripsViewController.swift; sourceTree = "<group>"; };
 		D0365DF42CFA723600D711A9 /* TripDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripDetailViewController.swift; sourceTree = "<group>"; };
@@ -198,6 +202,8 @@
 				D0D192D52A6FFF9A000853B8 /* CalendarViewController.swift */,
 				D0365DF22CFA6D3500D711A9 /* AllTripsViewController.swift */,
 				D043B43C2CFF6DDE00151ED0 /* TripViewController.swift */,
+				D026365B2D84ADBB0070D28C /* SegmentedControlView.swift */,
+				D026365D2D84AE0D0070D28C /* SegmentCell.swift */,
 				D04945B82D3EB26900232F26 /* ItineraryViewModel.swift */,
 				D04945B22D3A451B00232F26 /* ItineraryItemCell.swift */,
 				D05D92E52D4B8CB10022C734 /* DayCell.swift */,
@@ -454,7 +460,9 @@
 				D04945B32D3A451B00232F26 /* ItineraryItemCell.swift in Sources */,
 				D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */,
 				D0D192D42A6FFF9A000853B8 /* SceneDelegate.swift in Sources */,
+				D026365C2D84ADBB0070D28C /* SegmentedControlView.swift in Sources */,
 				D05D92E62D4B8CB10022C734 /* DayCell.swift in Sources */,
+				D026365E2D84AE0D0070D28C /* SegmentCell.swift in Sources */,
 				D03D086B2D08C14F009F8E63 /* MapLocationViewController.swift in Sources */,
 				D043B43D2CFF6DDE00151ED0 /* TripViewController.swift in Sources */,
 				D03D08652D0730CE009F8E63 /* PlanDayDetailViewController.swift in Sources */,

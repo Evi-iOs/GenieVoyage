@@ -91,7 +91,6 @@ class ItineraryViewModel {
     
     func getDay(at index: Int) -> TripDay {
         return sampleDays[index]
-       // return itineraryData[selectedDayIndex][index]
     }
     
     func numberOfDays() -> Int {
