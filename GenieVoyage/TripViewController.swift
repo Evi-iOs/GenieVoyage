@@ -111,7 +111,12 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         
         addCoverButton.addTarget(self, action: #selector(addCoverTapped), for: .touchUpInside)
         addCoverButton.translatesAutoresizingMaskIntoConstraints = false
-        
+        addCoverButton.setImage(UIImage(named: "addPhoto"), for: .normal)
+        addCoverButton.tintColor = .white
+        addCoverButton.isUserInteractionEnabled = true
+        addCoverButton.isHidden = false
+        addCoverButton.alpha = 1
+
         saveButton.bigBlackButtonStyle(text: "Save")
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
@@ -121,7 +126,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         
         view.addSubview(datesLabel)
         view.addSubview(coverImageView)
-        coverImageView.addSubview(addCoverButton)
+        view.addSubview(addCoverButton)
         view.addSubview(segmentedControl)
         view.addSubview(collectionView)
         view.addSubview(saveButton)
@@ -323,6 +328,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let selectedImage = info[.originalImage] as? UIImage {
             coverImageView.image = selectedImage
+            addCoverButton.imageView?.isHidden = true
         }
         dismiss(animated: true, completion: nil)
     }
