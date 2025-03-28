@@ -8,7 +8,7 @@
 import UIKit
 import Photos
 
-class TripViewController: UIViewController, UIImagePickerControllerDelegate, SegmentedControlDelegate, UINavigationControllerDelegate {
+class TripViewController: UIViewController, UIImagePickerControllerDelegate, SegmentedControlDelegate, UINavigationControllerDelegate, UITextViewDelegate {
     
     var trip: TripModel?
     var onSave: ((TripModel) -> Void)?
@@ -17,7 +17,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     
     // MARK: UI elements
     private let destinationLabel = UILabel()
-    private let titleTextField = UITextField()
+    private let titleText = UITextView()
     private let stackView = UIStackView()
     
     private let datesLabel = UILabel()
@@ -83,9 +83,13 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         destinationLabel.textColor = UIColor.gray
         destinationLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        titleTextField.placeholder = trip?.title ?? "Title"
-        titleTextField.font = UIFont.boldSystemFont(ofSize: 20)
-        titleTextField.translatesAutoresizingMaskIntoConstraints = false
+        titleText.text = trip?.title ?? ""
+        titleText.font = UIFont.boldSystemFont(ofSize: 18)
+        titleText.isScrollEnabled = true
+        titleText.textContainer.lineBreakMode = .byWordWrapping
+        titleText.translatesAutoresizingMaskIntoConstraints = false
+        titleText.delegate = self
+        titleText.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         
         datesLabel.text = "\((trip != nil) ? trip!.startDate.formattedDateWeekDay() : startDatePicker.date.formattedDateWeekDay()) - \((trip != nil) ? trip!.endDate.formattedDateWeekDay() : endDatePicker.date.formattedDateWeekDay())"
         datesLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
@@ -113,7 +117,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         
         view.addSubview(destinationLabel)
-        view.addSubview(titleTextField)
+        view.addSubview(titleText)
         
         view.addSubview(datesLabel)
         view.addSubview(coverImageView)
@@ -140,7 +144,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     
     private func configureUI() {
         if let trip = trip {
-            titleTextField.text = trip.title
+            titleText.text = trip.title
             let dateFormater = DateFormatter()
             dateFormater.dateFormat = "dd/MM/yyyy"
             if let startDate = dateFormater.date(from: trip.startDate.description) {
@@ -200,8 +204,10 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
             destinationLabel.leadingAnchor.constraint(equalTo: coverImageView.trailingAnchor, constant: 20),
             destinationLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
             
-            titleTextField.topAnchor.constraint(equalTo: destinationLabel.bottomAnchor, constant: 10),
-            titleTextField.leadingAnchor.constraint(equalTo: coverImageView.trailingAnchor, constant: 20),
+            titleText.topAnchor.constraint(equalTo: destinationLabel.bottomAnchor, constant: 10),
+            titleText.leadingAnchor.constraint(equalTo: coverImageView.trailingAnchor, constant: 20),
+            titleText.trailingAnchor.constraint(equalTo: datesLabel.leadingAnchor, constant: -20),
+            titleText.bottomAnchor.constraint(equalTo: coverImageView.bottomAnchor),
             
             datesLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
             datesLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
@@ -258,7 +264,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     
     // MARK: - Actions
     @objc private func saveButtonTapped() {
-        guard let title = titleTextField.text, !title.isEmpty else {
+        guard let title = titleText.text, !title.isEmpty else {
             showAlert(message: "Enter title Trip")
             return
         }
@@ -366,5 +372,10 @@ extension TripViewController: UICollectionViewDataSource, UICollectionViewDelega
         
         let estimatedIndex = round((targetContentOffset.pointee.x + collectionView.contentInset.left) / cellWidth)
         targetContentOffset.pointee = CGPoint(x: estimatedIndex * cellWidth - collectionView.contentInset.left, y: 0)
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        let size = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
+        textView.heightAnchor.constraint(equalToConstant: size.height).isActive = true
     }
 }
