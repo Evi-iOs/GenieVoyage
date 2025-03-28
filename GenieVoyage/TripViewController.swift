@@ -26,11 +26,8 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     
     private let coverImageView = UIImageView()
     private let addCoverButton = UIButton(type: .system)
-    
-    private let itineraryLabel = UILabel()
-    
+        
     private let saveButton = UIButton(type: .system)
-    private let cancelButton = UIButton(type: .system)
     
     init(trip: TripModel? = nil, onSave: ((TripModel) -> Void)? = nil) {
         self.trip = trip
@@ -108,20 +105,10 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         coverImageView.clipsToBounds = true
         coverImageView.translatesAutoresizingMaskIntoConstraints = false
         
-        addCoverButton.applyPaperStyleWithGloss(withText: "Image")
         addCoverButton.addTarget(self, action: #selector(addCoverTapped), for: .touchUpInside)
         addCoverButton.translatesAutoresizingMaskIntoConstraints = false
         
-        itineraryLabel.text = "Itinerary:"
-        itineraryLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        itineraryLabel.textColor = UIColor.darkGray
-        itineraryLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
-        cancelButton.translatesAutoresizingMaskIntoConstraints = false
-        cancelButton.applyPaperStyleWithGloss(withText: "Cancel")
-        
-        saveButton.applyPaperStyleWithGloss(withText: "Save")
+        saveButton.bigBlackButtonStyle(text: "Save")
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         
@@ -129,15 +116,10 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         view.addSubview(titleTextField)
         
         view.addSubview(datesLabel)
-        //        contentView.addSubview(startDatePicker)
-        //        contentView.addSubview(endDatePicker)
-        //
         view.addSubview(coverImageView)
         coverImageView.addSubview(addCoverButton)
         view.addSubview(segmentedControl)
-        view.addSubview(itineraryLabel)
         view.addSubview(collectionView)
-        view.addSubview(cancelButton)
         view.addSubview(saveButton)
     }
     
@@ -147,8 +129,10 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         stackView.alignment = .center
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
-        for _ in 1...5 {
-            let button = createIconButton(iconName: "airplane")
+        let icons = ["plane", "treinIcon", "hotel", "ticketIcon", "fileIcon"]
+        
+        for i in icons {
+            let button = createIconButton(iconName: i)
             stackView.addArrangedSubview(button)
         }
         view.addSubview(stackView)
@@ -169,24 +153,30 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     }
     
     private func createIconButton(iconName: String) -> UIButton {
-        let button = UIButton(type: .system)
+        let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 30
+        button.clipsToBounds = true
+        button.layer.borderColor = UIColor(hex: "#DADADA").cgColor
+        button.layer.borderWidth = 1
         
         NSLayoutConstraint.activate([
-            button.widthAnchor.constraint(equalToConstant: 48),
-            button.heightAnchor.constraint(equalToConstant: 48)
+            button.widthAnchor.constraint(equalToConstant: 60),
+            button.heightAnchor.constraint(equalToConstant: 60)
         ])
         
-        button.layer.cornerRadius = 24
-        button.layer.masksToBounds = true
-        button.backgroundColor = .white
-        button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.lightGray.cgColor
+        let imageView = UIImageView(image: UIImage(named: iconName))
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         
-        let icon = UIImage(systemName: iconName)?.withTintColor(.darkGray)
-        button.setImage(icon, for: .normal)
+        button.addSubview(imageView) 
         
-        button.imageView?.contentMode = .scaleAspectFit
+        NSLayoutConstraint.activate([
+            imageView.centerXAnchor.constraint(equalTo: button.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: button.centerYAnchor),
+            imageView.widthAnchor.constraint(equalToConstant: 30),
+            imageView.heightAnchor.constraint(equalToConstant: 30)
+        ])
         
         return button
     }
@@ -216,6 +206,12 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
             datesLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
             datesLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
+            // Save Button
+            saveButton.bottomAnchor.constraint(equalTo: coverImageView.bottomAnchor),
+            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            saveButton.leadingAnchor.constraint(equalTo: datesLabel.leadingAnchor),
+            saveButton.heightAnchor.constraint(equalToConstant: 44),
+            
             stackView.topAnchor.constraint(equalTo: coverImageView.bottomAnchor, constant: 20),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
@@ -225,27 +221,11 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
             segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             segmentedControl.heightAnchor.constraint(equalToConstant: 60),
             
-            itineraryLabel.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 18),
-            itineraryLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            itineraryLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            
             // CollectionView below segmented control
-            collectionView.topAnchor.constraint(equalTo: itineraryLabel.bottomAnchor, constant: 10),
+            collectionView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -35),
-            
-            // Save Button
-            saveButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
-            saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            saveButton.trailingAnchor.constraint(equalTo: view.centerXAnchor, constant: -10),
-            saveButton.heightAnchor.constraint(equalToConstant: 44),
-            
-            //Cancel Button
-            cancelButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
-            cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            cancelButton.leadingAnchor.constraint(equalTo: view.centerXAnchor, constant: 10),
-            cancelButton.heightAnchor.constraint(equalToConstant: 44)
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -35)
         ])
     }
     

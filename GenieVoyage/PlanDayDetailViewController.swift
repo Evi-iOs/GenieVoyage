@@ -46,7 +46,7 @@ class PlanDayDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
         addEventButton.setTitle("Add", for: .normal)
         addEventButton.addTarget(self, action: #selector(addEventTapped), for: .touchUpInside)
-        addEventButton.backgroundColor = .systemBlue
+        addEventButton.backgroundColor = .darkGray
         addEventButton.setTitleColor(.white, for: .normal)
         addEventButton.layer.cornerRadius = 25
         addEventButton.translatesAutoresizingMaskIntoConstraints = false

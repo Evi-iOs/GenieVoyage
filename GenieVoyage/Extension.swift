@@ -75,34 +75,6 @@ extension UIButton {
         self.titleLabel?.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16).isActive = true
     }
         
-    func applyPaperStyle(withText text: String, textureImageName: String? = nil) {
-        self.setTitle(text, for: .normal)
-        self.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        self.setTitleColor(.gray, for: .normal)
-        
-        self.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
-        self.layer.cornerRadius = 10
-        
-        self.layer.shadowColor = UIColor.black.cgColor
-        self.layer.shadowOffset = CGSize(width: 0, height: 2)
-        self.layer.shadowOpacity = 0.3
-        self.layer.shadowRadius = 4
-        self.layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.layer.cornerRadius).cgPath
-        
-        if let textureImageName = textureImageName, let textureImage = UIImage(named: textureImageName) {
-            self.layer.contents = textureImage.cgImage
-            self.layer.contentsGravity = .resizeAspectFill
-        }
-        
-        self.addTarget(self, action: #selector(handlePressDown), for: .touchDown)
-        self.addTarget(self, action: #selector(handlePressUp), for: [.touchUpInside, .touchDragExit])
-    }
-    
-    func applyPaperStyleWithGloss(withText text: String, textureImageName: String? = nil){
-        self.applyPaperStyle(withText: text, textureImageName: textureImageName)
-        addGlossEffect()
-    }
-    
     @objc private func handlePressDown() {
         UIView.animate(withDuration: 0.2) {
             self.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
@@ -113,21 +85,6 @@ extension UIButton {
         UIView.animate(withDuration: 0.2) {
             self.transform = .identity
         }
-    }
-    
-    private func addGlossEffect() {
-        let glossLayer = CAGradientLayer()
-        glossLayer.frame = CGRect(
-            x: 0,
-            y: 0,
-            width: self.bounds.width,
-            height: self.bounds.height * 0.4
-        )
-        glossLayer.backgroundColor = UIColor.white.withAlphaComponent(0.3).cgColor
-        glossLayer.cornerRadius = self.layer.cornerRadius
-        glossLayer.masksToBounds = true
-        
-        self.layer.addSublayer(glossLayer)
     }
 }
     
@@ -153,5 +110,32 @@ extension UITextField {
         )
     }
 }
+
+import UIKit
+
+extension UIColor {
+    convenience init(hex: String) {
+        var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+
+        if hexSanitized.hasPrefix("#") {
+            hexSanitized.removeFirst()
+        }
+
+        guard hexSanitized.count == 6 else {
+            self.init(white: 0.5, alpha: 1.0) 
+            return
+        }
+
+        var rgbValue: UInt64 = 0
+        Scanner(string: hexSanitized).scanHexInt64(&rgbValue)
+
+        let red = CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0
+        let green = CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0
+        let blue = CGFloat(rgbValue & 0x0000FF) / 255.0
+
+        self.init(red: red, green: green, blue: blue, alpha: 1.0)
+    }
+}
+
 
 

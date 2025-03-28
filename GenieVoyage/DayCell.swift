@@ -16,7 +16,7 @@ class DayCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionViewD
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
-        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowColor = UIColor.darkGray.cgColor
         layer.shadowOpacity = 0.1
         layer.shadowRadius = 5
         layer.shadowOffset = CGSize(width: 0, height: 2)
@@ -27,8 +27,7 @@ class DayCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionViewD
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10)
         ])
         
         let layout = UICollectionViewFlowLayout()
@@ -58,7 +57,7 @@ class DayCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionViewD
     }
     
     func configure(with day: TripDay) {
-        titleLabel.text = "📅 \(day.date)"
+        titleLabel.text = "Weather +15°C"
         itineraryItems = day.itineraryItems
         collectionView.reloadData()
     }
