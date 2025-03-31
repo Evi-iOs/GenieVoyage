@@ -27,6 +27,7 @@ class AllTripsViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.frame = view.bounds
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTrip))
+        navigationController?.navigationBar.tintColor = .darkGray
     }
     
     @objc func addTrip() {

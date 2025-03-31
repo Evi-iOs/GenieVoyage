@@ -221,7 +221,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
             saveButton.bottomAnchor.constraint(equalTo: coverImageView.bottomAnchor),
             saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             saveButton.leadingAnchor.constraint(equalTo: datesLabel.leadingAnchor),
-            saveButton.heightAnchor.constraint(equalToConstant: 44),
+            saveButton.heightAnchor.constraint(equalToConstant: 32),
             
             stackView.topAnchor.constraint(equalTo: coverImageView.bottomAnchor, constant: 20),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
