@@ -196,6 +196,7 @@
 			children = (
 				D0010B2B2B12A24200BAEC46 /* Extension.swift */,
 				D0365DF02CFA6BE700D711A9 /* TripModel.swift */,
+				D04945B42D3A46FA00232F26 /* ItineraryItem.swift */,
 				D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */,
 				D0D192D32A6FFF9A000853B8 /* SceneDelegate.swift */,
 				D0D193072A71AC36000853B8 /* EKWrapper.swift */,
@@ -207,7 +208,6 @@
 				D04945B82D3EB26900232F26 /* ItineraryViewModel.swift */,
 				D04945B22D3A451B00232F26 /* ItineraryItemCell.swift */,
 				D05D92E52D4B8CB10022C734 /* DayCell.swift */,
-				D04945B42D3A46FA00232F26 /* ItineraryItem.swift */,
 				D03D08642D0730CE009F8E63 /* PlanDayDetailViewController.swift */,
 				D07B67892D2C6D8000842293 /* StartPlanningViewController.swift */,
 				D03D08682D08544D009F8E63 /* EventViewController.swift */,

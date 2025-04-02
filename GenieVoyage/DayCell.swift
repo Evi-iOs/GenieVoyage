@@ -10,7 +10,7 @@ import UIKit
 class DayCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
     
     private let titleLabel = UILabel()
-    private var collectionView: UICollectionView!
+    private var itineraryCollectionView: UICollectionView!
     private var itineraryItems: [ItineraryItem] = []
     
     override init(frame: CGRect) {
@@ -35,20 +35,21 @@ class DayCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionViewD
         layout.itemSize = CGSize(width: frame.width - 20, height: 50)
         layout.minimumLineSpacing = 8
         
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.register(ItineraryItemCell.self, forCellWithReuseIdentifier: "ItineraryItemCell")
-        
-        contentView.addSubview(collectionView)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        itineraryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        itineraryCollectionView.backgroundColor = .clear
+        itineraryCollectionView.showsVerticalScrollIndicator = false
+        itineraryCollectionView.dataSource = self
+        itineraryCollectionView.delegate = self
+        itineraryCollectionView.register(ItineraryItemCell.self, forCellWithReuseIdentifier: "ItineraryItemCell")
+        itineraryCollectionView.addInteraction(UIDropInteraction(delegate: self))
+
+        contentView.addSubview(itineraryCollectionView)
+        itineraryCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
+            itineraryCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
+            itineraryCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            itineraryCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            itineraryCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         ])
     }
     
@@ -59,7 +60,7 @@ class DayCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionViewD
     func configure(with day: TripDay) {
         titleLabel.text = "Weather +15°C"
         itineraryItems = day.itineraryItems
-        collectionView.reloadData()
+        itineraryCollectionView.reloadData()
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -72,3 +73,57 @@ class DayCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionViewD
         return cell
     }
 }
+
+//MARK: Drag & drop icons
+extension DayCell: UIDropInteractionDelegate {
+    
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
+        let dropLocation = session.location(in: itineraryCollectionView)
+        
+        // Сбрасываем подсветку у всех видимых ячеек
+        for cell in itineraryCollectionView.visibleCells {
+            cell.contentView.backgroundColor = .white
+        }
+        
+        // Определяем, над какой ячейкой находится курсор
+        if let indexPath = itineraryCollectionView.indexPathForItem(at: dropLocation),
+           let cell = itineraryCollectionView.cellForItem(at: indexPath) as? ItineraryItemCell {
+            cell.contentView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3) // Подсветка активной ячейки
+        }
+        
+        return UIDropProposal(operation: .move) // Разрешаем перемещение
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+        let dropLocation = session.location(in: itineraryCollectionView)
+        
+        guard let indexPath = itineraryCollectionView.indexPathForItem(at: dropLocation),
+              let cell = itineraryCollectionView.cellForItem(at: indexPath) as? ItineraryItemCell else { return }
+        
+        // Достаём переданный imageView
+        if let dragItem = session.items.first,
+           let draggedImageView = dragItem.localObject as? UIImageView {
+            
+            // Добавляем imageView в ячейку
+            let newImageView = UIImageView(image: draggedImageView.image)
+            newImageView.frame = draggedImageView.frame
+            cell.contentView.addSubview(newImageView)
+            draggedImageView.center = CGPoint(x: cell.contentView.bounds.midX, y: cell.contentView.bounds.midY)
+        }
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidEnter session: UIDropSession) {
+        let dropLocation = session.location(in: itineraryCollectionView)
+        if let indexPath = itineraryCollectionView.indexPathForItem(at: dropLocation),
+           let cell = itineraryCollectionView.cellForItem(at: indexPath) as? ItineraryItemCell {
+            cell.contentView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3) // Подсвечиваем
+        }
+    }
+
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidExit session: UIDropSession) {
+        for cell in itineraryCollectionView.visibleCells {
+            cell.contentView.backgroundColor = .white // Убираем подсветку
+        }
+    }
+}
+

@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import CoreLocation
 
 struct TripDay {
     let date: String
@@ -15,6 +16,12 @@ struct TripDay {
 
 struct ItineraryItem {
     let time: String
+   // let endTime: String?
     let title: String
+   // let location: CLLocationCoordinate2D?
     let icon: UIImage?
+}
+
+enum ItineraryItemCategory: String {
+    case transport, transfer, hotel, point, food
 }

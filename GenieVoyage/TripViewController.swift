@@ -128,7 +128,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         view.addSubview(coverImageView)
         view.addSubview(addCoverButton)
         view.addSubview(segmentedControl)
-        view.addSubview(collectionView)
+        view.addSubview(daysCollectionView)
         view.addSubview(saveButton)
     }
     
@@ -138,10 +138,12 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         stackView.alignment = .center
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
-        let icons = ["plane", "treinIcon", "hotel", "ticketIcon", "fileIcon"]
+        let icons = ["plane", "treinIcon", "hotel", "point", "eating"]
         
         for i in icons {
             let button = createIconButton(iconName: i)
+            button.isUserInteractionEnabled = true
+            button.addInteraction(UIDragInteraction(delegate: self))
             stackView.addArrangedSubview(button)
         }
         view.addSubview(stackView)
@@ -233,10 +235,10 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
             segmentedControl.heightAnchor.constraint(equalToConstant: 60),
             
             // CollectionView below segmented control
-            collectionView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -35)
+            daysCollectionView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor),
+            daysCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            daysCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            daysCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -35)
         ])
     }
     
@@ -248,12 +250,12 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     private var collectionViewHeightConstraint: NSLayoutConstraint!
     
     private func configureCollectionView() {
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.register(DayCell.self, forCellWithReuseIdentifier: "DayCell")
+        daysCollectionView.dataSource = self
+        daysCollectionView.delegate = self
+        daysCollectionView.register(DayCell.self, forCellWithReuseIdentifier: "DayCell")
     }
     
-    private let collectionView: UICollectionView = {
+    private let daysCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 20
@@ -320,7 +322,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     // MARK: - Binding
     private func bindViewModel() {
         viewModel.onDayChanged = { [weak self] in
-            self?.collectionView.reloadData()
+            self?.daysCollectionView.reloadData()
         }
     }
     
@@ -344,7 +346,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     
     func didSelectSegment(at index: Int) {
         let indexPath = IndexPath(item: index, section: 0)
-        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        daysCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
     }
 }
 
@@ -373,15 +375,29 @@ extension TripViewController: UICollectionViewDataSource, UICollectionViewDelega
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        let cellWidth = collectionView.frame.width * 0.9 + layout.minimumLineSpacing
+        let layout = daysCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        let cellWidth = daysCollectionView.frame.width * 0.9 + layout.minimumLineSpacing
         
-        let estimatedIndex = round((targetContentOffset.pointee.x + collectionView.contentInset.left) / cellWidth)
-        targetContentOffset.pointee = CGPoint(x: estimatedIndex * cellWidth - collectionView.contentInset.left, y: 0)
+        let estimatedIndex = round((targetContentOffset.pointee.x + daysCollectionView.contentInset.left) / cellWidth)
+        targetContentOffset.pointee = CGPoint(x: estimatedIndex * cellWidth - daysCollectionView.contentInset.left, y: 0)
     }
     
     func textViewDidChange(_ textView: UITextView) {
         let size = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
         textView.heightAnchor.constraint(equalToConstant: size.height).isActive = true
     }
+}
+
+//MARK: Drag icons
+extension TripViewController: UIDragInteractionDelegate {
+    func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
+        guard let button = interaction.view as? UIButton else { return [] }
+        
+        let itemProvider = NSItemProvider(object: UIImage()) // Заглушка (UIButton нельзя передать)
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = button.imageView // Передаём кнопку через localObject
+        
+        return [dragItem]
+    }
+
 }

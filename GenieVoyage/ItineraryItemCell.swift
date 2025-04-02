@@ -26,7 +26,7 @@ final class ItineraryItemCell: UICollectionViewCell {
         return label
     }()
     
-    private let iconImageView: UIImageView = {
+     let iconImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.tintColor = .darkGray
