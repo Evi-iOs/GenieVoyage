@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ItineraryItemCell: UICollectionViewCell {
+final class ItineraryEventCell: UICollectionViewCell {
     static let identifier = "ItineraryItemCell"
     
     private let timeLabel: UILabel = {
@@ -59,7 +59,7 @@ final class ItineraryItemCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with item: ItineraryItem) {
+    func configure(with item: ItineraryEventModel) {
         timeLabel.text = item.time
         titleLabel.text = item.title
         iconImageView.image = item.icon

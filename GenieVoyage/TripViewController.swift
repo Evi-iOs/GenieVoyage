@@ -10,10 +10,11 @@ import Photos
 
 class TripViewController: UIViewController, UIImagePickerControllerDelegate, SegmentedControlDelegate, UINavigationControllerDelegate, UITextViewDelegate {
     
-    var trip: TripModel?
+    var trip: TripModel
     var onSave: ((TripModel) -> Void)?
+    let hours = Array(8...24).map { String(format: "%02d:00", $0) }
     
-    private lazy var viewModel = ItineraryViewModel(trip: trip)
+    private lazy var viewModel = TripViewModel(trip: trip)
     
     // MARK: UI elements
     private let destinationLabel = UILabel()
@@ -29,7 +30,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         
     private let saveButton = UIButton(type: .system)
     
-    init(trip: TripModel? = nil, onSave: ((TripModel) -> Void)? = nil) {
+    init(trip: TripModel, onSave: ((TripModel) -> Void)? = nil) {
         self.trip = trip
         self.onSave = onSave
         super.init(nibName: nil, bundle: nil)
@@ -49,6 +50,10 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         
         segmentedControl.delegate = self
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        
+        viewModel.onUpdate = { [weak self] in
+            self?.daysCollectionView.reloadData()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -76,14 +81,14 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         
-        navigationItem.title = trip == nil ? "Add Trip" : "Trip to \(trip?.title ?? "Trip")"
+        navigationItem.title = "Trip to \(trip.title)"
         
         destinationLabel.text = "Destination"
         destinationLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         destinationLabel.textColor = UIColor.gray
         destinationLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        titleText.text = trip?.title ?? ""
+        titleText.text = trip.title
         titleText.font = UIFont.boldSystemFont(ofSize: 18)
         titleText.isScrollEnabled = true
         titleText.textContainer.lineBreakMode = .byWordWrapping
@@ -91,7 +96,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         titleText.delegate = self
         titleText.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         
-        datesLabel.text = "\((trip != nil) ? trip!.startDate.formattedDateWeekDay() : startDatePicker.date.formattedDateWeekDay()) - \((trip != nil) ? trip!.endDate.formattedDateWeekDay() : endDatePicker.date.formattedDateWeekDay())"
+        datesLabel.text = "\(trip.startDate.formattedDateWeekDay()) - \(trip.endDate.formattedDateWeekDay())"
         datesLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         datesLabel.translatesAutoresizingMaskIntoConstraints = false
         
@@ -150,16 +155,14 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     }
     
     private func configureUI() {
-        if let trip = trip {
-            titleText.text = trip.title
-            let dateFormater = DateFormatter()
-            dateFormater.dateFormat = "dd/MM/yyyy"
-            if let startDate = dateFormater.date(from: trip.startDate.description) {
-                startDatePicker.date = startDate
-            }
-            if let endDate = dateFormater.date(from: trip.endDate.description) {
-                endDatePicker.date = endDate
-            }
+        titleText.text = trip.title
+        let dateFormater = DateFormatter()
+        dateFormater.dateFormat = "dd/MM/yyyy"
+        if let startDate = dateFormater.date(from: trip.startDate.description) {
+            startDatePicker.date = startDate
+        }
+        if let endDate = dateFormater.date(from: trip.endDate.description) {
+            endDatePicker.date = endDate
         }
     }
     
@@ -243,7 +246,9 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     }
     
     // MARK: - SegmentControl
-    private lazy var segmentedControl = SegmentedControlView(items: viewModel.days)
+    private lazy var segmentedControl = SegmentedControlView(items: viewModel.days.map({ dayViewModel in
+        dayViewModel.dateDay.formattedDateWeekDay()
+    }))
     
     // MARK: - Collection View
     
@@ -279,7 +284,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         let endDate = endDatePicker.date
         
         let newTrip = TripModel(
-            id: UUID(), title: title, description: description, startDate: startDate, endDate: endDate, destinations: trip?.destinations ?? [])
+            id: UUID(), title: title, description: description, startDate: startDate, endDate: endDate, destinations: trip.destinations ?? [])
         
         onSave?(newTrip)
         //TODO: save CoreData
@@ -311,6 +316,13 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     @objc private func cancelButtonTapped() {
         print("Cancel editing")
         navigationController?.popViewController(animated: true)
+    }
+    
+    func addEvent(to dayIndex: Int, event: ItineraryEventModel) {
+        viewModel.days[dayIndex].addEvent(event)
+        
+        let indexPath = IndexPath(item: dayIndex, section: 0)
+        daysCollectionView.reloadItems(at: [indexPath])
     }
     
     private func showAlert(message: String) {
@@ -360,7 +372,7 @@ extension TripViewController: UICollectionViewDataSource, UICollectionViewDelega
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DayCell", for: indexPath) as? DayCell else {
             return UICollectionViewCell()
         }
-        cell.configure(with: viewModel.getDay(at: indexPath.item))
+        cell.viewModel = viewModel.days[indexPath.item]
         return cell
     }
     
@@ -399,5 +411,4 @@ extension TripViewController: UIDragInteractionDelegate {
         
         return [dragItem]
     }
-
 }

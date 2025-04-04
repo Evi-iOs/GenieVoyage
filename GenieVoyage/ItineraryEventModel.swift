@@ -11,15 +11,16 @@ import CoreLocation
 
 struct TripDay {
     let date: String
-    let itineraryItems: [ItineraryItem]
+    let itineraryItems: [ItineraryEventModel]
 }
 
-struct ItineraryItem {
+struct ItineraryEventModel {
     let time: String
-   // let endTime: String?
+    let category: ItineraryItemCategory
     let title: String
-   // let location: CLLocationCoordinate2D?
     let icon: UIImage?
+    let duration: TimeInterval?
+    let address: String?
 }
 
 enum ItineraryItemCategory: String {

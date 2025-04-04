@@ -7,14 +7,23 @@
 
 import UIKit
 
-class DayCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
+class DayCell: UICollectionViewCell {
     
     private let titleLabel = UILabel()
-    private var itineraryCollectionView: UICollectionView!
-    private var itineraryItems: [ItineraryItem] = []
+    private var itineraryItems: [ItineraryEventModel] = []
+    
+    var viewModel: DayViewModel? {
+        didSet {
+            viewModel?.onUpdate = { [weak self] in
+                self?.itineraryCollectionView.reloadData()
+            }
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        contentView.addSubview(itineraryCollectionView)
+
         backgroundColor = .white
         layer.shadowColor = UIColor.darkGray.cgColor
         layer.shadowOpacity = 0.1
@@ -30,28 +39,29 @@ class DayCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionViewD
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10)
         ])
         
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: frame.width - 20, height: 50)
-        layout.minimumLineSpacing = 8
-        
-        itineraryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        itineraryCollectionView.backgroundColor = .clear
-        itineraryCollectionView.showsVerticalScrollIndicator = false
-        itineraryCollectionView.dataSource = self
-        itineraryCollectionView.delegate = self
-        itineraryCollectionView.register(ItineraryItemCell.self, forCellWithReuseIdentifier: "ItineraryItemCell")
-        itineraryCollectionView.addInteraction(UIDropInteraction(delegate: self))
-
-        contentView.addSubview(itineraryCollectionView)
-        itineraryCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             itineraryCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
             itineraryCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             itineraryCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             itineraryCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         ])
+        
+        itineraryCollectionView.showsVerticalScrollIndicator = false
+        itineraryCollectionView.register(ItineraryEventCell.self, forCellWithReuseIdentifier: "ItineraryItemCell")
+        itineraryCollectionView.addInteraction(UIDropInteraction(delegate: self))
+        itineraryCollectionView.dataSource = self
+        itineraryCollectionView.delegate = self
     }
+    
+    private let itineraryCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+      //  layout.itemSize = CGSize(width: frame.width - 20, height: 50)
+        layout.minimumLineSpacing = 8
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        return collectionView
+    }()
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -62,13 +72,15 @@ class DayCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionViewD
         itineraryItems = day.itineraryItems
         itineraryCollectionView.reloadData()
     }
-    
+}
+
+extension DayCell: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return itineraryItems.count
+        return viewModel?.events.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ItineraryItemCell", for: indexPath) as! ItineraryItemCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ItineraryItemCell", for: indexPath) as! ItineraryEventCell
         cell.configure(with: itineraryItems[indexPath.item])
         return cell
     }
@@ -87,7 +99,7 @@ extension DayCell: UIDropInteractionDelegate {
         
         // Определяем, над какой ячейкой находится курсор
         if let indexPath = itineraryCollectionView.indexPathForItem(at: dropLocation),
-           let cell = itineraryCollectionView.cellForItem(at: indexPath) as? ItineraryItemCell {
+           let cell = itineraryCollectionView.cellForItem(at: indexPath) as? ItineraryEventCell {
             cell.contentView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3) // Подсветка активной ячейки
         }
         
@@ -98,7 +110,7 @@ extension DayCell: UIDropInteractionDelegate {
         let dropLocation = session.location(in: itineraryCollectionView)
         
         guard let indexPath = itineraryCollectionView.indexPathForItem(at: dropLocation),
-              let cell = itineraryCollectionView.cellForItem(at: indexPath) as? ItineraryItemCell else { return }
+              let cell = itineraryCollectionView.cellForItem(at: indexPath) as? ItineraryEventCell else { return }
         
         // Достаём переданный imageView
         if let dragItem = session.items.first,
@@ -115,7 +127,7 @@ extension DayCell: UIDropInteractionDelegate {
     func dropInteraction(_ interaction: UIDropInteraction, sessionDidEnter session: UIDropSession) {
         let dropLocation = session.location(in: itineraryCollectionView)
         if let indexPath = itineraryCollectionView.indexPathForItem(at: dropLocation),
-           let cell = itineraryCollectionView.cellForItem(at: indexPath) as? ItineraryItemCell {
+           let cell = itineraryCollectionView.cellForItem(at: indexPath) as? ItineraryEventCell {
             cell.contentView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3) // Подсвечиваем
         }
     }
