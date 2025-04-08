@@ -11,10 +11,6 @@ import UIKit
 class TripViewModel {
     
     var days: [DayViewModel] = []
-
-    private let trip: TripModel
-    
-    // Callback for updating data when the selected day changes
     var onDayChanged: (() -> Void)?
     var events: [String: [ItineraryEventModel]] = [:]
     var onUpdate: (() -> Void)?
@@ -24,6 +20,8 @@ class TripViewModel {
             onDayChanged?()
         }
     }
+    
+    private let trip: TripModel
     
     init(trip: TripModel) {
         self.trip = trip

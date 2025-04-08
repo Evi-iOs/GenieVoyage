@@ -11,7 +11,7 @@ class DayViewModel {
     
     var dateDay: Date
     var events: [String: ItineraryEventModel] = [:]
-    let hours = (8...23).map { String(format: "%02d:00", $0) }
+    let hours = (0...24).map { String(format: "%02d:00", $0) }
     init(dateDay: Date) {
         self.dateDay = dateDay
     }

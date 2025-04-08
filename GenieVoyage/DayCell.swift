@@ -57,7 +57,6 @@ class DayCell: UICollectionViewCell {
     private let itineraryCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-       // layout.itemSize = CGSize(width: frame.width - 20, height: 50)
         layout.minimumLineSpacing = 8
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
