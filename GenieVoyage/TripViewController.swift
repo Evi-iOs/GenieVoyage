@@ -405,9 +405,9 @@ extension TripViewController: UIDragInteractionDelegate {
     func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
         guard let button = interaction.view as? UIButton else { return [] }
         
-        let itemProvider = NSItemProvider(object: UIImage()) // Заглушка (UIButton нельзя передать)
+        let itemProvider = NSItemProvider(object: UIImage())
         let dragItem = UIDragItem(itemProvider: itemProvider)
-        dragItem.localObject = button.imageView // Передаём кнопку через localObject
+        dragItem.localObject = button.imageView 
         
         return [dragItem]
     }

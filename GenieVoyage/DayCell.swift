@@ -17,6 +17,7 @@ class DayCell: UICollectionViewCell {
             viewModel?.onUpdate = { [weak self] in
                 self?.itineraryCollectionView.reloadData()
             }
+            itineraryCollectionView.reloadData()
         }
     }
     
@@ -43,7 +44,7 @@ class DayCell: UICollectionViewCell {
             itineraryCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
             itineraryCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             itineraryCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            itineraryCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
+            itineraryCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
         
         itineraryCollectionView.showsVerticalScrollIndicator = false
@@ -56,7 +57,7 @@ class DayCell: UICollectionViewCell {
     private let itineraryCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-      //  layout.itemSize = CGSize(width: frame.width - 20, height: 50)
+       // layout.itemSize = CGSize(width: frame.width - 20, height: 50)
         layout.minimumLineSpacing = 8
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -66,23 +67,26 @@ class DayCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    func configure(with day: TripDay) {
-        titleLabel.text = "Weather +15°C"
-        itineraryItems = day.itineraryItems
-        itineraryCollectionView.reloadData()
-    }
 }
 
-extension DayCell: UICollectionViewDelegate, UICollectionViewDataSource {
+extension DayCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel?.events.count ?? 0
+        return viewModel?.hours.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ItineraryItemCell", for: indexPath) as! ItineraryEventCell
-        cell.configure(with: itineraryItems[indexPath.item])
+        let time = viewModel?.hours[indexPath.item] ?? ""
+        let event = viewModel?.events[time]
+        cell.configure(with: time, event: event)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let width = collectionView.bounds.width
+        let height: CGFloat = 50
+        return CGSize(width: width, height: height)
     }
 }
 
@@ -103,24 +107,20 @@ extension DayCell: UIDropInteractionDelegate {
             cell.contentView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3) // Подсветка активной ячейки
         }
         
-        return UIDropProposal(operation: .move) // Разрешаем перемещение
+        return UIDropProposal(operation: .move)
     }
     
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
-        let dropLocation = session.location(in: itineraryCollectionView)
+        guard let cell = interaction.view as? ItineraryEventCell,
+              let indexPath = itineraryCollectionView.indexPath(for: cell),
+              let viewModel = viewModel else { return }
         
-        guard let indexPath = itineraryCollectionView.indexPathForItem(at: dropLocation),
-              let cell = itineraryCollectionView.cellForItem(at: indexPath) as? ItineraryEventCell else { return }
-        
-        // Достаём переданный imageView
-        if let dragItem = session.items.first,
-           let draggedImageView = dragItem.localObject as? UIImageView {
-            
-            // Добавляем imageView в ячейку
-            let newImageView = UIImageView(image: draggedImageView.image)
-            newImageView.frame = draggedImageView.frame
-            cell.contentView.addSubview(newImageView)
-            draggedImageView.center = CGPoint(x: cell.contentView.bounds.midX, y: cell.contentView.bounds.midY)
+        let time = viewModel.hours[indexPath.item]
+        session.loadObjects(ofClass: UIImage.self) { items in
+            guard let images = items as? [UIImage], let image = images.first else { return }
+                        
+            let newEvent = ItineraryEventModel(time: time, category: .transport, title: "", icon: image, duration: nil, address: nil)
+            viewModel.addEvent(newEvent)
         }
     }
     

@@ -11,7 +11,7 @@ import CoreLocation
 
 struct TripDay {
     let date: String
-    let itineraryItems: [ItineraryEventModel]
+    let itineraryEvents: [ItineraryEventModel]
 }
 
 struct ItineraryEventModel {
