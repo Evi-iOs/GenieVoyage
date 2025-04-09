@@ -15,12 +15,12 @@ struct TripDay {
 }
 
 struct ItineraryEventModel {
-    let time: String
+    let id: UUID
     let category: ItineraryItemCategory
-    let title: String
-    let icon: UIImage?
-    let duration: TimeInterval?
-    let address: String?
+    let icon: UIImage
+    let time: String
+    let duration: Int
+    let location: CLLocationCoordinate2D?
 }
 
 enum ItineraryItemCategory: String {

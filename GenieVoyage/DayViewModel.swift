@@ -10,16 +10,23 @@ import Foundation
 class DayViewModel {
     
     var dateDay: Date
-    var events: [String: ItineraryEventModel] = [:]
-    let hours = (0...24).map { String(format: "%02d:00", $0) }
+    var events: [ItineraryEventModel] = []
+    let hours = (0...23).map { String(format: "%02d:00", $0) }
+    
+    var onUpdate: (() -> Void)?
+    
     init(dateDay: Date) {
         self.dateDay = dateDay
     }
     
-    var onUpdate: (() -> Void)?
-
     func addEvent(_ event: ItineraryEventModel) {
-        events[event.time] = event
+        //TODO: alert / ask user
+       // guard !events.contains(where: { $0.time == event.time }) else { return }
+        events.append(event)
         onUpdate?()
+    }
+    
+    func events(at time: String) -> [ItineraryEventModel] {
+        return events.filter { $0.time == time }
     }
 }

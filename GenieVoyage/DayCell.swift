@@ -24,7 +24,7 @@ class DayCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(itineraryCollectionView)
-
+        
         backgroundColor = .white
         layer.shadowColor = UIColor.darkGray.cgColor
         layer.shadowOpacity = 0.1
@@ -76,7 +76,7 @@ extension DayCell: UICollectionViewDelegate, UICollectionViewDataSource, UIColle
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ItineraryItemCell", for: indexPath) as! ItineraryEventCell
         let time = viewModel?.hours[indexPath.item] ?? ""
-        let event = viewModel?.events[time]
+        let event = viewModel?.events.first(where: { $0.time == time })
         cell.configure(with: time, event: event)
         return cell
     }
@@ -91,38 +91,39 @@ extension DayCell: UICollectionViewDelegate, UICollectionViewDataSource, UIColle
 
 //MARK: Drag & drop icons
 extension DayCell: UIDropInteractionDelegate {
+    func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
+        return session.items.first?.localObject is ItineraryEventModel
+    }
     
     func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
-        let dropLocation = session.location(in: itineraryCollectionView)
-        
-        // Сбрасываем подсветку у всех видимых ячеек
-        for cell in itineraryCollectionView.visibleCells {
-            cell.contentView.backgroundColor = .white
+        let location = session.location(in: itineraryCollectionView)
+        if let indexPath = itineraryCollectionView.indexPathForItem(at: location),
+           let cell = itineraryCollectionView.cellForItem(at: indexPath) {
+            cell.contentView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
         }
-        
-        // Определяем, над какой ячейкой находится курсор
-        if let indexPath = itineraryCollectionView.indexPathForItem(at: dropLocation),
-           let cell = itineraryCollectionView.cellForItem(at: indexPath) as? ItineraryEventCell {
-            cell.contentView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3) // Подсветка активной ячейки
-        }
-        
-        return UIDropProposal(operation: .move)
+        return UIDropProposal(operation: .copy)
     }
     
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
-        guard let cell = interaction.view as? ItineraryEventCell,
-              let indexPath = itineraryCollectionView.indexPath(for: cell),
-              let viewModel = viewModel else { return }
-        
-        let time = viewModel.hours[indexPath.item]
-        session.loadObjects(ofClass: UIImage.self) { items in
-            guard let images = items as? [UIImage], let image = images.first else { return }
-                        
-            let newEvent = ItineraryEventModel(time: time, category: .transport, title: "", icon: image, duration: nil, address: nil)
-            viewModel.addEvent(newEvent)
-        }
+        guard let event = session.items.first?.localObject as? ItineraryEventModel else { return }
+
+        let dropPoint = session.location(in: itineraryCollectionView)
+        guard let indexPath = itineraryCollectionView.indexPathForItem(at: dropPoint) else { return }
+
+        let timeSlot = viewModel?.hours[indexPath.item] ?? ""
+
+        var newEvent = event
+        newEvent = ItineraryEventModel(
+            id: UUID(),
+            category: event.category,
+            icon: event.icon,
+            time: timeSlot,
+            duration: event.duration,
+            location: event.location
+        )
+        viewModel?.addEvent(newEvent)
     }
-    
+
     func dropInteraction(_ interaction: UIDropInteraction, sessionDidEnter session: UIDropSession) {
         let dropLocation = session.location(in: itineraryCollectionView)
         if let indexPath = itineraryCollectionView.indexPathForItem(at: dropLocation),
@@ -132,8 +133,8 @@ extension DayCell: UIDropInteractionDelegate {
     }
 
     func dropInteraction(_ interaction: UIDropInteraction, sessionDidExit session: UIDropSession) {
-        for cell in itineraryCollectionView.visibleCells {
-            cell.contentView.backgroundColor = .white // Убираем подсветку
+        itineraryCollectionView.visibleCells.forEach {
+            $0.contentView.backgroundColor = .clear
         }
     }
 }

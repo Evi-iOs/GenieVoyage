@@ -38,7 +38,6 @@ final class ItineraryEventCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFit
         imageView.tintColor = .darkGray
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.isHidden = true
         return imageView
     }()
     
@@ -50,16 +49,17 @@ final class ItineraryEventCell: UICollectionViewCell {
         contentView.addSubview(separator)
         
         NSLayoutConstraint.activate([
-            iconImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+            timeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+            timeLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            timeLabel.widthAnchor.constraint(equalToConstant: 40),
+            
+            iconImageView.leadingAnchor.constraint(equalTo: timeLabel.trailingAnchor, constant: 8),
             iconImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            iconImageView.widthAnchor.constraint(equalToConstant: 40),
-            iconImageView.heightAnchor.constraint(equalToConstant: 40),
+            iconImageView.widthAnchor.constraint(equalToConstant: 28),
+            iconImageView.heightAnchor.constraint(equalToConstant: 28),
             
-            timeLabel.leadingAnchor.constraint(equalTo: iconImageView.leadingAnchor, constant: 8),
-            timeLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            
+            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: 8),
-            titleLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 4),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
             
             separator.heightAnchor.constraint(equalToConstant: 0.2),
@@ -74,46 +74,14 @@ final class ItineraryEventCell: UICollectionViewCell {
     }
     
     func configure(with time: String, event: ItineraryEventModel?) {
-            timeLabel.text = time
-            if let event = event {
-                iconImageView.image = event.icon
-                iconImageView.isHidden = false
-            } else {
-                iconImageView.isHidden = true
-            }
-        }
-}
-
-// MARK: - UIDragInteractionDelegate
-extension ItineraryEventCell: UIDragInteractionDelegate {
-    func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
-        guard let image = iconImageView.image else { return [] }
-        let provider = NSItemProvider(object: image)
-        let dragItem = UIDragItem(itemProvider: provider)
-        dragItem.localObject = self // Сохраняем ссылку на ячейку
-        return [dragItem]
-    }
-}
-
-// MARK: - UIDropInteractionDelegate
-extension ItineraryEventCell: UIDropInteractionDelegate {
-    func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
-        return session.canLoadObjects(ofClass: UIImage.self)
-    }
-
-    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
-        return UIDropProposal(operation: .move)
-    }
-
-    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
-        guard let cell = interaction.view as? ItineraryEventCell else { return }
-        
-        session.loadObjects(ofClass: UIImage.self) { items in
-            guard let images = items as? [UIImage], let image = images.first else { return }
-            DispatchQueue.main.async {
-                cell.iconImageView.image = image
-                cell.iconImageView.isHidden = false
-            }
+        timeLabel.text = time
+        if let event = event {
+            iconImageView.image = event.icon
+            iconImageView.isHidden = false
+        } else {
+            iconImageView.image = nil
+            iconImageView.isHidden = true
         }
     }
 }
+

@@ -12,7 +12,6 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     
     var trip: TripModel
     var onSave: ((TripModel) -> Void)?
-    let hours = Array(8...24).map { String(format: "%02d:00", $0) }
     
     private lazy var viewModel = TripViewModel(trip: trip)
     
@@ -174,24 +173,16 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         button.clipsToBounds = true
         button.layer.borderColor = UIColor(hex: "#DADADA").cgColor
         button.layer.borderWidth = 1
+        button.contentHorizontalAlignment = .center
+        button.contentVerticalAlignment = .center
         
         NSLayoutConstraint.activate([
             button.widthAnchor.constraint(equalToConstant: 60),
             button.heightAnchor.constraint(equalToConstant: 60)
         ])
-        
-        let imageView = UIImageView(image: UIImage(named: iconName))
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        
-        button.addSubview(imageView) 
-        
-        NSLayoutConstraint.activate([
-            imageView.centerXAnchor.constraint(equalTo: button.centerXAnchor),
-            imageView.centerYAnchor.constraint(equalTo: button.centerYAnchor),
-            imageView.widthAnchor.constraint(equalToConstant: 30),
-            imageView.heightAnchor.constraint(equalToConstant: 30)
-        ])
-        
+        guard let image = UIImage(named: iconName), let resized = image.resizedImage(named: iconName, size: CGSize(width: 30, height: 30))
+        else { return button }
+        button.setImage(resized, for: .normal)
         return button
     }
     
@@ -405,10 +396,25 @@ extension TripViewController: UIDragInteractionDelegate {
     func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
         guard let button = interaction.view as? UIButton else { return [] }
         
-        let itemProvider = NSItemProvider(object: UIImage())
-        let dragItem = UIDragItem(itemProvider: itemProvider)
-        dragItem.localObject = button.imageView 
+        let icon = button.image(for: .normal) ?? UIImage()
         
+        let event = ItineraryEventModel(
+            id: UUID(),
+            category: .transport,
+            icon: icon,
+            time: "", 
+            duration: 60,
+            location: nil
+        )
+        
+        let itemProvider = NSItemProvider(object: icon)
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = event
         return [dragItem]
+    }
+    
+    func dragInteraction(_ interaction: UIDragInteraction, previewForLifting item: UIDragItem, session: UIDragSession) -> UITargetedDragPreview? {
+        guard let view = interaction.view else { return nil }
+        return UITargetedDragPreview(view: view)
     }
 }

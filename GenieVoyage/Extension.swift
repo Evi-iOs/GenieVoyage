@@ -87,6 +87,17 @@ extension UIButton {
         }
     }
 }
+
+extension UIImage {
+    func resizedImage(named name: String, size: CGSize) -> UIImage? {
+        guard let image = UIImage(named: name) else { return nil }
+        
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { _ in
+            image.draw(in: CGRect(origin: .zero, size: size))
+        }
+    }
+}
     
 extension DestinationCategory {
     func icon() -> UIImage? {

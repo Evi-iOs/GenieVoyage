@@ -12,9 +12,8 @@ class TripViewModel {
     
     var days: [DayViewModel] = []
     var onDayChanged: (() -> Void)?
-    var events: [String: [ItineraryEventModel]] = [:]
     var onUpdate: (() -> Void)?
-    
+
     var selectedDayIndex: Int = 0 {
         didSet {
             onDayChanged?()
@@ -26,15 +25,6 @@ class TripViewModel {
     init(trip: TripModel) {
         self.trip = trip
         setupData()
-    }
-        
-    func addEvent(_ event: ItineraryEventModel, at time: String) {
-        if events[time] != nil {
-            events[time]?.append(event)
-        } else {
-            events[time] = [event]
-        }
-        onUpdate?()
     }
     
     // MARK: - Data Setup
