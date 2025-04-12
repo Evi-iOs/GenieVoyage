@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class DayViewModel {
     
@@ -20,13 +21,51 @@ class DayViewModel {
     }
     
     func addEvent(_ event: ItineraryEventModel) {
-        //TODO: alert / ask user
-       // guard !events.contains(where: { $0.time == event.time }) else { return }
         events.append(event)
         onUpdate?()
     }
     
-    func events(at time: String) -> [ItineraryEventModel] {
-        return events.filter { $0.time == time }
+    func hasEvent(at time: String) -> Bool {
+        return events.contains { $0.time == time }
+    }
+    
+    func showOccupiedSlotAlert() {
+        let alert = UIAlertController(
+            title: "Time is occupied",
+            message: "There is already an event added to this time slot.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "ОК", style: .default, handler: nil))
+        
+        if let topController = topMostViewController() {
+            topController.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    private func topMostViewController(base: UIViewController? = UIApplication.shared.connectedScenes
+        .compactMap { ($0 as? UIWindowScene)?.keyWindow }
+        .first?.rootViewController) -> UIViewController? {
+            
+            if let nav = base as? UINavigationController {
+                return topMostViewController(base: nav.visibleViewController)
+            }
+            
+            if let tab = base as? UITabBarController {
+                return topMostViewController(base: tab.selectedViewController)
+            }
+            
+            if let presented = base?.presentedViewController {
+                return topMostViewController(base: presented)
+            }
+            return base
+        }
+    
+    func shake(cell: UICollectionViewCell) {
+        let animation = CAKeyframeAnimation(keyPath: "transform.translation.x")
+        animation.timingFunction = CAMediaTimingFunction(name: .linear)
+        animation.duration = 0.4
+        animation.values = [-6, 6, -4, 4, -2, 2, 0]
+        
+        cell.layer.add(animation, forKey: "shake")
     }
 }

@@ -107,6 +107,14 @@ extension DayCell: UIDropInteractionDelegate {
         
         let timeSlot = viewModel?.hours[indexPath.item] ?? ""
         
+        if viewModel?.hasEvent(at: timeSlot) == true {
+            if let cell = itineraryCollectionView.cellForItem(at: indexPath) {
+                viewModel?.shake(cell: cell)
+            }
+            viewModel?.showOccupiedSlotAlert()
+            return
+        }
+        
         var newEvent = event
         newEvent = ItineraryEventModel(
             id: UUID(),
