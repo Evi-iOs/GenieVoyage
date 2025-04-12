@@ -17,8 +17,15 @@ class DayCell: UICollectionViewCell {
         didSet {
             viewModel?.onUpdate = { [weak self] in
                 self?.itineraryCollectionView.reloadData()
+                DispatchQueue.main.async {
+                    self?.scrollToStartHour()
+                }
             }
+            
             itineraryCollectionView.reloadData()
+            DispatchQueue.main.async {
+                self.scrollToStartHour()
+            }
         }
     }
     
@@ -66,6 +73,14 @@ class DayCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func scrollToStartHour() {
+        guard let hours = viewModel?.hours, let index = hours.firstIndex(of: "08:00"),
+              itineraryCollectionView.numberOfItems(inSection: 0) > index else { return }
+        
+        let indexPath = IndexPath(item: index, section: 0)
+        itineraryCollectionView.scrollToItem(at: indexPath, at: .top, animated: false)
     }
 }
 
