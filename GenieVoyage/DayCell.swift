@@ -11,6 +11,7 @@ class DayCell: UICollectionViewCell {
     
     private let titleLabel = UILabel()
     private var itineraryItems: [ItineraryEventModel] = []
+    private var highlightedIndexPath: IndexPath?
     
     var viewModel: DayViewModel? {
         didSet {
@@ -95,23 +96,17 @@ extension DayCell: UIDropInteractionDelegate {
         return session.items.first?.localObject is ItineraryEventModel
     }
     
-    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
-        let location = session.location(in: itineraryCollectionView)
-        if let indexPath = itineraryCollectionView.indexPathForItem(at: location),
-           let cell = itineraryCollectionView.cellForItem(at: indexPath) {
-            cell.contentView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
-        }
-        return UIDropProposal(operation: .copy)
-    }
-    
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+        
+        clearHighlight()
+        
         guard let event = session.items.first?.localObject as? ItineraryEventModel else { return }
-
+        
         let dropPoint = session.location(in: itineraryCollectionView)
         guard let indexPath = itineraryCollectionView.indexPathForItem(at: dropPoint) else { return }
-
+        
         let timeSlot = viewModel?.hours[indexPath.item] ?? ""
-
+        
         var newEvent = event
         newEvent = ItineraryEventModel(
             id: UUID(),
@@ -123,19 +118,43 @@ extension DayCell: UIDropInteractionDelegate {
         )
         viewModel?.addEvent(newEvent)
     }
-
-    func dropInteraction(_ interaction: UIDropInteraction, sessionDidEnter session: UIDropSession) {
-        let dropLocation = session.location(in: itineraryCollectionView)
-        if let indexPath = itineraryCollectionView.indexPathForItem(at: dropLocation),
-           let cell = itineraryCollectionView.cellForItem(at: indexPath) as? ItineraryEventCell {
-            cell.contentView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3) // Подсвечиваем
-        }
-    }
-
+    
     func dropInteraction(_ interaction: UIDropInteraction, sessionDidExit session: UIDropSession) {
-        itineraryCollectionView.visibleCells.forEach {
-            $0.contentView.backgroundColor = .clear
+        clearHighlight()
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
+        let dropLocation = session.location(in: itineraryCollectionView)
+        guard let indexPath = itineraryCollectionView.indexPathForItem(at: dropLocation) else {
+            clearHighlight()
+            return UIDropProposal(operation: .cancel)
         }
+        
+        if indexPath == highlightedIndexPath {
+            return UIDropProposal(operation: .copy)
+        }
+        
+        clearHighlight()
+        
+        if let cell = itineraryCollectionView.cellForItem(at: indexPath) {
+            UIView.animate(withDuration: 0.15) {
+                cell.contentView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
+            }
+        }
+        
+        highlightedIndexPath = indexPath
+        
+        return UIDropProposal(operation: .copy)
+    }
+    
+    private func clearHighlight() {
+        if let indexPath = highlightedIndexPath,
+           let cell = itineraryCollectionView.cellForItem(at: indexPath) {
+            UIView.animate(withDuration: 0.15) {
+                cell.contentView.backgroundColor = .clear
+            }
+        }
+        highlightedIndexPath = nil
     }
 }
 
