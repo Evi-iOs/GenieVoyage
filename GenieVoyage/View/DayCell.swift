@@ -9,10 +9,14 @@ import UIKit
 
 class DayCell: UICollectionViewCell {
     
+    weak var scrollDelegate: DayCellScrollDelegate?
+    
     private let titleLabel = UILabel()
     private var itineraryItems: [ItineraryEventModel] = []
     private var highlightedIndexPath: IndexPath?
     
+    private var lastOffsetY: CGFloat = 0
+
     var viewModel: DayViewModel? {
         didSet {
             viewModel?.onUpdate = { [weak self] in
@@ -81,6 +85,13 @@ class DayCell: UICollectionViewCell {
         
         let indexPath = IndexPath(item: index, section: 0)
         itineraryCollectionView.scrollToItem(at: indexPath, at: .top, animated: false)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let currentOffsetY = scrollView.contentOffset.y
+        let scrollingUp = currentOffsetY < lastOffsetY
+        scrollDelegate?.dayCellDidScroll(upward: scrollingUp)
+        lastOffsetY = currentOffsetY
     }
 }
 
@@ -180,4 +191,6 @@ extension DayCell: UIDropInteractionDelegate {
         highlightedIndexPath = nil
     }
 }
+
+
 

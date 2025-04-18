@@ -59,6 +59,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         super.viewDidAppear(animated)
         view.setNeedsLayout()
         view.layoutIfNeeded()
+        showFloatingMapButton()
     }
     
     override func viewDidLayoutSubviews() {
@@ -134,6 +135,9 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         view.addSubview(segmentedControl)
         view.addSubview(daysCollectionView)
         view.addSubview(saveButton)
+        view.addSubview(floatingMapButton)
+        
+        floatingMapButton.addTarget(self, action: #selector(mapButtonTapped), for: .touchUpInside)
     }
     
     private func setupIconButtons() {
@@ -232,7 +236,13 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
             daysCollectionView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor),
             daysCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             daysCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            daysCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -35)
+            daysCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -35),
+            
+            //MapButton
+            floatingMapButton.widthAnchor.constraint(equalToConstant: 64),
+            floatingMapButton.heightAnchor.constraint(equalToConstant: 64),
+            floatingMapButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
+            floatingMapButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -40)
         ])
     }
     
@@ -309,6 +319,12 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         navigationController?.popViewController(animated: true)
     }
     
+    @objc private func mapButtonTapped() {
+        //TODO: Открывать должна VM
+        let vc = MapLocationViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
     func addEvent(to dayIndex: Int, event: ItineraryEventModel) {
         viewModel.days[dayIndex].addEvent(event)
         
@@ -328,6 +344,49 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
             self?.daysCollectionView.reloadData()
         }
     }
+    
+    //MARK: - MapButton
+
+    private let floatingMapButton: UIButton = {
+        let button = UIButton(type: .system)
+        let config = UIImage.SymbolConfiguration(pointSize: 16, weight: .light)
+        let icon = UIImage(named: "map")?.withRenderingMode(.alwaysTemplate)
+        button.setImage(icon, for: .normal)
+        button.tintColor = .black
+        button.layer.cornerRadius = 32
+        button.layer.masksToBounds = false
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = .white
+        return button
+    }()
+
+    private func showFloatingMapButton() {
+        guard floatingMapButton.alpha != 1 else { return }
+        
+        floatingMapButton.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        floatingMapButton.layer.shadowColor = UIColor.gray.cgColor
+        floatingMapButton.layer.shadowOpacity = 0.5
+        floatingMapButton.layer.shadowOffset = CGSize(width: 0, height: 4)
+        floatingMapButton.layer.shadowRadius = 6
+        
+        UIView.animate(withDuration: 0.3,
+                       delay: 0,
+                       usingSpringWithDamping: 0.6,
+                       initialSpringVelocity: 0.8,
+                       options: .curveEaseInOut) {
+            self.floatingMapButton.alpha = 1
+            self.floatingMapButton.transform = .identity
+        }
+    }
+
+    private func hideFloatingMapButton() {
+        guard floatingMapButton.alpha != 0 else { return }
+        
+        UIView.animate(withDuration: 0.2) {
+            self.floatingMapButton.alpha = 0
+        }
+    }
+
     
     // MARK: - UIImagePickerControllerDelegate
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -364,6 +423,7 @@ extension TripViewController: UICollectionViewDataSource, UICollectionViewDelega
             return UICollectionViewCell()
         }
         cell.viewModel = viewModel.days[indexPath.item]
+        cell.scrollDelegate = self
         return cell
     }
     
@@ -416,5 +476,15 @@ extension TripViewController: UIDragInteractionDelegate {
     func dragInteraction(_ interaction: UIDragInteraction, previewForLifting item: UIDragItem, session: UIDragSession) -> UITargetedDragPreview? {
         guard let view = interaction.view else { return nil }
         return UITargetedDragPreview(view: view)
+    }
+}
+
+extension TripViewController: DayCellScrollDelegate {
+    func dayCellDidScroll(upward: Bool) {
+        if upward {
+            showFloatingMapButton()
+        } else {
+            hideFloatingMapButton()
+        }
     }
 }

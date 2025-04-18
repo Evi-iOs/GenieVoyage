@@ -77,8 +77,8 @@
             filePath = "GenieVoyage/DayCell.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "118"
-            endingLineNumber = "118"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
             landmarkName = "dropInteraction(_:performDrop:)"
             landmarkType = "7">
          </BreakpointContent>
