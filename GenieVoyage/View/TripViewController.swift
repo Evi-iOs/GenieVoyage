@@ -239,8 +239,8 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
             daysCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -35),
             
             //MapButton
-            floatingMapButton.widthAnchor.constraint(equalToConstant: 64),
-            floatingMapButton.heightAnchor.constraint(equalToConstant: 64),
+            floatingMapButton.widthAnchor.constraint(equalToConstant: 60),
+            floatingMapButton.heightAnchor.constraint(equalToConstant: 60),
             floatingMapButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             floatingMapButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -40)
         ])
@@ -352,11 +352,11 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         let config = UIImage.SymbolConfiguration(pointSize: 16, weight: .light)
         let icon = UIImage(named: "map")?.withRenderingMode(.alwaysTemplate)
         button.setImage(icon, for: .normal)
-        button.tintColor = .black
-        button.layer.cornerRadius = 32
+        button.tintColor = .white
+        button.layer.cornerRadius = 30
         button.layer.masksToBounds = false
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .white
+        button.backgroundColor = .black
         return button
     }()
 
@@ -365,16 +365,16 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         
         floatingMapButton.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         floatingMapButton.layer.shadowColor = UIColor.gray.cgColor
-        floatingMapButton.layer.shadowOpacity = 0.5
-        floatingMapButton.layer.shadowOffset = CGSize(width: 0, height: 4)
-        floatingMapButton.layer.shadowRadius = 6
+        floatingMapButton.layer.shadowOpacity = 0.6
+        floatingMapButton.layer.shadowOffset = CGSize(width: 0, height: 8)
+        floatingMapButton.layer.shadowRadius = 8
         
         UIView.animate(withDuration: 0.3,
                        delay: 0,
                        usingSpringWithDamping: 0.6,
                        initialSpringVelocity: 0.8,
                        options: .curveEaseInOut) {
-            self.floatingMapButton.alpha = 1
+            self.floatingMapButton.alpha = 0.7
             self.floatingMapButton.transform = .identity
         }
     }
