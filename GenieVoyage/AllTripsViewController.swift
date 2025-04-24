@@ -32,7 +32,7 @@ class AllTripsViewController: UIViewController, UITableViewDelegate, UITableView
     
     @objc func addTrip() {
         let startPlanningVC = StartPlanningViewController()
-        
+        startPlanningVC.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(startPlanningVC, animated: true)
     }
     

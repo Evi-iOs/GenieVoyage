@@ -322,6 +322,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     @objc private func mapButtonTapped() {
         //TODO: Открывать должна VM
         let vc = MapLocationViewController()
+        vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
     }
     

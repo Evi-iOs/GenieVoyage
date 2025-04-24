@@ -27,6 +27,8 @@
 		D0605DF82D3FF24C00465BD2 /* Pods_GenieVoyage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 071C3747FA4F0ADB75D5CC99 /* Pods_GenieVoyage.framework */; };
 		D0605DF92D3FF24C00465BD2 /* Pods_GenieVoyage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 071C3747FA4F0ADB75D5CC99 /* Pods_GenieVoyage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D06C7F1B2DB26C2600402EA0 /* DayCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F1A2DB26C1B00402EA0 /* DayCellDelegate.swift */; };
+		D06C7F1E2DBAC2E500402EA0 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F1D2DBAC2D700402EA0 /* MainTabBarController.swift */; };
+		D06C7F202DBAC3CD00402EA0 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F1F2DBAC3CD00402EA0 /* ProfileViewController.swift */; };
 		D07B678A2D2C6D8000842293 /* StartPlanningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07B67892D2C6D8000842293 /* StartPlanningViewController.swift */; };
 		D0949A3F2AF32444005E310D /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0949A3E2AF32444005E310D /* CoreDataManager.swift */; };
 		D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */; };
@@ -101,6 +103,8 @@
 		D04945B82D3EB26900232F26 /* TripViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripViewModel.swift; sourceTree = "<group>"; };
 		D05D92E52D4B8CB10022C734 /* DayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCell.swift; sourceTree = "<group>"; };
 		D06C7F1A2DB26C1B00402EA0 /* DayCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCellDelegate.swift; sourceTree = "<group>"; };
+		D06C7F1D2DBAC2D700402EA0 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
+		D06C7F1F2DBAC3CD00402EA0 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		D07B67892D2C6D8000842293 /* StartPlanningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartPlanningViewController.swift; sourceTree = "<group>"; };
 		D0949A3E2AF32444005E310D /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		D0D192CE2A6FFF9A000853B8 /* GenieVoyage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GenieVoyage.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -250,14 +254,16 @@
 				D06C7F192DB26C0A00402EA0 /* Delegate */,
 				D06C7F1C2DB26C8A00402EA0 /* Extensios */,
 				D0D193072A71AC36000853B8 /* EKWrapper.swift */,
-				D0D192D52A6FFF9A000853B8 /* CalendarViewController.swift */,
+				D06C7F1D2DBAC2D700402EA0 /* MainTabBarController.swift */,
 				D0365DF22CFA6D3500D711A9 /* AllTripsViewController.swift */,
+				D03D086A2D08C14F009F8E63 /* MapLocationViewController.swift */,
+				D06C7F1F2DBAC3CD00402EA0 /* ProfileViewController.swift */,
 				D026365B2D84ADBB0070D28C /* SegmentedControlView.swift */,
 				D026365D2D84AE0D0070D28C /* SegmentCell.swift */,
 				D03D08642D0730CE009F8E63 /* PlanDayDetailViewController.swift */,
 				D07B67892D2C6D8000842293 /* StartPlanningViewController.swift */,
+				D0D192D52A6FFF9A000853B8 /* CalendarViewController.swift */,
 				D03D08682D08544D009F8E63 /* EventViewController.swift */,
-				D03D086A2D08C14F009F8E63 /* MapLocationViewController.swift */,
 				D0365DF42CFA723600D711A9 /* TripDetailViewController.swift */,
 				D03D08662D074316009F8E63 /* ItineraryCell.swift */,
 				D0365DF82CFDC76F00D711A9 /* CalculateDistance.swift */,
@@ -502,6 +508,7 @@
 				D04945B52D3A46FA00232F26 /* ItineraryEventModel.swift in Sources */,
 				D07B678A2D2C6D8000842293 /* StartPlanningViewController.swift in Sources */,
 				D0010B2C2B12A24200BAEC46 /* Extension.swift in Sources */,
+				D06C7F202DBAC3CD00402EA0 /* ProfileViewController.swift in Sources */,
 				D06C7F1B2DB26C2600402EA0 /* DayCellDelegate.swift in Sources */,
 				D03D08692D08544D009F8E63 /* EventViewController.swift in Sources */,
 				D04945B32D3A451B00232F26 /* ItineraryEventCell.swift in Sources */,
@@ -516,6 +523,7 @@
 				D0D192DC2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld in Sources */,
 				D0365DF32CFA6D3500D711A9 /* AllTripsViewController.swift in Sources */,
 				D03D08672D074316009F8E63 /* ItineraryCell.swift in Sources */,
+				D06C7F1E2DBAC2E500402EA0 /* MainTabBarController.swift in Sources */,
 				D0D193082A71AC36000853B8 /* EKWrapper.swift in Sources */,
 				D0365DF12CFA6BEA00D711A9 /* TripModel.swift in Sources */,
 				D04945B92D3EB26900232F26 /* TripViewModel.swift in Sources */,
