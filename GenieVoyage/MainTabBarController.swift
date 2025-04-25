@@ -21,26 +21,26 @@ class MainTabBarController: UITabBarController {
         tabBar.tintColor = .black
         tabBar.unselectedItemTintColor = .lightGray
         
-        let homeVC = HomeViewController()
-        homeVC.tabBarItem = createTabBarItem(image: "hausSmall", selectedImage: "hausSmall", tag: 0)
-        homeVC.tabBarItem.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: 300)
-        
         let allTripsVC = AllTripsViewController()
-        allTripsVC.tabBarItem = createTabBarItem(image: "calendarSmall", selectedImage: "calendarSmall", tag: 1)
+        allTripsVC.tabBarItem = createTabBarItem(image: "homeSmall", selectedImage: "homeSmall", tag: 0)
         allTripsVC.tabBarItem.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: 300)
         
         let mapVC = MapLocationViewController()
-        mapVC.tabBarItem = createTabBarItem(image: "mapSmall", selectedImage: "mapSmall", tag: 2)
+        mapVC.tabBarItem = createTabBarItem(image: "mapSmall", selectedImage: "mapSmall", tag: 1)
         mapVC.tabBarItem.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: 300)
+        
+        let checkListVC = CheckListViewController()
+        checkListVC.tabBarItem = createTabBarItem(image: "checkListSmall", selectedImage: "checkListSmall", tag: 2)
+        checkListVC.tabBarItem.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: 300)
         
         let profileVC = ProfileViewController()
         profileVC.tabBarItem = createTabBarItem(image: "profileSmall", selectedImage: "profileSmall", tag: 3)
         profileVC.tabBarItem.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: 300)
         
         viewControllers = [
-            UINavigationController(rootViewController: homeVC),
             UINavigationController(rootViewController: allTripsVC),
             UINavigationController(rootViewController: mapVC),
+            UINavigationController(rootViewController: checkListVC),
             UINavigationController(rootViewController: profileVC)
         ]
     }
