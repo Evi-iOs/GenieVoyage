@@ -20,7 +20,8 @@ struct ItineraryEventModel {
     let icon: UIImage
     let time: String
     let duration: Int
-    let location: CLLocationCoordinate2D?
+    let locationName: String?
+    let coordinate: CLLocationCoordinate2D?
 }
 
 enum ItineraryItemCategory: String {

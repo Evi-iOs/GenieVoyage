@@ -31,6 +31,7 @@
 		D06C7F202DBAC3CD00402EA0 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F1F2DBAC3CD00402EA0 /* ProfileViewController.swift */; };
 		D06C7F222DBC19CC00402EA0 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F212DBC19CC00402EA0 /* CustomTabBar.swift */; };
 		D06C7F242DBC1E4100402EA0 /* CheckListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F232DBC1E4100402EA0 /* CheckListViewController.swift */; };
+		D06C7F262DBCF32D00402EA0 /* PointViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F252DBCF32D00402EA0 /* PointViewController.swift */; };
 		D07B678A2D2C6D8000842293 /* StartPlanningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07B67892D2C6D8000842293 /* StartPlanningViewController.swift */; };
 		D0949A3F2AF32444005E310D /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0949A3E2AF32444005E310D /* CoreDataManager.swift */; };
 		D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */; };
@@ -109,6 +110,7 @@
 		D06C7F1F2DBAC3CD00402EA0 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		D06C7F212DBC19CC00402EA0 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
 		D06C7F232DBC1E4100402EA0 /* CheckListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListViewController.swift; sourceTree = "<group>"; };
+		D06C7F252DBCF32D00402EA0 /* PointViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointViewController.swift; sourceTree = "<group>"; };
 		D07B67892D2C6D8000842293 /* StartPlanningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartPlanningViewController.swift; sourceTree = "<group>"; };
 		D0949A3E2AF32444005E310D /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		D0D192CE2A6FFF9A000853B8 /* GenieVoyage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GenieVoyage.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -184,6 +186,7 @@
 		D06C7F162DB26B8700402EA0 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				D06C7F252DBCF32D00402EA0 /* PointViewController.swift */,
 				D043B43C2CFF6DDE00151ED0 /* TripViewController.swift */,
 				D04945B22D3A451B00232F26 /* ItineraryEventCell.swift */,
 				D05D92E52D4B8CB10022C734 /* DayCell.swift */,
@@ -523,6 +526,7 @@
 				D026365C2D84ADBB0070D28C /* SegmentedControlView.swift in Sources */,
 				D05D92E62D4B8CB10022C734 /* DayCell.swift in Sources */,
 				D026365E2D84AE0D0070D28C /* SegmentCell.swift in Sources */,
+				D06C7F262DBCF32D00402EA0 /* PointViewController.swift in Sources */,
 				D03D086B2D08C14F009F8E63 /* MapLocationViewController.swift in Sources */,
 				D06C7F222DBC19CC00402EA0 /* CustomTabBar.swift in Sources */,
 				D043B43D2CFF6DDE00151ED0 /* TripViewController.swift in Sources */,

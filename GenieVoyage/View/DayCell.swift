@@ -9,7 +9,7 @@ import UIKit
 
 class DayCell: UICollectionViewCell {
     
-    weak var scrollDelegate: DayCellScrollDelegate?
+    weak var dayCellDelegate: DayCellDelegate?
     
     private let titleLabel = UILabel()
     private var itineraryItems: [ItineraryEventModel] = []
@@ -90,7 +90,7 @@ class DayCell: UICollectionViewCell {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentOffsetY = scrollView.contentOffset.y
         let scrollingUp = currentOffsetY < lastOffsetY
-        scrollDelegate?.dayCellDidScroll(upward: scrollingUp)
+        dayCellDelegate?.dayCellDidScroll(upward: scrollingUp)
         lastOffsetY = currentOffsetY
     }
 }
@@ -141,16 +141,9 @@ extension DayCell: UIDropInteractionDelegate {
             return
         }
         
-        var newEvent = event
-        newEvent = ItineraryEventModel(
-            id: UUID(),
-            category: event.category,
-            icon: event.icon,
-            time: timeSlot,
-            duration: event.duration,
-            location: event.location
-        )
-        viewModel?.addEvent(newEvent)
+        if let event = session.items.first?.localObject as? ItineraryEventModel {
+            dayCellDelegate?.dayCell(self, didDropEventWith: event.category, at: timeSlot)
+        }
     }
     
     func dropInteraction(_ interaction: UIDropInteraction, sessionDidExit session: UIDropSession) {

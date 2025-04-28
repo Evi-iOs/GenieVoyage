@@ -44,10 +44,16 @@ extension Date {
         dateFormater.dateFormat = "dd/MM/yyyy"
         return dateFormater.string(from: self)
     }
-
+    
     func formattedTime() -> String {
         let formatter = DateFormatter()
         formatter.timeStyle = .short
+        return formatter.string(from: self)
+    }
+    
+    func toString(format: String = "HH:mm") -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = format
         return formatter.string(from: self)
     }
 }

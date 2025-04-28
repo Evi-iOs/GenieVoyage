@@ -424,7 +424,7 @@ extension TripViewController: UICollectionViewDataSource, UICollectionViewDelega
             return UICollectionViewCell()
         }
         cell.viewModel = viewModel.days[indexPath.item]
-        cell.scrollDelegate = self
+        cell.dayCellDelegate = self
         return cell
     }
     
@@ -459,13 +459,24 @@ extension TripViewController: UIDragInteractionDelegate {
         
         let icon = button.image(for: .normal) ?? UIImage()
         
+        let category: ItineraryItemCategory
+        switch button.tag {
+        case 0: category = .transport
+        case 1: category = .transfer
+        case 2: category = .hotel
+        case 3: category = .point
+        case 4: category = .food
+        default: category = .point
+        }
+        
         let event = ItineraryEventModel(
             id: UUID(),
-            category: .transport,
+            category: category,
             icon: icon,
-            time: "", 
+            time: "",
             duration: 60,
-            location: nil
+            locationName: nil,
+            coordinate: nil
         )
         
         let itemProvider = NSItemProvider(object: icon)
@@ -480,7 +491,34 @@ extension TripViewController: UIDragInteractionDelegate {
     }
 }
 
-extension TripViewController: DayCellScrollDelegate {
+extension TripViewController: DayCellDelegate {
+    func dayCell(_ cell: DayCell, didDropEventWith category: ItineraryItemCategory, at time: String) {
+        switch category {
+        case .point:
+            let pointVC = PointViewController()
+            presentModalVC(VC: pointVC)
+        case .hotel:
+            let hotelVC = PointViewController()
+            presentModalVC(VC: hotelVC)
+        case .food:
+            let foodVC = PointViewController()
+            presentModalVC(VC: foodVC)
+        case .transport, .transfer:
+            let pointVC = PointViewController()
+            presentModalVC(VC: pointVC)
+            break
+        }
+    }
+    
+    private func presentModalVC(VC: UIViewController) {
+        VC.modalPresentationStyle = .pageSheet
+        if let sheet = VC.sheetPresentationController {
+            sheet.detents = [.medium()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(VC, animated: true)
+    }
+    
     func dayCellDidScroll(upward: Bool) {
         if upward {
             showFloatingMapButton()
