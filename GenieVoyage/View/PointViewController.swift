@@ -27,7 +27,9 @@ class PointViewController: UIViewController {
     private let saveButton = UIButton(type: .system)
     private let closeButton = UIButton(type: .system)
     
-    var preselectedTime: Date?
+    var preselectedTime: String?
+    var selectedCategory: ItineraryItemCategory?
+    
     var onSave: ((ItineraryEventModel) -> Void)?
     
     override func viewDidLoad() {
@@ -48,8 +50,6 @@ class PointViewController: UIViewController {
         locationTextField.heightAnchor.constraint(equalToConstant: 44).isActive = true
         locationTextField.backgroundColor = UIColor.systemGray6
         locationTextField.layer.cornerRadius = 8
-        locationTextField.layer.borderWidth = 1
-        locationTextField.layer.borderColor = UIColor.lightGray.cgColor
         locationTextField.font = UIFont.systemFont(ofSize: 16)
         locationTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 8, height: 0))
         locationTextField.leftViewMode = .always
@@ -71,9 +71,8 @@ class PointViewController: UIViewController {
             stack.topAnchor.constraint(equalTo: pickersStack.bottomAnchor, constant: 16),
             stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            stack.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16)
+            stack.heightAnchor.constraint(equalToConstant: 88)
         ])
-        
     }
     
     private func setupHeader() {
@@ -122,6 +121,14 @@ class PointViewController: UIViewController {
     }()
     
     private func setupTimePickers() {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+
+        if let date = formatter.date(from: preselectedTime ?? "") {
+            beginPicker.date = date
+            endPicker.date = date
+        }
+               
         beginLabel.text = "Begin event:"
         beginLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         
@@ -162,14 +169,13 @@ class PointViewController: UIViewController {
         
         let event = ItineraryEventModel(
             id: UUID(),
-            category: .point,
+            category: selectedCategory ?? .point,
             icon: UIImage(systemName: "mappin") ?? UIImage(),
             time: DateFormatter.localizedString(from: beginPicker.date, dateStyle: .none, timeStyle: .short),
             duration: Int(endPicker.countDownDuration / 60),
             locationName: selectedLocationName,
             coordinate: selectedCoordinate
         )
-        
         onSave?(event)
         dismiss(animated: true)
     }
@@ -199,8 +205,6 @@ class PointViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "ОК", style: .default))
         present(alert, animated: true)
     }
-
-
 }
 
 // MARK: - UITableViewDataSource & Delegate
@@ -229,7 +233,7 @@ extension PointViewController: UITableViewDataSource, UITableViewDelegate {
             let coordinate = mapItem.placemark.coordinate
             let name = result.title
             
-            self.locationTextField.text = name
+            self.locationTextField.text = result.subtitle
             self.selectedCoordinate = coordinate
             self.selectedLocationName = name
             

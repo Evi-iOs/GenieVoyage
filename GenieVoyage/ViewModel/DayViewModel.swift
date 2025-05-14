@@ -68,4 +68,27 @@ class DayViewModel {
         
         cell.layer.add(animation, forKey: "shake")
     }
+    
+    func makeDropViewController(category: ItineraryItemCategory, time: String, onSave: @escaping (ItineraryEventModel) -> Void) -> UIViewController {
+        switch category {
+        case .point:
+            let pointVC = PointViewController()
+            pointVC.preselectedTime = time
+            pointVC.selectedCategory = .point
+            pointVC.onSave = onSave
+            return pointVC
+        case .hotel:
+            let hotelVC = PointViewController()
+            return hotelVC
+        case .food:
+            let foodVC = PointViewController()
+            return foodVC
+        case .transport, .transfer:
+            let pointVC = PointViewController()
+            pointVC.preselectedTime = time
+            pointVC.selectedCategory = .point
+            pointVC.onSave = onSave
+            return pointVC
+        }
+    }
 }

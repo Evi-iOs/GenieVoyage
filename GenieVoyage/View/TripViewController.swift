@@ -493,21 +493,11 @@ extension TripViewController: UIDragInteractionDelegate {
 
 extension TripViewController: DayCellDelegate {
     func dayCell(_ cell: DayCell, didDropEventWith category: ItineraryItemCategory, at time: String) {
-        switch category {
-        case .point:
-            let pointVC = PointViewController()
-            presentModalVC(VC: pointVC)
-        case .hotel:
-            let hotelVC = PointViewController()
-            presentModalVC(VC: hotelVC)
-        case .food:
-            let foodVC = PointViewController()
-            presentModalVC(VC: foodVC)
-        case .transport, .transfer:
-            let pointVC = PointViewController()
-            presentModalVC(VC: pointVC)
-            break
+        guard let dayViewModel = cell.viewModel else { return }
+        let vc = dayViewModel.makeDropViewController(category: category, time: time) { newEvent in
+            dayViewModel.addEvent(newEvent)
         }
+        presentModalVC(VC: vc)
     }
     
     private func presentModalVC(VC: UIViewController) {

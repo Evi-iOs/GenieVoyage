@@ -21,9 +21,6 @@ class DayCell: UICollectionViewCell {
         didSet {
             viewModel?.onUpdate = { [weak self] in
                 self?.itineraryCollectionView.reloadData()
-                DispatchQueue.main.async {
-                    self?.scrollToStartHour()
-                }
             }
             
             itineraryCollectionView.reloadData()

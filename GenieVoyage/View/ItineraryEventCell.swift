@@ -77,6 +77,7 @@ final class ItineraryEventCell: UICollectionViewCell {
         timeLabel.text = time
         if let event = event {
             iconImageView.image = event.icon
+            titleLabel.text = event.locationName
             iconImageView.isHidden = false
         } else {
             iconImageView.image = nil
