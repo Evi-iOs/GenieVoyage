@@ -170,7 +170,7 @@ class PointViewController: UIViewController {
         let event = ItineraryEventModel(
             id: UUID(),
             category: selectedCategory ?? .point,
-            icon: UIImage(systemName: "mappin") ?? UIImage(),
+            icon: UIImage(systemName: selectedCategory?.iconSystemName ?? "car") ?? UIImage(),
             time: DateFormatter.localizedString(from: beginPicker.date, dateStyle: .none, timeStyle: .short),
             duration: Int(endPicker.countDownDuration / 60),
             locationName: selectedLocationName,

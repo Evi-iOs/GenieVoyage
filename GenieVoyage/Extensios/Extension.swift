@@ -80,7 +80,7 @@ extension UIButton {
         self.titleLabel?.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
         self.titleLabel?.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16).isActive = true
     }
-        
+    
     @objc private func handlePressDown() {
         UIView.animate(withDuration: 0.2) {
             self.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
@@ -90,6 +90,17 @@ extension UIButton {
     @objc private func handlePressUp() {
         UIView.animate(withDuration: 0.2) {
             self.transform = .identity
+        }
+    }
+    
+    var itineraryCategory: ItineraryItemCategory {
+        switch self.tag {
+        case 0: return .transport
+        case 1: return .transfer
+        case 2: return .hotel
+        case 3: return .point
+        case 4: return .food
+        default: return .point
         }
     }
 }

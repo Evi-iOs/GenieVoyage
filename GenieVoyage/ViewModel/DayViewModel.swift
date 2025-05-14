@@ -79,14 +79,26 @@ class DayViewModel {
             return pointVC
         case .hotel:
             let hotelVC = PointViewController()
+            hotelVC.preselectedTime = time
+            hotelVC.selectedCategory = .hotel
+            hotelVC.onSave = onSave
             return hotelVC
         case .food:
             let foodVC = PointViewController()
+            foodVC.preselectedTime = time
+            foodVC.selectedCategory = .food
+            foodVC.onSave = onSave
             return foodVC
-        case .transport, .transfer:
+        case .transport:
             let pointVC = PointViewController()
             pointVC.preselectedTime = time
-            pointVC.selectedCategory = .point
+            pointVC.selectedCategory = .transport
+            pointVC.onSave = onSave
+            return pointVC
+        case .transfer:
+            let pointVC = PointViewController()
+            pointVC.preselectedTime = time
+            pointVC.selectedCategory = .transfer
             pointVC.onSave = onSave
             return pointVC
         }

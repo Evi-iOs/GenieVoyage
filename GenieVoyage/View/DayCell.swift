@@ -123,8 +123,6 @@ extension DayCell: UIDropInteractionDelegate {
         
         clearHighlight()
         
-        guard let event = session.items.first?.localObject as? ItineraryEventModel else { return }
-        
         let dropPoint = session.location(in: itineraryCollectionView)
         guard let indexPath = itineraryCollectionView.indexPathForItem(at: dropPoint) else { return }
         

@@ -148,8 +148,9 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         
         let icons = ["plane", "treinIcon", "hotel", "point", "eating"]
         
-        for i in icons {
-            let button = createIconButton(iconName: i)
+        for (index, iconName) in icons.enumerated() {
+            let button = createIconButton(iconName: iconName)
+            button.tag = index
             button.isUserInteractionEnabled = true
             button.addInteraction(UIDragInteraction(delegate: self))
             stackView.addArrangedSubview(button)
@@ -458,16 +459,7 @@ extension TripViewController: UIDragInteractionDelegate {
         guard let button = interaction.view as? UIButton else { return [] }
         
         let icon = button.image(for: .normal) ?? UIImage()
-        
-        let category: ItineraryItemCategory
-        switch button.tag {
-        case 0: category = .transport
-        case 1: category = .transfer
-        case 2: category = .hotel
-        case 3: category = .point
-        case 4: category = .food
-        default: category = .point
-        }
+        let category = button.itineraryCategory
         
         let event = ItineraryEventModel(
             id: UUID(),
