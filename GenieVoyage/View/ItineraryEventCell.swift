@@ -73,6 +73,15 @@ final class ItineraryEventCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        iconImageView.image = nil
+        iconImageView.isHidden = true
+        titleLabel.text = nil
+        contentView.backgroundColor = .clear
+    }
+    
     func configure(with time: String, event: ItineraryEventModel?) {
         timeLabel.text = time
         if let event = event {

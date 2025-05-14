@@ -327,13 +327,6 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func addEvent(to dayIndex: Int, event: ItineraryEventModel) {
-        viewModel.days[dayIndex].addEvent(event)
-        
-        let indexPath = IndexPath(item: dayIndex, section: 0)
-        daysCollectionView.reloadItems(at: [indexPath])
-    }
-    
     private func showAlert(message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
@@ -389,7 +382,6 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         }
     }
 
-    
     // MARK: - UIImagePickerControllerDelegate
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let selectedImage = info[.originalImage] as? UIImage {
