@@ -21,18 +21,31 @@ class DayCell: UICollectionViewCell {
         didSet {
             viewModel?.onUpdate = { [weak self] in
                 self?.itineraryCollectionView.reloadData()
+                self?.renderEventsOverlay()
             }
             
             itineraryCollectionView.reloadData()
             DispatchQueue.main.async {
-                self.scrollToStartHour()
+                //self.scrollToStartHour()
             }
         }
     }
     
+    private let eventOverlayView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 6
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.clipsToBounds = false
+        view.isUserInteractionEnabled = false
+        return view
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(itineraryCollectionView)
+        itineraryCollectionView.addSubview(eventOverlayView)
+       // itineraryCollectionView.bringSubviewToFront(eventOverlayView)
+        itineraryCollectionView.addInteraction(UIDropInteraction(delegate: self))
         
         backgroundColor = .white
         layer.shadowColor = UIColor.darkGray.cgColor
@@ -44,21 +57,24 @@ class DayCell: UICollectionViewCell {
         titleLabel.textAlignment = .center
         contentView.addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10)
-        ])
         
         NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            
             itineraryCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
             itineraryCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             itineraryCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            itineraryCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            itineraryCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+        
+            eventOverlayView.leadingAnchor.constraint(equalTo: itineraryCollectionView.leadingAnchor),
+            eventOverlayView.trailingAnchor.constraint(equalTo: itineraryCollectionView.trailingAnchor),
+            eventOverlayView.topAnchor.constraint(equalTo: itineraryCollectionView.topAnchor),
+            eventOverlayView.bottomAnchor.constraint(equalTo: itineraryCollectionView.bottomAnchor)
         ])
         
         itineraryCollectionView.showsVerticalScrollIndicator = false
         itineraryCollectionView.register(ItineraryEventCell.self, forCellWithReuseIdentifier: "ItineraryItemCell")
-        itineraryCollectionView.addInteraction(UIDropInteraction(delegate: self))
         itineraryCollectionView.dataSource = self
         itineraryCollectionView.delegate = self
     }
@@ -89,6 +105,71 @@ class DayCell: UICollectionViewCell {
         let scrollingUp = currentOffsetY < lastOffsetY
         dayCellDelegate?.dayCellDidScroll(upward: scrollingUp)
         lastOffsetY = currentOffsetY
+    }
+    
+    func renderEventsOverlay() {
+        eventOverlayView.subviews.forEach { $0.removeFromSuperview() }
+        
+        guard let viewModel = viewModel else { return }
+        
+        for event in viewModel.events {
+            let eventView = createEventView(for: event)
+            eventView.translatesAutoresizingMaskIntoConstraints = false
+            eventOverlayView.addSubview(eventView)
+            eventOverlayView.bringSubviewToFront(eventView)
+            
+            let topOffset = CGFloat(event.startMinutes) / 15.0 * 20.0
+            let height = CGFloat(event.duration) / 15.0 * 20.0
+
+            NSLayoutConstraint.activate([
+                eventView.topAnchor.constraint(equalTo: eventOverlayView.topAnchor, constant: topOffset),
+                eventView.leadingAnchor.constraint(equalTo: eventOverlayView.leadingAnchor, constant: 60),
+                eventView.trailingAnchor.constraint(equalTo: eventOverlayView.trailingAnchor, constant: -8),
+                eventView.heightAnchor.constraint(equalToConstant: height)
+            ])
+        }
+    }
+    
+    func createEventView(for event: ItineraryEventModel) -> UIView {
+        let container = UIView()
+        container.backgroundColor = event.category.color.withAlphaComponent(0.5)
+        container.layer.cornerRadius = 8
+        container.layer.shadowColor = UIColor.black.cgColor
+        container.layer.shadowOpacity = 0.1
+        container.layer.shadowOffset = CGSize(width: 0, height: 2)
+        container.layer.shadowRadius = 4
+        container.clipsToBounds = false
+        container.translatesAutoresizingMaskIntoConstraints = false
+
+        let iconView = UIImageView(image: event.icon)
+        iconView.contentMode = .scaleAspectFit
+        iconView.tintColor = .white
+        iconView.translatesAutoresizingMaskIntoConstraints = false
+        iconView.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        iconView.heightAnchor.constraint(equalToConstant: 20).isActive = true
+
+        let titleLabel = UILabel()
+        titleLabel.text = event.locationName ?? "Event"
+        titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        titleLabel.textColor = .white
+        titleLabel.numberOfLines = 1
+
+        let hStack = UIStackView(arrangedSubviews: [iconView, titleLabel])
+        hStack.axis = .horizontal
+        hStack.spacing = 8
+        hStack.alignment = .center
+        hStack.translatesAutoresizingMaskIntoConstraints = false
+
+        container.addSubview(hStack)
+        
+        NSLayoutConstraint.activate([
+            hStack.topAnchor.constraint(equalTo: container.topAnchor, constant: 4),
+            hStack.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 8),
+            hStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -8),
+            hStack.bottomAnchor.constraint(lessThanOrEqualTo: container.bottomAnchor, constant: -4)
+        ])
+
+        return container
     }
 }
 

@@ -18,14 +18,6 @@ final class ItineraryEventCell: UICollectionViewCell {
         return label
     }()
     
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        label.textColor = .black
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
     private let separator: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.lightGray
@@ -33,34 +25,15 @@ final class ItineraryEventCell: UICollectionViewCell {
         return view
     }()
     
-    private let iconImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = .darkGray
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(timeLabel)
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(iconImageView)
         contentView.addSubview(separator)
         
         NSLayoutConstraint.activate([
             timeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
             timeLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             timeLabel.widthAnchor.constraint(equalToConstant: 40),
-            
-            iconImageView.leadingAnchor.constraint(equalTo: timeLabel.trailingAnchor, constant: 8),
-            iconImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            iconImageView.widthAnchor.constraint(equalToConstant: 28),
-            iconImageView.heightAnchor.constraint(equalToConstant: 28),
-            
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: 8),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
             
             separator.heightAnchor.constraint(equalToConstant: 0.2),
             separator.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
@@ -73,25 +46,8 @@ final class ItineraryEventCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        
-        iconImageView.image = nil
-        iconImageView.isHidden = true
-        titleLabel.text = nil
-        contentView.backgroundColor = .clear
-    }
-    
     func configure(with time: String, event: ItineraryEventModel?) {
         timeLabel.text = time
-        if let event = event {
-            iconImageView.image = event.icon
-            titleLabel.text = event.locationName
-            iconImageView.isHidden = false
-        } else {
-            iconImageView.image = nil
-            iconImageView.isHidden = true
-        }
     }
 }
 

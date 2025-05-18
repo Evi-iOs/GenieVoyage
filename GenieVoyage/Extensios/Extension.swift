@@ -76,7 +76,7 @@ extension UIButton {
         self.setTitle(text, for: .normal)
         self.setTitleColor(.white, for: .normal)
         self.layer.cornerRadius = 8
-        self.heightAnchor.constraint(equalToConstant: 52).isActive = true
+        self.heightAnchor.constraint(equalToConstant: 32).isActive = true
         self.titleLabel?.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
         self.titleLabel?.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16).isActive = true
     }

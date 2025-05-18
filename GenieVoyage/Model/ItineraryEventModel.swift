@@ -19,6 +19,7 @@ struct ItineraryEventModel {
     let category: ItineraryItemCategory
     let icon: UIImage
     let time: String
+    var startMinutes: Int
     let duration: Int
     let locationName: String?
     let coordinate: CLLocationCoordinate2D?
@@ -52,4 +53,13 @@ enum ItineraryItemCategory: String {
         }
     }
     
+    var color: UIColor {
+        switch self {
+        case .point: return .systemBlue
+        case .hotel: return .systemGreen
+        case .food: return .systemOrange
+        case .transport: return .systemPurple
+        case .transfer: return .systemPink
+        }
+    }
 }

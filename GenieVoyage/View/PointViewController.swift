@@ -28,6 +28,7 @@ class PointViewController: UIViewController {
     private let closeButton = UIButton(type: .system)
     
     var preselectedTime: String?
+    var preselectedStartMinutes: Int?
     var selectedCategory: ItineraryItemCategory?
     
     var onSave: ((ItineraryEventModel) -> Void)?
@@ -68,10 +69,11 @@ class PointViewController: UIViewController {
         view.addSubview(stack)
         
         NSLayoutConstraint.activate([
+            tableView.heightAnchor.constraint(greaterThanOrEqualToConstant: 50),
+            
             stack.topAnchor.constraint(equalTo: pickersStack.bottomAnchor, constant: 16),
             stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            stack.heightAnchor.constraint(equalToConstant: 88)
         ])
     }
     
@@ -123,12 +125,19 @@ class PointViewController: UIViewController {
     private func setupTimePickers() {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
-
-        if let date = formatter.date(from: preselectedTime ?? "") {
-            beginPicker.date = date
-            endPicker.date = date
+            
+        if let minutes = preselectedStartMinutes {
+            let hour = minutes / 60
+            let minute = minutes % 60
+            var components = DateComponents()
+            components.hour = hour
+            components.minute = minute
+            if let date = Calendar.current.date(from: components) {
+                beginPicker.date = date
+                endPicker.date = date
+            }
         }
-               
+
         beginLabel.text = "Begin event:"
         beginLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         
@@ -165,14 +174,21 @@ class PointViewController: UIViewController {
     
     // MARK: - Save Action
     @objc func saveTapped() {
-        guard let address = locationTextField.text, !address.isEmpty, validateTimes() else { return }
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.hour, .minute], from: beginPicker.date)
+        
+        guard let address = locationTextField.text, !address.isEmpty, validateTimes(),
+              let hour = components.hour, let minute = components.minute else { return }
+        
+        let rawMinutes = hour * 60 + minute
         
         let event = ItineraryEventModel(
             id: UUID(),
             category: selectedCategory ?? .point,
             icon: UIImage(systemName: selectedCategory?.iconSystemName ?? "car") ?? UIImage(),
             time: DateFormatter.localizedString(from: beginPicker.date, dateStyle: .none, timeStyle: .short),
-            duration: Int(endPicker.countDownDuration / 60),
+            startMinutes: (rawMinutes / 15) * 15,
+            duration: Int(endPicker.date.timeIntervalSince(beginPicker.date))/60,
             locationName: selectedLocationName,
             coordinate: selectedCoordinate
         )

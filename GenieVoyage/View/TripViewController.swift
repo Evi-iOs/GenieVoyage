@@ -222,7 +222,6 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
             saveButton.bottomAnchor.constraint(equalTo: coverImageView.bottomAnchor),
             saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             saveButton.leadingAnchor.constraint(equalTo: datesLabel.leadingAnchor),
-            saveButton.heightAnchor.constraint(equalToConstant: 32),
             
             stackView.topAnchor.constraint(equalTo: coverImageView.bottomAnchor, constant: 20),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -416,8 +415,10 @@ extension TripViewController: UICollectionViewDataSource, UICollectionViewDelega
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DayCell", for: indexPath) as? DayCell else {
             return UICollectionViewCell()
         }
-        cell.viewModel = viewModel.days[indexPath.item]
+        let dayVM = viewModel.days[indexPath.item]
+        cell.viewModel = dayVM
         cell.dayCellDelegate = self
+        cell.renderEventsOverlay()
         return cell
     }
     
@@ -458,6 +459,7 @@ extension TripViewController: UIDragInteractionDelegate {
             category: category,
             icon: icon,
             time: "",
+            startMinutes: 0,
             duration: 60,
             locationName: nil,
             coordinate: nil
@@ -476,12 +478,29 @@ extension TripViewController: UIDragInteractionDelegate {
 }
 
 extension TripViewController: DayCellDelegate {
-    func dayCell(_ cell: DayCell, didDropEventWith category: ItineraryItemCategory, at time: String) {
-        guard let dayViewModel = cell.viewModel else { return }
-        let vc = dayViewModel.makeDropViewController(category: category, time: time) { newEvent in
-            dayViewModel.addEvent(newEvent)
-        }
-        presentModalVC(VC: vc)
+        func dayCell(_ cell: DayCell, didDropEventWith category: ItineraryItemCategory, at time: String) {
+            guard let dayViewModel = cell.viewModel else { return }
+            
+            let formatter = DateFormatter()
+            formatter.dateFormat = "HH:mm"
+            
+            guard let date = formatter.date(from: time) else { return }
+            let calendar = Calendar.current
+            let components = calendar.dateComponents([.hour, .minute], from: date)
+            guard let hour = components.hour, let minute = components.minute else { return }
+            
+            let startMinutes = hour * 60 + minute
+            
+            let vc = dayViewModel.makeDropViewController(
+                category: category,
+                startMinutes: startMinutes
+            ) { newEvent in
+                var updatedEvent = newEvent
+                updatedEvent.startMinutes = startMinutes
+                dayViewModel.addEvent(updatedEvent)
+            }
+            
+            presentModalVC(VC: vc)
     }
     
     private func presentModalVC(VC: UIViewController) {

@@ -54,7 +54,7 @@ class MapLocationViewController: UIViewController {
             confirmButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             confirmButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             confirmButton.widthAnchor.constraint(equalToConstant: 200),
-            confirmButton.heightAnchor.constraint(equalToConstant: 44)
+            confirmButton.heightAnchor.constraint(equalToConstant: 32)
         ])
     }
 

@@ -29,6 +29,10 @@ class DayViewModel {
         return events.contains { $0.time == time }
     }
     
+    func event(at time: String) -> ItineraryEventModel? {
+        return events.first { $0.time == time }
+    }
+    
     func showOccupiedSlotAlert() {
         let alert = UIAlertController(
             title: "Time is occupied",
@@ -69,35 +73,35 @@ class DayViewModel {
         cell.layer.add(animation, forKey: "shake")
     }
     
-    func makeDropViewController(category: ItineraryItemCategory, time: String, onSave: @escaping (ItineraryEventModel) -> Void) -> UIViewController {
+    func makeDropViewController(category: ItineraryItemCategory, startMinutes: Int, onSave: @escaping (ItineraryEventModel) -> Void) -> UIViewController {
         switch category {
         case .point:
             let pointVC = PointViewController()
-            pointVC.preselectedTime = time
+            pointVC.preselectedStartMinutes = startMinutes
             pointVC.selectedCategory = .point
             pointVC.onSave = onSave
             return pointVC
         case .hotel:
             let hotelVC = PointViewController()
-            hotelVC.preselectedTime = time
+            hotelVC.preselectedStartMinutes = startMinutes
             hotelVC.selectedCategory = .hotel
             hotelVC.onSave = onSave
             return hotelVC
         case .food:
             let foodVC = PointViewController()
-            foodVC.preselectedTime = time
+            foodVC.preselectedStartMinutes = startMinutes
             foodVC.selectedCategory = .food
             foodVC.onSave = onSave
             return foodVC
         case .transport:
             let pointVC = PointViewController()
-            pointVC.preselectedTime = time
+            pointVC.preselectedStartMinutes = startMinutes
             pointVC.selectedCategory = .transport
             pointVC.onSave = onSave
             return pointVC
         case .transfer:
             let pointVC = PointViewController()
-            pointVC.preselectedTime = time
+            pointVC.preselectedStartMinutes = startMinutes
             pointVC.selectedCategory = .transfer
             pointVC.onSave = onSave
             return pointVC
