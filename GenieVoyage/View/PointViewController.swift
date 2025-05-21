@@ -129,9 +129,10 @@ class PointViewController: UIViewController {
         if let minutes = preselectedStartMinutes {
             let hour = minutes / 60
             let minute = minutes % 60
-            var components = DateComponents()
+            var components = Calendar.current.dateComponents([.year, .month, .day], from: Date())
             components.hour = hour
             components.minute = minute
+            
             if let date = Calendar.current.date(from: components) {
                 beginPicker.date = date
                 endPicker.date = date
@@ -175,19 +176,17 @@ class PointViewController: UIViewController {
     // MARK: - Save Action
     @objc func saveTapped() {
         let calendar = Calendar.current
-        let components = calendar.dateComponents([.hour, .minute], from: beginPicker.date)
-        
-        guard let address = locationTextField.text, !address.isEmpty, validateTimes(),
-              let hour = components.hour, let minute = components.minute else { return }
-        
-        let rawMinutes = hour * 60 + minute
+        let startOfDay = calendar.startOfDay(for: beginPicker.date)
+        let rawMinutes = Int(beginPicker.date.timeIntervalSince(startOfDay) / 60)
+
+        guard let address = locationTextField.text, !address.isEmpty, validateTimes() else { return }
         
         let event = ItineraryEventModel(
             id: UUID(),
             category: selectedCategory ?? .point,
             icon: UIImage(systemName: selectedCategory?.iconSystemName ?? "car") ?? UIImage(),
             time: DateFormatter.localizedString(from: beginPicker.date, dateStyle: .none, timeStyle: .short),
-            startMinutes: (rawMinutes / 15) * 15,
+            startMinutes: rawMinutes,
             duration: Int(endPicker.date.timeIntervalSince(beginPicker.date))/60,
             locationName: selectedLocationName,
             coordinate: selectedCoordinate

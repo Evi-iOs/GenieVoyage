@@ -46,7 +46,7 @@ final class ItineraryEventCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with time: String, event: ItineraryEventModel?) {
+    func configure(with time: String) {
         timeLabel.text = time
     }
 }
