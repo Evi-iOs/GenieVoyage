@@ -33,6 +33,23 @@ class DayViewModel {
         return events.first { $0.time == time }
     }
     
+    func update(event: ItineraryEventModel) {
+        if let index = events.firstIndex(where: { $0.id == event.id }) {
+            events[index] = event
+            onUpdate?()
+        }
+    }
+    
+    func moveEvent(_ id: UUID, byMinutes delta: Int) {
+        guard let index = events.firstIndex(where: { $0.id == id }) else { return }
+        events[index].startMinutes += delta
+    }
+
+    func resizeEvent(_ id: UUID, toMinutes newDuration: Int) {
+        guard let index = events.firstIndex(where: { $0.id == id }) else { return }
+        events[index].duration = newDuration
+    }
+    
     func showOccupiedSlotAlert() {
         let alert = UIAlertController(
             title: "Time is occupied",

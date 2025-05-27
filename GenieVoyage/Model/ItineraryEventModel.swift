@@ -20,7 +20,7 @@ struct ItineraryEventModel {
     let icon: UIImage
     let time: String
     var startMinutes: Int
-    let duration: Int
+    var duration: Int
     let locationName: String?
     let coordinate: CLLocationCoordinate2D?
 }

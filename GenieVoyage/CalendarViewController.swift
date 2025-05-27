@@ -68,13 +68,13 @@ class CalendarViewController: DayViewController, EKEventEditViewDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(storeChanged(_:)), name: .EKEventStoreChanged, object: nil)
     }
     
-    override func dayViewDidSelectEventView(_ eventView: EventView) {
-        guard let ckEvent = eventView.descriptor as? EKWrapper else {
-            return
-        }
-        presentDetailViewForEvent(ckEvent.ekEvent)
-    }
-    
+//    override func dayViewDidSelectEventView(_ eventView: EventView) {
+//        guard let ckEvent = eventView.descriptor as? EKWrapper else {
+//            return
+//        }
+//        presentDetailViewForEvent(ckEvent.ekEvent)
+//    }
+//    
     private func presentDetailViewForEvent(_ ekEvent: EKEvent) {
         let eventViewController = EKEventViewController()
         eventViewController.event = ekEvent
@@ -83,13 +83,13 @@ class CalendarViewController: DayViewController, EKEventEditViewDelegate {
         navigationController?.pushViewController(eventViewController, animated: true)
     }
     
-    override func dayViewDidLongPressEventView(_ eventView: EventView) {
-        guard let ckEvent = eventView.descriptor as? EKWrapper else {
-            return
-        }
-        endEventEditing()
-        beginEditing(event: ckEvent, animated: true)
-    }
+//    override func dayViewDidLongPressEventView(_ eventView: EventView) {
+//        guard let ckEvent = eventView.descriptor as? EKWrapper else {
+//            return
+//        }
+//        endEventEditing()
+//        beginEditing(event: ckEvent, animated: true)
+//    }
     
     override func dayView(dayView: DayView, didUpdate event: EventDescriptor) {
         guard let editingEvent = event as? EKWrapper else {

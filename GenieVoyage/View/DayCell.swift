@@ -12,13 +12,12 @@ class DayCell: UICollectionViewCell {
     weak var dayCellDelegate: DayCellDelegate?
     
     static let reuseIdentifier = "ItineraryItemCell"
-
-    private let minuteHeight: CGFloat = 1.0
+    
     private var itineraryItems: [ItineraryEventModel] = []
     private var highlightedIndexPath: IndexPath?
     
     private var lastOffsetY: CGFloat = 0
-
+        
     var viewModel: DayViewModel? {
         didSet {
             viewModel?.onUpdate = { [weak self] in
@@ -27,7 +26,7 @@ class DayCell: UICollectionViewCell {
                 DispatchQueue.main.async {
                     self.itineraryCollectionView.layoutIfNeeded()
                     
-                    self.eventOverlayView.frame = CGRect(x: 0, y: 0, width: self.itineraryCollectionView.bounds.width, height: self.itineraryCollectionView.contentSize.height)
+                    self.eventContainerView.frame = CGRect(x: 0, y: 0, width: self.itineraryCollectionView.bounds.width, height: self.itineraryCollectionView.contentSize.height)
                     
                     self.renderEventsOverlay()
                 }
@@ -37,27 +36,23 @@ class DayCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        eventOverlayView.frame = CGRect(x: 0, y: 0,
-            width: itineraryCollectionView.frame.width,
-            height: itineraryCollectionView.contentSize.height
-        )
+        eventContainerView.frame = CGRect(x: 0, y: 0, width: itineraryCollectionView.frame.width, height: itineraryCollectionView.contentSize.height)
     }
     
-    private let eventOverlayView: UIView = {
+    private let eventContainerView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 6
         view.translatesAutoresizingMaskIntoConstraints = true
         view.clipsToBounds = false
-        view.isUserInteractionEnabled = false
-        view.backgroundColor = UIColor.red.withAlphaComponent(0.05)
+        view.isUserInteractionEnabled = true
         return view
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(itineraryCollectionView)
-        itineraryCollectionView.addSubview(eventOverlayView)
-        itineraryCollectionView.bringSubviewToFront(eventOverlayView)
+        itineraryCollectionView.addSubview(eventContainerView)
+        itineraryCollectionView.bringSubviewToFront(eventContainerView)
         itineraryCollectionView.addInteraction(UIDropInteraction(delegate: self))
         
         backgroundColor = .white
@@ -108,67 +103,63 @@ class DayCell: UICollectionViewCell {
     }
     
     func renderEventsOverlay() {
-        eventOverlayView.subviews.forEach { $0.removeFromSuperview() }
-        
+        eventContainerView.subviews.forEach { $0.removeFromSuperview() }
         guard let viewModel = viewModel else { return }
-        
         for event in viewModel.events {
             let eventView = createEventView(for: event)
-            eventView.translatesAutoresizingMaskIntoConstraints = false
-            eventOverlayView.addSubview(eventView)
-            
-            let topOffset = CGFloat(event.startMinutes) * minuteHeight
-            let height = CGFloat(event.duration) * minuteHeight
-            
-            NSLayoutConstraint.activate([
-                eventView.topAnchor.constraint(equalTo: eventOverlayView.topAnchor, constant: topOffset),
-                eventView.leadingAnchor.constraint(equalTo: eventOverlayView.leadingAnchor, constant: 60),
-                eventView.trailingAnchor.constraint(equalTo: eventOverlayView.trailingAnchor, constant: -8),
-                eventView.heightAnchor.constraint(equalToConstant: height)
-            ])
+            eventContainerView.addSubview(eventView)
         }
     }
     
-    func createEventView(for event: ItineraryEventModel) -> UIView {
-        let container = UIView()
-        container.backgroundColor = event.category.color.withAlphaComponent(0.5)
-        container.layer.cornerRadius = 8
-        container.layer.shadowColor = UIColor.black.cgColor
-        container.layer.shadowOpacity = 0.1
-        container.layer.shadowOffset = CGSize(width: 0, height: 2)
-        container.layer.shadowRadius = 4
-        container.clipsToBounds = false
-        container.translatesAutoresizingMaskIntoConstraints = false
-
-        let iconView = UIImageView(image: event.icon)
-        iconView.contentMode = .scaleAspectFit
-        iconView.tintColor = .white
-        iconView.translatesAutoresizingMaskIntoConstraints = false
-        iconView.widthAnchor.constraint(equalToConstant: 20).isActive = true
-        iconView.heightAnchor.constraint(equalToConstant: 20).isActive = true
-
-        let titleLabel = UILabel()
-        titleLabel.text = event.locationName ?? "Event"
-        titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        titleLabel.textColor = .white
-        titleLabel.numberOfLines = 1
-
-        let hStack = UIStackView(arrangedSubviews: [iconView, titleLabel])
-        hStack.axis = .horizontal
-        hStack.spacing = 8
-        hStack.alignment = .center
-        hStack.translatesAutoresizingMaskIntoConstraints = false
-
-        container.addSubview(hStack)
+    func createEventView(for event: ItineraryEventModel) -> EventView {
+        let eventView = EventView(event: event)
         
-        NSLayoutConstraint.activate([
-            hStack.topAnchor.constraint(equalTo: container.topAnchor, constant: 4),
-            hStack.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 8),
-            hStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -8),
-            hStack.bottomAnchor.constraint(lessThanOrEqualTo: container.bottomAnchor, constant: -4)
-        ])
+        let yPosition = CGFloat(event.startMinutes) * minuteHeight
+        let height = CGFloat(event.duration) * minuteHeight
 
-        return container
+        eventView.frame = CGRect(x: 60, y: yPosition, width: dayColumnWidth, height: height)
+
+        eventView.onMove = { [weak eventView] deltaY in
+            guard let eventView = eventView else { return }
+            eventView.transform = eventView.transform.translatedBy(x: 0, y: deltaY)
+        }
+
+        eventView.onMoveEnd = { [weak self, weak eventView] in
+            guard let self = self, let eventView = eventView, let viewModel = viewModel
+            else { return }
+            
+            let offsetY = eventView.transform.ty
+            let deltaMinutes = Int(round(offsetY / minuteHeight))
+            
+            UIView.animate(withDuration: 0.3) {
+                eventView.transform = .identity
+            }
+
+            guard deltaMinutes != 0 else { return }
+            viewModel.moveEvent(event.id, byMinutes: deltaMinutes)
+            self.renderEventsOverlay()
+        }
+
+        eventView.onResize = { [weak eventView] deltaY in
+            guard let eventView = eventView else { return }
+            
+            var newHeight = eventView.frame.height + deltaY
+            newHeight = max(minuteHeight * 15, newHeight)
+            eventView.frame.size.height = newHeight
+        }
+
+        eventView.onResizeEnd = { [weak self, weak eventView] in
+            guard let self = self, let eventView = eventView, let viewModel = viewModel
+            else { return }
+            
+            let newDuration = Int(round(eventView.frame.height / minuteHeight))
+
+            guard newDuration != event.duration else { return }
+
+            viewModel.resizeEvent(event.id, toMinutes: newDuration)
+            self.renderEventsOverlay()
+        }
+        return eventView
     }
 }
 

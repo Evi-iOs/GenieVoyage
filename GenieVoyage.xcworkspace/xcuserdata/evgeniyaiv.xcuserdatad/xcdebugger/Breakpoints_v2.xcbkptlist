@@ -86,16 +86,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "39E18602-29F2-4929-90C9-02EA6F532A73"
+            uuid = "CC2BEB86-E96A-46C2-BD0F-A4D192805025"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "GenieVoyage/View/PointViewController.swift"
+            filePath = "GenieVoyage/ViewModel/DayViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "194"
-            endingLineNumber = "194"
-            landmarkName = "saveTapped()"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
+            landmarkName = "update(event:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
