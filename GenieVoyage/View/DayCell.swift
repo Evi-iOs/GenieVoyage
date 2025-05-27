@@ -116,46 +116,52 @@ class DayCell: UICollectionViewCell {
         
         let yPosition = CGFloat(event.startMinutes) * minuteHeight
         let height = CGFloat(event.duration) * minuteHeight
-
-        eventView.frame = CGRect(x: 60, y: yPosition, width: dayColumnWidth, height: height)
-
+        
+        eventContainerView.addSubview(eventView)
+        eventView.attachConstraints(to: eventContainerView, top: yPosition, height: height)
+        
         eventView.onMove = { [weak eventView] deltaY in
             guard let eventView = eventView else { return }
-            eventView.transform = eventView.transform.translatedBy(x: 0, y: deltaY)
-        }
-
-        eventView.onMoveEnd = { [weak self, weak eventView] in
-            guard let self = self, let eventView = eventView, let viewModel = viewModel
-            else { return }
-            
-            let offsetY = eventView.transform.ty
-            let deltaMinutes = Int(round(offsetY / minuteHeight))
-            
-            UIView.animate(withDuration: 0.3) {
-                eventView.transform = .identity
+            if let top = eventView.topConstraint {
+                top.constant += deltaY
             }
-
-            guard deltaMinutes != 0 else { return }
+        }
+        
+        eventView.onMoveEnd = { [weak self, weak eventView] in
+            guard let self = self, let eventView = eventView, let viewModel = viewModel, let top = eventView.topConstraint else { return }
+            
+            let newY = top.constant
+            let newStartMinutes = Int(round(newY / minuteHeight))
+            let deltaMinutes = newStartMinutes - event.startMinutes
+            
+            guard deltaMinutes != 0 else {
+                eventView.setLayout(top: CGFloat(event.startMinutes) * minuteHeight, height: CGFloat(event.duration) * minuteHeight, animated: true)
+                return
+            }
+            
             viewModel.moveEvent(event.id, byMinutes: deltaMinutes)
             self.renderEventsOverlay()
         }
-
+        
         eventView.onResize = { [weak eventView] deltaY in
             guard let eventView = eventView else { return }
-            
-            var newHeight = eventView.frame.height + deltaY
-            newHeight = max(minuteHeight * 15, newHeight)
-            eventView.frame.size.height = newHeight
+            if let height = eventView.heightConstraint {
+                let newHeight = max(height.constant + deltaY, minuteHeight * 15)
+                height.constant = newHeight
+            }
         }
-
+        
         eventView.onResizeEnd = { [weak self, weak eventView] in
-            guard let self = self, let eventView = eventView, let viewModel = viewModel
-            else { return }
+            guard let self = self, let eventView = eventView, let viewModel = viewModel else { return }
             
-            let newDuration = Int(round(eventView.frame.height / minuteHeight))
-
-            guard newDuration != event.duration else { return }
-
+            guard let height = eventView.heightConstraint else { return }
+            let newDuration = Int(round(height.constant / minuteHeight))
+            
+            guard newDuration != event.duration else {
+                eventView.setLayout(top: CGFloat(event.startMinutes) * minuteHeight, height: CGFloat(event.duration) * minuteHeight, animated: true)
+                return
+            }
+            
             viewModel.resizeEvent(event.id, toMinutes: newDuration)
             self.renderEventsOverlay()
         }

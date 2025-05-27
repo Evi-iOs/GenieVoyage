@@ -20,11 +20,8 @@ final class EventView: UIView {
     var onMoveEnd: (() -> Void)?
     var onResizeEnd: (() -> Void)?
     
-    private var initialTouchPoint: CGPoint = .zero
-    private var isResizing = false
-    
-    private var topConstraint: NSLayoutConstraint?
-    private var heightConstraint: NSLayoutConstraint?
+    var topConstraint: NSLayoutConstraint?
+    var heightConstraint: NSLayoutConstraint?
     
     private let resizeHandle = UIView()
     
@@ -39,23 +36,31 @@ final class EventView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    func setLayout(top: CGFloat, height: CGFloat) {
-//        topConstraint?.constant = top
-//        heightConstraint?.constant = height
-//    }
-//    
-//    func attachConstraints(to container: UIView, top: CGFloat, height: CGFloat) {
-//        translatesAutoresizingMaskIntoConstraints = false
-//        topConstraint = topAnchor.constraint(equalTo: container.topAnchor, constant: top)
-//        heightConstraint = heightAnchor.constraint(equalToConstant: height)
-//
-//        NSLayoutConstraint.activate([
-//            topConstraint!,
-//            leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 60),
-//            trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -8),
-//            heightConstraint!
-//        ])
-//    }
+    func attachConstraints(to container: UIView, top: CGFloat, height: CGFloat) {
+        translatesAutoresizingMaskIntoConstraints = false
+        topConstraint = topAnchor.constraint(equalTo: container.topAnchor, constant: top)
+        heightConstraint = heightAnchor.constraint(equalToConstant: height)
+        
+        NSLayoutConstraint.activate([
+            topConstraint!,
+            leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 60),
+            trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -8),
+            heightConstraint!
+        ])
+    }
+    
+    func setLayout(top: CGFloat, height: CGFloat, animated: Bool = false) {
+        topConstraint?.constant = top
+        heightConstraint?.constant = height
+        
+        if animated {
+            UIView.animate(withDuration: 0.2) {
+                self.superview?.layoutIfNeeded()
+            }
+        } else {
+            superview?.layoutIfNeeded()
+        }
+    }
     
     private func setupView() {
         backgroundColor = event.category.color.withAlphaComponent(0.7)
@@ -120,14 +125,13 @@ final class EventView: UIView {
     }
     
     @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
-        let translation = gesture.translation(in: self)
+        let translation = gesture.translation(in: self.superview)
         
         switch gesture.state {
         case .changed:
-            let deltaY = translation.y
-            gesture.setTranslation(.zero, in: self)
-            onMove?(deltaY)
-        case .ended, .cancelled, .failed:
+            onMove?(translation.y)
+            gesture.setTranslation(.zero, in: self.superview)
+        case .ended, .cancelled:
             onMoveEnd?()
         default:
             break
@@ -135,14 +139,13 @@ final class EventView: UIView {
     }
     
     @objc private func handleResize(_ gesture: UIPanGestureRecognizer) {
-        let translation = gesture.translation(in: self)
+        let translation = gesture.translation(in: self.superview)
         
         switch gesture.state {
         case .changed:
-            let deltaY = translation.y
-            gesture.setTranslation(.zero, in: self)
-            onResize?(deltaY)
-        case .ended, .cancelled, .failed:
+            onResize?(translation.y)
+            gesture.setTranslation(.zero, in: self.superview)
+        case .ended, .cancelled:
             onResizeEnd?()
         default:
             break
