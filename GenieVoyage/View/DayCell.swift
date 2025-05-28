@@ -61,6 +61,9 @@ class DayCell: UICollectionViewCell {
         layer.shadowRadius = 5
         layer.shadowOffset = CGSize(width: 0, height: 2)
         
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        itineraryCollectionView.addGestureRecognizer(longPressGesture)
+        
         NSLayoutConstraint.activate([
             itineraryCollectionView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             itineraryCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -167,6 +170,23 @@ class DayCell: UICollectionViewCell {
         }
         return eventView
     }
+    
+    @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
+        guard gesture.state == .began else { return }
+
+        let point = gesture.location(in: itineraryCollectionView)
+
+        guard let indexPath = itineraryCollectionView.indexPathForItem(at: point),
+              let viewModel = viewModel else { return }
+
+        let hourString = viewModel.hours[indexPath.item]
+        
+        let components = hourString.split(separator: ":").compactMap { Int($0) }
+        let startMinutes = components[0] * 60 + components[1]
+        
+        dayCellDelegate?.dayCell(self, didRequestAddEventAt: startMinutes)
+    }
+
 }
 
 extension DayCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {

@@ -491,16 +491,24 @@ extension TripViewController: DayCellDelegate {
             
             let startMinutes = hour * 60 + minute
             
-            let vc = dayViewModel.makeDropViewController(
-                category: category,
-                startMinutes: startMinutes
-            ) { newEvent in
+            let vc = dayViewModel.makeDropViewController( category: category, startMinutes: startMinutes) { newEvent in
                 var updatedEvent = newEvent
                 updatedEvent.startMinutes = startMinutes
                 dayViewModel.addEvent(updatedEvent)
             }
             
             presentModalVC(VC: vc)
+    }
+    
+    func dayCell(_ cell: DayCell, didRequestAddEventAt minutes: Int) {
+        guard let dayViewModel = cell.viewModel else { return }
+        
+        let vc = dayViewModel.makeDropViewController( category: .point, startMinutes: minutes) { newEvent in
+            var updatedEvent = newEvent
+            updatedEvent.startMinutes = minutes
+            dayViewModel.addEvent(updatedEvent)
+        }
+        presentModalVC(VC: vc)
     }
     
     private func presentModalVC(VC: UIViewController) {

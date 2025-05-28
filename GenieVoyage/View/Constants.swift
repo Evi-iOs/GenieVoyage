@@ -8,6 +8,5 @@
 import Foundation
 
 let minuteHeight: CGFloat = 1.0
-let dayColumnWidth: CGFloat = 300.0
 
 

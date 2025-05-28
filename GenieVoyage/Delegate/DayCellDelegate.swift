@@ -10,6 +10,10 @@
 import Foundation
 
 protocol DayCellDelegate: AnyObject {
+    
     func dayCellDidScroll(upward: Bool)
+    
     func dayCell(_ cell: DayCell, didDropEventWith category: ItineraryItemCategory, at time: String)
+    
+    func dayCell(_ cell: DayCell, didRequestAddEventAt minutes: Int)
 }
