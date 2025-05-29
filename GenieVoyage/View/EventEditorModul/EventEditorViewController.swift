@@ -1,0 +1,259 @@
+//
+//  EventEditorViewController.swift
+//  GenieVoyage
+//
+//  Created by Evgeniya  Iv on 28.05.2025.
+//
+
+
+import UIKit
+import MapKit
+
+final class EventEditorViewController: UIViewController {
+
+    var preselectedStartMinutes: Int?
+
+    private var viewModel: EventEditorConfigurable
+
+    private let headerView = UIView()
+    private let saveButton = UIButton(type: .system)
+    private let closeButton = UIButton(type: .system)
+
+    private let beginPicker = UIDatePicker()
+    private let endPicker = UIDatePicker()
+
+    private let locationTextField = UITextField()
+    private let tableView = UITableView()
+    
+    private let searchCompleter = MKLocalSearchCompleter()
+    private var searchResults = [MKLocalSearchCompletion]()
+    
+    private var selectedCoordinate: CLLocationCoordinate2D?
+    private var selectedLocationName: String?
+
+    var onSave: ((ItineraryEventModel) -> Void)?
+
+    init(viewModel: EventEditorConfigurable) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+        self.title = viewModel.locationName
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemBackground
+        setupHeader()
+        setupTimePickers()
+        setupSearchField()
+        setupSearch()
+        completeIfEditing()
+    }
+
+    // MARK: - Setup UI
+
+    private func setupHeader() {
+        view.addSubview(headerView)
+        headerView.translatesAutoresizingMaskIntoConstraints = false
+
+        headerView.addSubview(saveButton)
+        headerView.addSubview(closeButton)
+
+        saveButton.setTitle("Save", for: .normal)
+        saveButton.addTarget(self, action: #selector(saveTapped), for: .touchUpInside)
+        saveButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
+        saveButton.titleLabel?.tintColor = .red
+
+        closeButton.setTitle("Close", for: .normal)
+        closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
+        closeButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        closeButton.titleLabel?.tintColor = .red
+
+        saveButton.translatesAutoresizingMaskIntoConstraints = false
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            headerView.topAnchor.constraint(equalTo: view.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            headerView.heightAnchor.constraint(equalToConstant: 60),
+
+            saveButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
+            saveButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+            
+            closeButton.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
+            closeButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor)
+        ])
+    }
+
+    private func setupTimePickers() {
+        let stack = UIStackView(arrangedSubviews: [beginPicker, endPicker])
+        stack.axis = .horizontal
+        stack.spacing = 12
+        stack.translatesAutoresizingMaskIntoConstraints = false
+
+        beginPicker.datePickerMode = .time
+        beginPicker.preferredDatePickerStyle = .compact
+
+        endPicker.datePickerMode = .time
+        endPicker.preferredDatePickerStyle = .compact
+
+        if let minutes = preselectedStartMinutes {
+            let hour = minutes / 60
+            let minute = minutes % 60
+            var components = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+            components.hour = hour
+            components.minute = minute
+
+            if let date = Calendar.current.date(from: components) {
+                beginPicker.date = date
+                endPicker.date = date
+            }
+        }
+
+        view.addSubview(stack)
+
+        NSLayoutConstraint.activate([
+            stack.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 20),
+            stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+        ])
+    }
+
+    private func setupSearchField() {
+        locationTextField.placeholder = "Enter location"
+        locationTextField.borderStyle = .roundedRect
+        locationTextField.translatesAutoresizingMaskIntoConstraints = false
+        locationTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.isHidden = true
+        tableView.delegate = self
+        tableView.dataSource = self
+
+        let stack = UIStackView(arrangedSubviews: [locationTextField, tableView])
+        stack.axis = .vertical
+        stack.spacing = 12
+        stack.translatesAutoresizingMaskIntoConstraints = false
+
+        view.addSubview(stack)
+
+        NSLayoutConstraint.activate([
+            tableView.heightAnchor.constraint(equalToConstant: 150),
+            stack.topAnchor.constraint(equalTo: endPicker.bottomAnchor, constant: 20),
+            stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+        ])
+    }
+
+    private func completeIfEditing() {
+        guard let event = viewModel.existingEvent else { return }
+
+        let calendar = Calendar.current
+        let now = Date()
+        if let start = calendar.date(bySettingHour: event.startMinutes / 60, minute: event.startMinutes % 60, second: 0, of: now) {
+            beginPicker.date = start
+            endPicker.date = start.addingTimeInterval(TimeInterval(event.duration * 60))
+        }
+
+        locationTextField.text = event.locationName
+        selectedCoordinate = event.coordinate
+        selectedLocationName = event.locationName
+    }
+
+    // MARK: - Actions
+
+    @objc private func saveTapped() {
+        guard validateTimes() else { return }
+        if var model = viewModel.buildEvent() {
+            let calendar = Calendar.current
+            let startOfDay = calendar.startOfDay(for: beginPicker.date)
+            let rawMinutes = Int(beginPicker.date.timeIntervalSince(startOfDay) / 60)
+            
+            guard let address = locationTextField.text, !address.isEmpty, validateTimes() else { return }
+            
+            model.startMinutes = rawMinutes
+            model.duration = Int(endPicker.date.timeIntervalSince(beginPicker.date))/60
+            model.locationName = address
+            model.coordinate = selectedCoordinate
+            
+            onSave?(model)
+        }
+        dismiss(animated: true)
+    }
+
+    @objc private func closeTapped() {
+        dismiss(animated: true)
+    }
+
+    private func validateTimes() -> Bool {
+        if beginPicker.date >= endPicker.date {
+            let alert = UIAlertController(
+                title: "Invalid Time",
+                message: "Start time must be earlier than end time.",
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            present(alert, animated: true)
+            return false
+        }
+        return true
+    }
+
+    // MARK: - Search
+
+    private func setupSearch() {
+        searchCompleter.delegate = self
+    }
+
+    @objc private func textFieldDidChange() {
+        searchCompleter.queryFragment = locationTextField.text ?? ""
+        tableView.isHidden = false
+    }
+}
+
+// MARK: - UITableViewDelegate & DataSource
+
+extension EventEditorViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return searchResults.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell()
+        let result = searchResults[indexPath.row]
+        cell.textLabel?.text = result.title + ", " + result.subtitle
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let result = searchResults[indexPath.row]
+        let request = MKLocalSearch.Request(completion: result)
+        let search = MKLocalSearch(request: request)
+
+        search.start { [weak self] response, _ in
+            guard let self = self, let item = response?.mapItems.first else { return }
+            self.selectedCoordinate = item.placemark.coordinate
+            self.selectedLocationName = result.title
+            self.locationTextField.text = result.subtitle
+            self.tableView.isHidden = true
+            self.locationTextField.resignFirstResponder()
+        }
+    }
+}
+
+// MARK: - MKLocalSearchCompleterDelegate
+
+extension EventEditorViewController: MKLocalSearchCompleterDelegate {
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        searchResults = completer.results
+        tableView.reloadData()
+    }
+
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        print("Search failed: \(error)")
+    }
+}

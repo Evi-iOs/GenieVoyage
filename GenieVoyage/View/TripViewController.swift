@@ -478,32 +478,37 @@ extension TripViewController: UIDragInteractionDelegate {
 }
 
 extension TripViewController: DayCellDelegate {
-        func dayCell(_ cell: DayCell, didDropEventWith category: ItineraryItemCategory, at time: String) {
-            guard let dayViewModel = cell.viewModel else { return }
-            
-            let formatter = DateFormatter()
-            formatter.dateFormat = "HH:mm"
-            
-            guard let date = formatter.date(from: time) else { return }
-            let calendar = Calendar.current
-            let components = calendar.dateComponents([.hour, .minute], from: date)
-            guard let hour = components.hour, let minute = components.minute else { return }
-            
-            let startMinutes = hour * 60 + minute
-            
-            let vc = dayViewModel.makeDropViewController( category: category, startMinutes: startMinutes) { newEvent in
-                var updatedEvent = newEvent
-                updatedEvent.startMinutes = startMinutes
-                dayViewModel.addEvent(updatedEvent)
-            }
-            
-            presentModalVC(VC: vc)
+    
+    func dayCell(_ cell: DayCell, didRequestOpenEvent event: ItineraryEventModel) {
+        guard let dayViewModel = cell.viewModel else { return }
+        presentModalVC(VC: dayViewModel.openExistingEventEditorViewController(for: event))
+    }
+    
+    func dayCell(_ cell: DayCell, didDropEventWith category: ItineraryItemCategory, at time: String) {
+        guard let dayViewModel = cell.viewModel else { return }
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        
+        guard let date = formatter.date(from: time) else { return }
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.hour, .minute], from: date)
+        guard let hour = components.hour, let minute = components.minute else { return }
+        
+        let startMinutes = hour * 60 + minute
+        
+        let vc = dayViewModel.createEventEditorViewController( category: category, startMinutes: startMinutes) { newEvent in
+            var updatedEvent = newEvent
+            updatedEvent.startMinutes = startMinutes
+            dayViewModel.addEvent(updatedEvent)
+        }
+        presentModalVC(VC: vc)
     }
     
     func dayCell(_ cell: DayCell, didRequestAddEventAt minutes: Int) {
         guard let dayViewModel = cell.viewModel else { return }
         
-        let vc = dayViewModel.makeDropViewController( category: .point, startMinutes: minutes) { newEvent in
+        let vc = dayViewModel.createEventEditorViewController(category: .point, startMinutes: minutes) { newEvent in
             var updatedEvent = newEvent
             updatedEvent.startMinutes = minutes
             dayViewModel.addEvent(updatedEvent)

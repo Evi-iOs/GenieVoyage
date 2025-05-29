@@ -27,7 +27,6 @@ class PointViewController: UIViewController {
     private let saveButton = UIButton(type: .system)
     private let closeButton = UIButton(type: .system)
     
-    var preselectedTime: String?
     var preselectedStartMinutes: Int?
     var selectedCategory: ItineraryItemCategory?
     

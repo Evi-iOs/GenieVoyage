@@ -16,4 +16,6 @@ protocol DayCellDelegate: AnyObject {
     func dayCell(_ cell: DayCell, didDropEventWith category: ItineraryItemCategory, at time: String)
     
     func dayCell(_ cell: DayCell, didRequestAddEventAt minutes: Int)
+    
+    func dayCell(_ cell: DayCell, didRequestOpenEvent event: ItineraryEventModel)
 }

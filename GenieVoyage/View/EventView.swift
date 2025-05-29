@@ -19,6 +19,7 @@ final class EventView: UIView {
     var onResize: ((CGFloat) -> Void)?
     var onMoveEnd: (() -> Void)?
     var onResizeEnd: (() -> Void)?
+    var onTap: (() -> Void)?
     
     var topConstraint: NSLayoutConstraint?
     var heightConstraint: NSLayoutConstraint?
@@ -122,6 +123,11 @@ final class EventView: UIView {
         
         let resizePan = UIPanGestureRecognizer(target: self, action: #selector(handleResize(_:)))
         resizeHandle.addGestureRecognizer(resizePan)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        addGestureRecognizer(tapGesture)
+        
+        isUserInteractionEnabled = true
     }
     
     @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
@@ -150,5 +156,9 @@ final class EventView: UIView {
         default:
             break
         }
+    }
+    
+    @objc private func handleTap() {
+        onTap?()
     }
 }

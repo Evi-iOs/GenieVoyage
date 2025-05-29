@@ -21,8 +21,8 @@ struct ItineraryEventModel {
     let time: String
     var startMinutes: Int
     var duration: Int
-    let locationName: String?
-    let coordinate: CLLocationCoordinate2D?
+    var locationName: String?
+    var coordinate: CLLocationCoordinate2D?
 }
 
 enum ItineraryItemCategory: String {

@@ -168,6 +168,11 @@ class DayCell: UICollectionViewCell {
             viewModel.resizeEvent(event.id, toMinutes: newDuration)
             self.renderEventsOverlay()
         }
+        
+        eventView.onTap = { [weak self] in
+            guard let self = self else { return }
+            self.dayCellDelegate?.dayCell(self, didRequestOpenEvent: event)
+        }
         return eventView
     }
     

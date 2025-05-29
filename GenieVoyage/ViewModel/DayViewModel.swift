@@ -21,8 +21,16 @@ class DayViewModel {
     }
     
     func addEvent(_ event: ItineraryEventModel) {
-        events.append(event)
-        onUpdate?()
+        if hasEvent(id: event.id) {
+            update(event: event)
+        } else {
+            events.append(event)
+            onUpdate?()
+        }
+    }
+    
+    func hasEvent(id: UUID) -> Bool {
+        return events.contains { $0.id == id }
     }
     
     func hasEvent(at time: String) -> Bool {
@@ -90,38 +98,21 @@ class DayViewModel {
         cell.layer.add(animation, forKey: "shake")
     }
     
-    func makeDropViewController(category: ItineraryItemCategory, startMinutes: Int, onSave: @escaping (ItineraryEventModel) -> Void) -> UIViewController {
-        switch category {
-        case .point:
-            let pointVC = PointViewController()
-            pointVC.preselectedStartMinutes = startMinutes
-            pointVC.selectedCategory = .point
-            pointVC.onSave = onSave
-            return pointVC
-        case .hotel:
-            let hotelVC = PointViewController()
-            hotelVC.preselectedStartMinutes = startMinutes
-            hotelVC.selectedCategory = .hotel
-            hotelVC.onSave = onSave
-            return hotelVC
-        case .food:
-            let foodVC = PointViewController()
-            foodVC.preselectedStartMinutes = startMinutes
-            foodVC.selectedCategory = .food
-            foodVC.onSave = onSave
-            return foodVC
-        case .transport:
-            let pointVC = PointViewController()
-            pointVC.preselectedStartMinutes = startMinutes
-            pointVC.selectedCategory = .transport
-            pointVC.onSave = onSave
-            return pointVC
-        case .transfer:
-            let pointVC = PointViewController()
-            pointVC.preselectedStartMinutes = startMinutes
-            pointVC.selectedCategory = .transfer
-            pointVC.onSave = onSave
-            return pointVC
+    func openExistingEventEditorViewController(for event: ItineraryEventModel) -> UIViewController {
+        let viewModel = EventEditorFactory.editViewModel(for: event)
+        let editorVC = EventEditorViewController(viewModel: viewModel)
+        editorVC.onSave = { [weak self] updatedEvent in
+            guard let self = self else { return }
+            self.update(event: updatedEvent)
         }
+        return editorVC
+    }
+    
+    func createEventEditorViewController(category: ItineraryItemCategory, startMinutes: Int, onSave: @escaping (ItineraryEventModel) -> Void) -> UIViewController {
+        let viewModel = EventEditorFactory.newViewModel(for: category)
+        let editorVC = EventEditorViewController(viewModel: viewModel)
+        editorVC.preselectedStartMinutes = startMinutes
+        editorVC.onSave = onSave
+        return editorVC
     }
 }
