@@ -20,10 +20,10 @@
 		D03D08692D08544D009F8E63 /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03D08682D08544D009F8E63 /* EventViewController.swift */; };
 		D03D086B2D08C14F009F8E63 /* MapLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03D086A2D08C14F009F8E63 /* MapLocationViewController.swift */; };
 		D043B43D2CFF6DDE00151ED0 /* TripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D043B43C2CFF6DDE00151ED0 /* TripViewController.swift */; };
-		D04945B32D3A451B00232F26 /* ItineraryEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04945B22D3A451B00232F26 /* ItineraryEventCell.swift */; };
-		D04945B52D3A46FA00232F26 /* ItineraryEventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04945B42D3A46FA00232F26 /* ItineraryEventModel.swift */; };
+		D04945B32D3A451B00232F26 /* EventCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04945B22D3A451B00232F26 /* EventCollectionViewCell.swift */; };
+		D04945B52D3A46FA00232F26 /* EventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04945B42D3A46FA00232F26 /* EventModel.swift */; };
 		D04945B92D3EB26900232F26 /* TripViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04945B82D3EB26900232F26 /* TripViewModel.swift */; };
-		D05D92E62D4B8CB10022C734 /* DayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05D92E52D4B8CB10022C734 /* DayCell.swift */; };
+		D05D92E62D4B8CB10022C734 /* DayCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05D92E52D4B8CB10022C734 /* DayCollectionViewCell.swift */; };
 		D0605DF82D3FF24C00465BD2 /* Pods_GenieVoyage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 071C3747FA4F0ADB75D5CC99 /* Pods_GenieVoyage.framework */; };
 		D0605DF92D3FF24C00465BD2 /* Pods_GenieVoyage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 071C3747FA4F0ADB75D5CC99 /* Pods_GenieVoyage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D06C7F1B2DB26C2600402EA0 /* DayCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F1A2DB26C1B00402EA0 /* DayCellDelegate.swift */; };
@@ -57,6 +57,7 @@
 		D0FC22632DE8AC090074C9AF /* TransferEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FC22622DE8AC090074C9AF /* TransferEditorViewModel.swift */; };
 		D0FC22652DE8AC430074C9AF /* TransportEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FC22642DE8AC430074C9AF /* TransportEditorViewModel.swift */; };
 		D0FC22672DE8AC720074C9AF /* FoodEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FC22662DE8AC720074C9AF /* FoodEditorViewModel.swift */; };
+		D0FC226A2DEA406A0074C9AF /* MapEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FC22692DEA406A0074C9AF /* MapEventsViewController.swift */; };
 		E60A866E6B722F5F093D186B /* Pods_GenieVoyageTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 890A253B57967C505085FD95 /* Pods_GenieVoyageTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -112,10 +113,10 @@
 		D03D08682D08544D009F8E63 /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
 		D03D086A2D08C14F009F8E63 /* MapLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLocationViewController.swift; sourceTree = "<group>"; };
 		D043B43C2CFF6DDE00151ED0 /* TripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripViewController.swift; sourceTree = "<group>"; };
-		D04945B22D3A451B00232F26 /* ItineraryEventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryEventCell.swift; sourceTree = "<group>"; };
-		D04945B42D3A46FA00232F26 /* ItineraryEventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryEventModel.swift; sourceTree = "<group>"; };
+		D04945B22D3A451B00232F26 /* EventCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionViewCell.swift; sourceTree = "<group>"; };
+		D04945B42D3A46FA00232F26 /* EventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventModel.swift; sourceTree = "<group>"; };
 		D04945B82D3EB26900232F26 /* TripViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripViewModel.swift; sourceTree = "<group>"; };
-		D05D92E52D4B8CB10022C734 /* DayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCell.swift; sourceTree = "<group>"; };
+		D05D92E52D4B8CB10022C734 /* DayCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCollectionViewCell.swift; sourceTree = "<group>"; };
 		D06C7F1A2DB26C1B00402EA0 /* DayCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCellDelegate.swift; sourceTree = "<group>"; };
 		D06C7F1D2DBAC2D700402EA0 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		D06C7F1F2DBAC3CD00402EA0 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -150,6 +151,7 @@
 		D0FC22622DE8AC090074C9AF /* TransferEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferEditorViewModel.swift; sourceTree = "<group>"; };
 		D0FC22642DE8AC430074C9AF /* TransportEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportEditorViewModel.swift; sourceTree = "<group>"; };
 		D0FC22662DE8AC720074C9AF /* FoodEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodEditorViewModel.swift; sourceTree = "<group>"; };
+		D0FC22692DEA406A0074C9AF /* MapEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapEventsViewController.swift; sourceTree = "<group>"; };
 		EC48F7F4B016AF516F86CCCC /* Pods-GenieVoyageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GenieVoyageTests.release.xcconfig"; path = "Target Support Files/Pods-GenieVoyageTests/Pods-GenieVoyageTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -209,8 +211,9 @@
 			isa = PBXGroup;
 			children = (
 				D043B43C2CFF6DDE00151ED0 /* TripViewController.swift */,
-				D04945B22D3A451B00232F26 /* ItineraryEventCell.swift */,
-				D05D92E52D4B8CB10022C734 /* DayCell.swift */,
+				D0FC22692DEA406A0074C9AF /* MapEventsViewController.swift */,
+				D04945B22D3A451B00232F26 /* EventCollectionViewCell.swift */,
+				D05D92E52D4B8CB10022C734 /* DayCollectionViewCell.swift */,
 				D06C7F2B2DE6197600402EA0 /* Constants.swift */,
 				D06C7F292DE24BA600402EA0 /* EventView.swift */,
 				D06C7F352DE7AAD900402EA0 /* EventEditorModul */,
@@ -231,7 +234,7 @@
 			isa = PBXGroup;
 			children = (
 				D0365DF02CFA6BE700D711A9 /* TripModel.swift */,
-				D04945B42D3A46FA00232F26 /* ItineraryEventModel.swift */,
+				D04945B42D3A46FA00232F26 /* EventModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -564,8 +567,9 @@
 				D0D192D62A6FFF9A000853B8 /* CalendarViewController.swift in Sources */,
 				D0FC22612DE8ABD90074C9AF /* HotelEditorViewModel.swift in Sources */,
 				D0365DF92CFDC76F00D711A9 /* CalculateDistance.swift in Sources */,
-				D04945B52D3A46FA00232F26 /* ItineraryEventModel.swift in Sources */,
+				D04945B52D3A46FA00232F26 /* EventModel.swift in Sources */,
 				D07B678A2D2C6D8000842293 /* StartPlanningViewController.swift in Sources */,
+				D0FC226A2DEA406A0074C9AF /* MapEventsViewController.swift in Sources */,
 				D0010B2C2B12A24200BAEC46 /* Extension.swift in Sources */,
 				D06C7F392DE7ABC300402EA0 /* EventEditorViewController.swift in Sources */,
 				D06C7F202DBAC3CD00402EA0 /* ProfileViewController.swift in Sources */,
@@ -573,13 +577,13 @@
 				D06C7F2C2DE6197600402EA0 /* Constants.swift in Sources */,
 				D06C7F1B2DB26C2600402EA0 /* DayCellDelegate.swift in Sources */,
 				D03D08692D08544D009F8E63 /* EventViewController.swift in Sources */,
-				D04945B32D3A451B00232F26 /* ItineraryEventCell.swift in Sources */,
+				D04945B32D3A451B00232F26 /* EventCollectionViewCell.swift in Sources */,
 				D06C7F372DE7AB3B00402EA0 /* EventEditorFactory.swift in Sources */,
 				D06C7F342DE7AACC00402EA0 /* PointEventEditorViewModel.swift in Sources */,
 				D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */,
 				D0D192D42A6FFF9A000853B8 /* SceneDelegate.swift in Sources */,
 				D026365C2D84ADBB0070D28C /* SegmentedControlView.swift in Sources */,
-				D05D92E62D4B8CB10022C734 /* DayCell.swift in Sources */,
+				D05D92E62D4B8CB10022C734 /* DayCollectionViewCell.swift in Sources */,
 				D026365E2D84AE0D0070D28C /* SegmentCell.swift in Sources */,
 				D06C7F2A2DE24BA600402EA0 /* EventView.swift in Sources */,
 				D06C7F262DBCF32D00402EA0 /* PointViewController.swift in Sources */,

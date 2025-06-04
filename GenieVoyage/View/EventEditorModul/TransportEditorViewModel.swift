@@ -10,9 +10,9 @@ import UIKit
 import CoreLocation
 
 final class TransportEditorViewModel: EventEditorConfigurable {
-    var existingEvent: ItineraryEventModel?
+    var existingEvent: EventModel?
     
-    var category: ItineraryItemCategory = .transport
+    var category: EventCategory = .transport
     var startDate = Date()
     var endDate = Date().addingTimeInterval(3600)
     
@@ -20,12 +20,12 @@ final class TransportEditorViewModel: EventEditorConfigurable {
     var coordinate: CLLocationCoordinate2D?
     var duration: Int = 0
     
-    init(existingEvent: ItineraryEventModel? = nil) {
+    init(existingEvent: EventModel? = nil) {
         self.existingEvent = existingEvent
     }
     
-    func buildEvent() -> ItineraryEventModel? {
-        return ItineraryEventModel(
+    func buildEvent() -> EventModel? {
+        return EventModel(
             id: existingEvent?.id ?? UUID(),
             category: .transport,
             icon: UIImage(systemName: category.iconSystemName)!,

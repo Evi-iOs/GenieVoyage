@@ -93,7 +93,7 @@ extension UIButton {
         }
     }
     
-    var itineraryCategory: ItineraryItemCategory {
+    var itineraryCategory: EventCategory {
         switch self.tag {
         case 0: return .transport
         case 1: return .transfer

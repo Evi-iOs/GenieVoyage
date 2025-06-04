@@ -31,7 +31,7 @@ final class EventEditorViewController: UIViewController {
     private var selectedCoordinate: CLLocationCoordinate2D?
     private var selectedLocationName: String?
 
-    var onSave: ((ItineraryEventModel) -> Void)?
+    var onSave: ((EventModel) -> Void)?
 
     init(viewModel: EventEditorConfigurable) {
         self.viewModel = viewModel

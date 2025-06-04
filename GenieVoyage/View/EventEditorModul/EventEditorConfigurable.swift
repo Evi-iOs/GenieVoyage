@@ -10,7 +10,7 @@ import CoreLocation
 
 protocol EventEditorConfigurable {
     
-    var category: ItineraryItemCategory { get }
+    var category: EventCategory { get }
     var startDate: Date { get set }
     var endDate: Date { get set }
     var duration: Int { get set }
@@ -18,8 +18,8 @@ protocol EventEditorConfigurable {
     var locationName: String? { get }
     var coordinate: CLLocationCoordinate2D? { get }
 
-    var existingEvent: ItineraryEventModel? { get }
+    var existingEvent: EventModel? { get }
 
-    func buildEvent() -> ItineraryEventModel?
+    func buildEvent() -> EventModel?
 }
 

@@ -28,9 +28,9 @@ class PointViewController: UIViewController {
     private let closeButton = UIButton(type: .system)
     
     var preselectedStartMinutes: Int?
-    var selectedCategory: ItineraryItemCategory?
+    var selectedCategory: EventCategory?
     
-    var onSave: ((ItineraryEventModel) -> Void)?
+    var onSave: ((EventModel) -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -180,7 +180,7 @@ class PointViewController: UIViewController {
 
         guard let address = locationTextField.text, !address.isEmpty, validateTimes() else { return }
         
-        let event = ItineraryEventModel(
+        let event = EventModel(
             id: UUID(),
             category: selectedCategory ?? .point,
             icon: UIImage(systemName: selectedCategory?.iconSystemName ?? "car") ?? UIImage(),

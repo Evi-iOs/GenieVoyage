@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ItineraryEventCell: UICollectionViewCell {
+final class EventCollectionViewCell: UICollectionViewCell {
     static let identifier = "ItineraryItemCell"
     
     private let timeLabel: UILabel = {

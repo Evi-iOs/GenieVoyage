@@ -9,7 +9,7 @@ import UIKit
 
 final class EventView: UIView {
     
-    var event: ItineraryEventModel {
+    var event: EventModel {
         didSet {
             updateContent()
         }
@@ -26,7 +26,7 @@ final class EventView: UIView {
     
     private let resizeHandle = UIView()
     
-    init(event: ItineraryEventModel) {
+    init(event: EventModel) {
         self.event = event
         super.init(frame: .zero)
         setupView()

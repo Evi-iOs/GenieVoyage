@@ -258,7 +258,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     private func configureCollectionView() {
         daysCollectionView.dataSource = self
         daysCollectionView.delegate = self
-        daysCollectionView.register(DayCell.self, forCellWithReuseIdentifier: "DayCell")
+        daysCollectionView.register(DayCollectionViewCell.self, forCellWithReuseIdentifier: "DayCell")
     }
     
     private let daysCollectionView: UICollectionView = {
@@ -320,10 +320,9 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     }
     
     @objc private func mapButtonTapped() {
-        //TODO: Открывать должна VM
-        let vc = MapLocationViewController()
-        vc.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(vc, animated: true)
+        let allEvents = viewModel.allEvents()
+        let mapVC = MapEventsViewController(events: allEvents)
+        navigationController?.pushViewController(mapVC, animated: true)
     }
     
     private func showAlert(message: String) {
@@ -363,11 +362,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         floatingMapButton.layer.shadowOffset = CGSize(width: 0, height: 8)
         floatingMapButton.layer.shadowRadius = 8
         
-        UIView.animate(withDuration: 0.3,
-                       delay: 0,
-                       usingSpringWithDamping: 0.6,
-                       initialSpringVelocity: 0.8,
-                       options: .curveEaseInOut) {
+        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.8, options: .curveEaseInOut) {
             self.floatingMapButton.alpha = 0.7
             self.floatingMapButton.transform = .identity
         }
@@ -412,7 +407,7 @@ extension TripViewController: UICollectionViewDataSource, UICollectionViewDelega
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DayCell", for: indexPath) as? DayCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DayCell", for: indexPath) as? DayCollectionViewCell else {
             return UICollectionViewCell()
         }
         let dayVM = viewModel.days[indexPath.item]
@@ -454,7 +449,7 @@ extension TripViewController: UIDragInteractionDelegate {
         let icon = button.image(for: .normal) ?? UIImage()
         let category = button.itineraryCategory
         
-        let event = ItineraryEventModel(
+        let event = EventModel(
             id: UUID(),
             category: category,
             icon: icon,
@@ -479,12 +474,12 @@ extension TripViewController: UIDragInteractionDelegate {
 
 extension TripViewController: DayCellDelegate {
     
-    func dayCell(_ cell: DayCell, didRequestOpenEvent event: ItineraryEventModel) {
+    func dayCell(_ cell: DayCollectionViewCell, didRequestOpenEvent event: EventModel) {
         guard let dayViewModel = cell.viewModel else { return }
         presentModalVC(VC: dayViewModel.openExistingEventEditorViewController(for: event))
     }
     
-    func dayCell(_ cell: DayCell, didDropEventWith category: ItineraryItemCategory, at time: String) {
+    func dayCell(_ cell: DayCollectionViewCell, didDropEventWith category: EventCategory, at time: String) {
         guard let dayViewModel = cell.viewModel else { return }
         
         let formatter = DateFormatter()
@@ -505,7 +500,7 @@ extension TripViewController: DayCellDelegate {
         presentModalVC(VC: vc)
     }
     
-    func dayCell(_ cell: DayCell, didRequestAddEventAt minutes: Int) {
+    func dayCell(_ cell: DayCollectionViewCell, didRequestAddEventAt minutes: Int) {
         guard let dayViewModel = cell.viewModel else { return }
         
         let vc = dayViewModel.createEventEditorViewController(category: .point, startMinutes: minutes) { newEvent in

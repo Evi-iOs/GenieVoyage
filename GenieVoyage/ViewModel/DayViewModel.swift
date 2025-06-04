@@ -11,7 +11,7 @@ import UIKit
 class DayViewModel {
     
     var dateDay: Date
-    var events: [ItineraryEventModel] = []
+    var events: [EventModel] = []
     let hours = (0...23).map { String(format: "%02d:00", $0) }
     
     var onUpdate: (() -> Void)?
@@ -20,7 +20,7 @@ class DayViewModel {
         self.dateDay = dateDay
     }
     
-    func addEvent(_ event: ItineraryEventModel) {
+    func addEvent(_ event: EventModel) {
         if hasEvent(id: event.id) {
             update(event: event)
         } else {
@@ -37,11 +37,11 @@ class DayViewModel {
         return events.contains { $0.time == time }
     }
     
-    func event(at time: String) -> ItineraryEventModel? {
+    func event(at time: String) -> EventModel? {
         return events.first { $0.time == time }
     }
     
-    func update(event: ItineraryEventModel) {
+    func update(event: EventModel) {
         if let index = events.firstIndex(where: { $0.id == event.id }) {
             events[index] = event
             onUpdate?()
@@ -98,7 +98,7 @@ class DayViewModel {
         cell.layer.add(animation, forKey: "shake")
     }
     
-    func openExistingEventEditorViewController(for event: ItineraryEventModel) -> UIViewController {
+    func openExistingEventEditorViewController(for event: EventModel) -> UIViewController {
         let viewModel = EventEditorFactory.editViewModel(for: event)
         let editorVC = EventEditorViewController(viewModel: viewModel)
         editorVC.onSave = { [weak self] updatedEvent in
@@ -108,7 +108,7 @@ class DayViewModel {
         return editorVC
     }
     
-    func createEventEditorViewController(category: ItineraryItemCategory, startMinutes: Int, onSave: @escaping (ItineraryEventModel) -> Void) -> UIViewController {
+    func createEventEditorViewController(category: EventCategory, startMinutes: Int, onSave: @escaping (EventModel) -> Void) -> UIViewController {
         let viewModel = EventEditorFactory.newViewModel(for: category)
         let editorVC = EventEditorViewController(viewModel: viewModel)
         editorVC.preselectedStartMinutes = startMinutes

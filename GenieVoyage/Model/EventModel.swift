@@ -11,12 +11,12 @@ import CoreLocation
 
 struct TripDay {
     let date: String
-    let itineraryEvents: [ItineraryEventModel]
+    let itineraryEvents: [EventModel]
 }
 
-struct ItineraryEventModel {
+struct EventModel {
     let id: UUID
-    let category: ItineraryItemCategory
+    let category: EventCategory
     let icon: UIImage
     let time: String
     var startMinutes: Int
@@ -25,7 +25,9 @@ struct ItineraryEventModel {
     var coordinate: CLLocationCoordinate2D?
 }
 
-enum ItineraryItemCategory: String {
+let allCases: [EventCategory] = [.transport, .transfer, .hotel, .point, .food]
+
+enum EventCategory: String, CaseIterable {
     case transport, transfer, hotel, point, food
     
     var iconSystemName: String {

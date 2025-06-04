@@ -21,10 +21,14 @@ class TripViewModel {
     }
     
     private let trip: TripModel
-    
+
     init(trip: TripModel) {
         self.trip = trip
         setupData()
+    }
+    
+    func allEvents() -> [EventModel] {
+        days.flatMap { $0.events }
     }
     
     // MARK: - Data Setup

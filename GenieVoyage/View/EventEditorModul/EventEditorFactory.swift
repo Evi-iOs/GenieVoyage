@@ -9,7 +9,7 @@ import Foundation
 
 enum EventEditorFactory {
     
-    static func newViewModel(for category: ItineraryItemCategory) -> EventEditorConfigurable {
+    static func newViewModel(for category: EventCategory) -> EventEditorConfigurable {
         switch category {
         case .point:
             return PointEventEditorViewModel()
@@ -24,7 +24,7 @@ enum EventEditorFactory {
         }
     }
     
-    static func editViewModel(for event: ItineraryEventModel) -> EventEditorConfigurable {
+    static func editViewModel(for event: EventModel) -> EventEditorConfigurable {
         switch event.category {
         case .point:
             return PointEventEditorViewModel(existingEvent: event)

@@ -13,9 +13,10 @@ protocol DayCellDelegate: AnyObject {
     
     func dayCellDidScroll(upward: Bool)
     
-    func dayCell(_ cell: DayCell, didDropEventWith category: ItineraryItemCategory, at time: String)
+    func dayCell(_ cell: DayCollectionViewCell, didDropEventWith category: EventCategory, at time: String)
     
-    func dayCell(_ cell: DayCell, didRequestAddEventAt minutes: Int)
+    func dayCell(_ cell: DayCollectionViewCell, didRequestAddEventAt minutes: Int)
     
-    func dayCell(_ cell: DayCell, didRequestOpenEvent event: ItineraryEventModel)
+    func dayCell(_ cell: DayCollectionViewCell, didRequestOpenEvent event: EventModel)
+    
 }

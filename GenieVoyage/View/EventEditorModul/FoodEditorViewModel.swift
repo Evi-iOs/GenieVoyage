@@ -10,9 +10,9 @@ import UIKit
 import CoreLocation
 
 final class FoodEditorViewModel: EventEditorConfigurable {
-    var existingEvent: ItineraryEventModel?
+    var existingEvent: EventModel?
     
-    var category: ItineraryItemCategory = .food
+    var category: EventCategory = .food
     var startDate = Date()
     var endDate = Date().addingTimeInterval(3600)
     
@@ -20,12 +20,12 @@ final class FoodEditorViewModel: EventEditorConfigurable {
     var coordinate: CLLocationCoordinate2D?
     var duration: Int = 0
     
-    init(existingEvent: ItineraryEventModel? = nil) {
+    init(existingEvent: EventModel? = nil) {
         self.existingEvent = existingEvent
     }
     
-    func buildEvent() -> ItineraryEventModel? {
-        return ItineraryEventModel(
+    func buildEvent() -> EventModel? {
+        return EventModel(
             id: existingEvent?.id ?? UUID(),
             category: .food,
             icon: UIImage(systemName: category.iconSystemName)!,

@@ -7,13 +7,13 @@
 
 import UIKit
 
-class DayCell: UICollectionViewCell {
+class DayCollectionViewCell: UICollectionViewCell {
 
     weak var dayCellDelegate: DayCellDelegate?
     
     static let reuseIdentifier = "ItineraryItemCell"
     
-    private var itineraryItems: [ItineraryEventModel] = []
+    private var itineraryItems: [EventModel] = []
     private var highlightedIndexPath: IndexPath?
     
     private var lastOffsetY: CGFloat = 0
@@ -72,7 +72,7 @@ class DayCell: UICollectionViewCell {
         ])
         
         itineraryCollectionView.showsVerticalScrollIndicator = false
-        itineraryCollectionView.register(ItineraryEventCell.self, forCellWithReuseIdentifier: DayCell.reuseIdentifier)
+        itineraryCollectionView.register(EventCollectionViewCell.self, forCellWithReuseIdentifier: DayCollectionViewCell.reuseIdentifier)
         itineraryCollectionView.dataSource = self
         itineraryCollectionView.delegate = self
     }
@@ -114,7 +114,7 @@ class DayCell: UICollectionViewCell {
         }
     }
     
-    func createEventView(for event: ItineraryEventModel) -> EventView {
+    func createEventView(for event: EventModel) -> EventView {
         let eventView = EventView(event: event)
         
         let yPosition = CGFloat(event.startMinutes) * minuteHeight
@@ -194,13 +194,13 @@ class DayCell: UICollectionViewCell {
 
 }
 
-extension DayCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension DayCollectionViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel?.hours.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DayCell.reuseIdentifier, for: indexPath) as! ItineraryEventCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DayCollectionViewCell.reuseIdentifier, for: indexPath) as! EventCollectionViewCell
         let time = viewModel?.hours[indexPath.item] ?? ""
         cell.configure(with: time)
         return cell
@@ -215,9 +215,9 @@ extension DayCell: UICollectionViewDelegate, UICollectionViewDataSource, UIColle
 }
 
 //MARK: Drag & drop icons
-extension DayCell: UIDropInteractionDelegate {
+extension DayCollectionViewCell: UIDropInteractionDelegate {
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
-        return session.items.first?.localObject is ItineraryEventModel
+        return session.items.first?.localObject is EventModel
     }
     
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
@@ -237,7 +237,7 @@ extension DayCell: UIDropInteractionDelegate {
             return
         }
         
-        if let event = session.items.first?.localObject as? ItineraryEventModel {
+        if let event = session.items.first?.localObject as? EventModel {
             dayCellDelegate?.dayCell(self, didDropEventWith: event.category, at: timeSlot)
         }
     }
