@@ -45,6 +45,12 @@ extension Date {
         return dateFormater.string(from: self)
     }
     
+    func formattedDay() -> String {
+        let dateFormater = DateFormatter()
+        dateFormater.dateFormat = "dd/MM"
+        return dateFormater.string(from: self)
+    }
+    
     func formattedTime() -> String {
         let formatter = DateFormatter()
         formatter.timeStyle = .short
@@ -79,6 +85,19 @@ extension UIButton {
         self.heightAnchor.constraint(equalToConstant: 32).isActive = true
         self.titleLabel?.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
         self.titleLabel?.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16).isActive = true
+    }
+    
+    func mapsButton(image: String) {
+        self.setImage(UIImage(systemName: image), for: .normal)
+        self.backgroundColor = .gray
+        self.tintColor = .white
+        self.alpha = 0.7
+        self.layer.cornerRadius = 28
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOpacity = 0.3
+        self.layer.shadowOffset = CGSize(width: 0, height: 4)
+        self.layer.shadowRadius = 8
+        self.translatesAutoresizingMaskIntoConstraints = false
     }
     
     @objc private func handlePressDown() {

@@ -7,6 +7,7 @@
 
 import UIKit
 import MapKit
+import CoreLocation
 
 class MapEventsViewController: UIViewController {
     
@@ -14,6 +15,7 @@ class MapEventsViewController: UIViewController {
     private var selectedDayIndex = 0
     
     private var isRouteVisible = true
+    private let locationManager = CLLocationManager()
     
     init(viewModel: TripViewModel) {
         self.viewModel = viewModel
@@ -40,7 +42,6 @@ class MapEventsViewController: UIViewController {
     
     private let mapView: MKMapView = {
         let map = MKMapView()
-        map.layer.cornerRadius = 12
         return map
     }()
     
@@ -48,31 +49,55 @@ class MapEventsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         
-        view.addSubview(dayTabsCollectionView)
-        mapView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(mapView)
-        mapView.delegate = self
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+
+        mapView.showsUserLocation = true
         
-        view.addSubview(fabButton)
+        mapView.translatesAutoresizingMaskIntoConstraints = false
+        
+        mapView.delegate = self
+        view.addSubview(mapView)
+        view.addSubview(dayTabsCollectionView)
+        view.addSubview(zoomInButton)
+        view.addSubview(zoomOutButton)
+        view.addSubview(roadButton)
+        view.addSubview(locationButton)
+        
+        mapView.showsUserLocation = true
         
         setupLayout()
         dayTabsCollectionView.selectItem(at: IndexPath(item: selectedDayIndex, section: 0), animated: false, scrollPosition: [])
         updateMapForSelectedDay()
     }
     
-    private let fabButton: UIButton = {
+    private let roadButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "point.topleft.down.to.point.bottomright.curvepath"), for: .normal)
-        button.backgroundColor = .gray
-        button.tintColor = .white
-        button.alpha = 0.7
-        button.layer.cornerRadius = 28
-        button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowOpacity = 0.3
-        button.layer.shadowOffset = CGSize(width: 0, height: 4)
-        button.layer.shadowRadius = 8
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(nil, action: #selector(toggleRouteVisibility), for: .touchUpInside)
+        button.mapsButton(image: "point.topleft.down.to.point.bottomright.curvepath")
+        return button
+    }()
+    
+    private lazy var locationButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.mapsButton(image: "location.fill")
+        button.addTarget(self, action: #selector(centerToUserLocation), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var zoomInButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.mapsButton(image: "plus")
+        button.addTarget(self, action: #selector(zoomIn), for: .touchUpInside)
+        return button
+    }()
+
+    private lazy var zoomOutButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.mapsButton(image: "minus")
+        button.addTarget(self, action: #selector(zoomOut), for: .touchUpInside)
         return button
     }()
 
@@ -86,15 +111,30 @@ class MapEventsViewController: UIViewController {
             dayTabsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             dayTabsCollectionView.heightAnchor.constraint(equalToConstant: 40),
             
-            mapView.topAnchor.constraint(equalTo: dayTabsCollectionView.bottomAnchor, constant: 16),
+            mapView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            fabButton.widthAnchor.constraint(equalToConstant: 56),
-            fabButton.heightAnchor.constraint(equalToConstant: 56),
-            fabButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            fabButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+            zoomInButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            zoomInButton.bottomAnchor.constraint(equalTo: zoomOutButton.topAnchor, constant: -20),
+            zoomInButton.widthAnchor.constraint(equalToConstant: 50),
+            zoomInButton.heightAnchor.constraint(equalToConstant: 50),
+
+            zoomOutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            zoomOutButton.bottomAnchor.constraint(equalTo: locationButton.topAnchor, constant: -20),
+            zoomOutButton.widthAnchor.constraint(equalToConstant: 50),
+            zoomOutButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            locationButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            locationButton.bottomAnchor.constraint(equalTo: roadButton.topAnchor, constant: -20),
+            locationButton.widthAnchor.constraint(equalToConstant: 50),
+            locationButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            roadButton.widthAnchor.constraint(equalToConstant: 50),
+            roadButton.heightAnchor.constraint(equalToConstant: 50),
+            roadButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            roadButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         ])
     }
     
@@ -146,8 +186,28 @@ class MapEventsViewController: UIViewController {
     
     @objc private func toggleRouteVisibility() {
         isRouteVisible.toggle()
-        fabButton.backgroundColor = isRouteVisible ? .gray : .black
+        roadButton.backgroundColor = isRouteVisible ? .gray : .black
         updateMapForSelectedDay()
+    }
+    
+    @objc private func centerToUserLocation() {
+        guard let coordinate = mapView.userLocation.location?.coordinate else { return }
+        let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 800, longitudinalMeters: 800)
+        mapView.setRegion(region, animated: true)
+    }
+    
+    @objc private func zoomIn() {
+        var region = mapView.region
+        region.span.latitudeDelta /= 2
+        region.span.longitudeDelta /= 2
+        mapView.setRegion(region, animated: true)
+    }
+
+    @objc private func zoomOut() {
+        var region = mapView.region
+        region.span.latitudeDelta *= 2
+        region.span.longitudeDelta *= 2
+        mapView.setRegion(region, animated: true)
     }
 }
 
@@ -160,7 +220,7 @@ class MapEventsViewController: UIViewController {
 
       func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
           let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DayTabCell.identifier, for: indexPath) as! DayTabCell
-          cell.configure(with: viewModel.days[indexPath.item].dateDay.formatted())
+          cell.configure(with: viewModel.days[indexPath.item].dateDay.formattedDay())
           return cell
       }
 
@@ -231,3 +291,40 @@ class EventAnnotation: MKPointAnnotation {
         super.init()
     }
 }
+
+extension MapEventsViewController: CLLocationManagerDelegate {
+
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        switch manager.authorizationStatus {
+        case .authorizedWhenInUse, .authorizedAlways:
+            mapView.showsUserLocation = true
+            locationManager.startUpdatingLocation()
+        case .denied, .restricted:
+            showLocationAccessAlert()
+            break
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        @unknown default:
+            break
+        }
+    }
+    
+    private func showLocationAccessAlert() {
+        let alert = UIAlertController(
+            title: "Geolocation is disabled",
+            message: "To display your location, please allow access in settings.",
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Open Settings", style: .default) { _ in
+            if let settingsURL = URL(string: UIApplication.openSettingsURLString),
+               UIApplication.shared.canOpenURL(settingsURL) {
+                UIApplication.shared.open(settingsURL)
+            }
+        })
+
+        present(alert, animated: true)
+    }
+}
+

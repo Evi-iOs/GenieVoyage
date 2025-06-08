@@ -29,6 +29,8 @@ class DayTabCell: UICollectionViewCell {
         super.init(frame: frame)
         contentView.layer.cornerRadius = 12
         contentView.layer.masksToBounds = true
+        contentView.backgroundColor = .systemGray5
+        titleLabel.textColor = .label
         contentView.addSubview(titleLabel)
     }
     
