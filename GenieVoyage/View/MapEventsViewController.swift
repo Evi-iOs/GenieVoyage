@@ -9,88 +9,115 @@ import UIKit
 import MapKit
 
 class MapEventsViewController: UIViewController {
-
-    private let mapView = MKMapView()
-    private var allEvents: [EventModel]
-    private var filteredEvents: [EventModel] = []
-
-    private let filterSegmented = UISegmentedControl(items: ["All"] + EventCategory.allCases.map { $0.displayName })
-
-    init(events: [EventModel]) {
-        self.allEvents = events.filter { $0.coordinate != nil }
+    
+    private let viewModel: TripViewModel
+    private var selectedDayIndex = 0
+    
+    init(viewModel: TripViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        self.filteredEvents = allEvents
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
+    private lazy var dayTabsCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 8
+        
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.showsHorizontalScrollIndicator = false
+        cv.backgroundColor = .clear
+        cv.delegate = self
+        cv.dataSource = self
+        cv.register(DayTabCell.self, forCellWithReuseIdentifier: DayTabCell.identifier)
+        return cv
+    }()
+    
+    private let mapView: MKMapView = {
+        let map = MKMapView()
+        map.layer.cornerRadius = 12
+        return map
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        setupMapView()
-        setupFilterControl()
-        addAnnotations()
-    }
-
-    private func setupMapView() {
-        mapView.delegate = self
+        
+        view.addSubview(dayTabsCollectionView)
         mapView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(mapView)
-
+        
+        mapView.delegate = self
+        
+        setupLayout()
+        dayTabsCollectionView.selectItem(at: IndexPath(item: selectedDayIndex, section: 0), animated: false, scrollPosition: [])
+        updateMapForSelectedDay()
+    }
+    
+    private func setupLayout() {
+        dayTabsCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        mapView.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
-            mapView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
-            mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            dayTabsCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
+            dayTabsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            dayTabsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            dayTabsCollectionView.heightAnchor.constraint(equalToConstant: 40),
+            
+            mapView.topAnchor.constraint(equalTo: dayTabsCollectionView.bottomAnchor, constant: 16),
             mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-
-    private func setupFilterControl() {
-        filterSegmented.selectedSegmentIndex = 0
-        filterSegmented.addTarget(self, action: #selector(filterChanged), for: .valueChanged)
-        filterSegmented.translatesAutoresizingMaskIntoConstraints = false
-
-        view.addSubview(filterSegmented)
-        NSLayoutConstraint.activate([
-            filterSegmented.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
-            filterSegmented.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
-            filterSegmented.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12)
-        ])
-    }
-
-    @objc private func filterChanged() {
-        let index = filterSegmented.selectedSegmentIndex
-        if index == 0 {
-            filteredEvents = allEvents
-        } else {
-            let selectedCategory = EventCategory.allCases[index - 1]
-            filteredEvents = allEvents.filter { $0.category == selectedCategory }
-        }
+    
+    private func updateMapForSelectedDay() {
         mapView.removeAnnotations(mapView.annotations)
-        addAnnotations()
-    }
-
-    private func addAnnotations() {
-        for event in filteredEvents {
-            guard let coordinate = event.coordinate else { continue }
-
+        let day = viewModel.days[selectedDayIndex]
+        let annotations = day.events.map { event -> MKPointAnnotation in
             let annotation = EventAnnotation(event: event)
-            annotation.coordinate = coordinate
+            guard let eventCoordinate = event.coordinate else { return annotation }
+            annotation.coordinate = eventCoordinate
             annotation.title = event.locationName ?? event.category.displayName
-            annotation.subtitle = "🕒 \(event.time) • \(event.duration) min"
-            mapView.addAnnotation(annotation)
+            annotation.subtitle = "🕒 \(event.startTimeEvent) • \(event.duration) min"
+            return annotation
         }
-
-        if let first = filteredEvents.first?.coordinate {
-            let region = MKCoordinateRegion(center: first, latitudinalMeters: 1200, longitudinalMeters: 1200)
+        UIView.performWithoutAnimation {
+            mapView.addAnnotations(annotations)
+        }
+        if let first = annotations.first {
+            let region = MKCoordinateRegion(center: first.coordinate, latitudinalMeters: 1200, longitudinalMeters: 1200)
             mapView.setRegion(region, animated: true)
         }
     }
 }
 
-// MARK: - MKMapViewDelegate
+  // MARK: - CollectionView Delegate & DataSource
+
+  extension MapEventsViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+      func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+          return viewModel.days.count
+      }
+
+      func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+          let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DayTabCell.identifier, for: indexPath) as! DayTabCell
+          cell.configure(with: viewModel.days[indexPath.item].dateDay.formatted())
+          return cell
+      }
+
+      func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+          selectedDayIndex = indexPath.item
+          collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+          updateMapForSelectedDay()
+      }
+
+      func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+          return CGSize(width: 80, height: 32)
+      }
+  }
 
 extension MapEventsViewController: MKMapViewDelegate {
 
@@ -122,16 +149,9 @@ extension MapEventsViewController: MKMapViewDelegate {
         guard let eventAnnotation = view.annotation as? EventAnnotation else { return }
         let editorVC = EventEditorViewController(viewModel: EventEditorFactory.editViewModel(for: eventAnnotation.event))
         editorVC.onSave = { [weak self] updatedEvent in
-            self?.reload(updatedEvent)
+           // self?.reload(updatedEvent)
         }
         navigationController?.pushViewController(editorVC, animated: true)
-    }
-
-    private func reload(_ updated: EventModel) {
-        if let index = allEvents.firstIndex(where: { $0.id == updated.id }) {
-            allEvents[index] = updated
-        }
-        filterChanged()
     }
 }
 
@@ -145,4 +165,3 @@ class EventAnnotation: MKPointAnnotation {
         super.init()
     }
 }
-

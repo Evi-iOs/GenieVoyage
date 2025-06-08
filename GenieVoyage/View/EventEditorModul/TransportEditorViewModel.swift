@@ -28,7 +28,7 @@ final class TransportEditorViewModel: EventEditorConfigurable {
         return EventModel(
             id: existingEvent?.id ?? UUID(),
             category: .transport,
-            icon: UIImage(systemName: category.iconSystemName)!,
+            icon: UIImage(systemName: category.iconSystemName) ?? UIImage(systemName: "questionmark")!,
             time: DateFormatter.localizedString(from: startDate, dateStyle: .none, timeStyle: .short),
             startMinutes: Int(startDate.timeIntervalSince(Calendar.current.startOfDay(for: startDate)) / 60),
             duration: Int(endDate.timeIntervalSince(startDate)) / 60,

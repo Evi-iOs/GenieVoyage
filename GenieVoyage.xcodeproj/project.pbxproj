@@ -58,6 +58,7 @@
 		D0FC22652DE8AC430074C9AF /* TransportEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FC22642DE8AC430074C9AF /* TransportEditorViewModel.swift */; };
 		D0FC22672DE8AC720074C9AF /* FoodEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FC22662DE8AC720074C9AF /* FoodEditorViewModel.swift */; };
 		D0FC226A2DEA406A0074C9AF /* MapEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FC22692DEA406A0074C9AF /* MapEventsViewController.swift */; };
+		D0FC226C2DF2EFC40074C9AF /* DayTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FC226B2DF2EFC40074C9AF /* DayTabCell.swift */; };
 		E60A866E6B722F5F093D186B /* Pods_GenieVoyageTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 890A253B57967C505085FD95 /* Pods_GenieVoyageTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -152,6 +153,7 @@
 		D0FC22642DE8AC430074C9AF /* TransportEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportEditorViewModel.swift; sourceTree = "<group>"; };
 		D0FC22662DE8AC720074C9AF /* FoodEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodEditorViewModel.swift; sourceTree = "<group>"; };
 		D0FC22692DEA406A0074C9AF /* MapEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapEventsViewController.swift; sourceTree = "<group>"; };
+		D0FC226B2DF2EFC40074C9AF /* DayTabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayTabCell.swift; sourceTree = "<group>"; };
 		EC48F7F4B016AF516F86CCCC /* Pods-GenieVoyageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GenieVoyageTests.release.xcconfig"; path = "Target Support Files/Pods-GenieVoyageTests/Pods-GenieVoyageTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -212,6 +214,7 @@
 			children = (
 				D043B43C2CFF6DDE00151ED0 /* TripViewController.swift */,
 				D0FC22692DEA406A0074C9AF /* MapEventsViewController.swift */,
+				D0FC226B2DF2EFC40074C9AF /* DayTabCell.swift */,
 				D04945B22D3A451B00232F26 /* EventCollectionViewCell.swift */,
 				D05D92E52D4B8CB10022C734 /* DayCollectionViewCell.swift */,
 				D06C7F2B2DE6197600402EA0 /* Constants.swift */,
@@ -592,6 +595,7 @@
 				D043B43D2CFF6DDE00151ED0 /* TripViewController.swift in Sources */,
 				D03D08652D0730CE009F8E63 /* PlanDayDetailViewController.swift in Sources */,
 				D06C7F242DBC1E4100402EA0 /* CheckListViewController.swift in Sources */,
+				D0FC226C2DF2EFC40074C9AF /* DayTabCell.swift in Sources */,
 				D0D192DC2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld in Sources */,
 				D06C7F322DE7A9C000402EA0 /* EventEditorConfigurable.swift in Sources */,
 				D0365DF32CFA6D3500D711A9 /* AllTripsViewController.swift in Sources */,

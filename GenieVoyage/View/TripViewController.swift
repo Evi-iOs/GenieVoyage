@@ -320,8 +320,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     }
     
     @objc private func mapButtonTapped() {
-        let allEvents = viewModel.allEvents()
-        let mapVC = MapEventsViewController(events: allEvents)
+        let mapVC = MapEventsViewController(viewModel: viewModel)
         navigationController?.pushViewController(mapVC, animated: true)
     }
     

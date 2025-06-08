@@ -65,3 +65,16 @@ enum EventCategory: String, CaseIterable {
         }
     }
 }
+
+extension EventModel {
+    var startTimeEvent: String {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let date = calendar.date(byAdding: .minute, value: startMinutes, to: today)!
+
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: date)
+    }
+}
+
