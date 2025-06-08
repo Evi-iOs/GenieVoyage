@@ -20,6 +20,11 @@ class DayCollectionViewCell: UICollectionViewCell {
         
     var viewModel: DayViewModel? {
         didSet {
+            DispatchQueue.main.async {[weak self] in
+                guard let self = self else { return }
+                self.scrollToStartHour()
+            }
+            
             viewModel?.onUpdate = { [weak self] in
                 guard let self = self else { return }
                 self.itineraryCollectionView.reloadData()
@@ -91,8 +96,7 @@ class DayCollectionViewCell: UICollectionViewCell {
     }
     
     private func scrollToStartHour() {
-        guard let hours = viewModel?.hours, let index = hours.firstIndex(of: "08:00"),
-              itineraryCollectionView.numberOfItems(inSection: 0) > index else { return }
+        guard let hours = viewModel?.hours, let index = hours.firstIndex(of: "08:00") else { return }
         
         let indexPath = IndexPath(item: index, section: 0)
         itineraryCollectionView.scrollToItem(at: indexPath, at: .top, animated: false)
