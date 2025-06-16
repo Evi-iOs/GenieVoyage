@@ -97,22 +97,4 @@ class DayViewModel {
         
         cell.layer.add(animation, forKey: "shake")
     }
-    
-    func openExistingEventEditorViewController(for event: EventModel) -> UIViewController {
-        let viewModel = EventEditorFactory.editViewModel(for: event)
-        let editorVC = EventEditorViewController(viewModel: viewModel)
-        editorVC.onSave = { [weak self] updatedEvent in
-            guard let self = self else { return }
-            self.update(event: updatedEvent)
-        }
-        return editorVC
-    }
-    
-    func createEventEditorViewController(category: EventCategory, startMinutes: Int, onSave: @escaping (EventModel) -> Void) -> UIViewController {
-        let viewModel = EventEditorFactory.newViewModel(for: category)
-        let editorVC = EventEditorViewController(viewModel: viewModel)
-        editorVC.preselectedStartMinutes = startMinutes
-        editorVC.onSave = onSave
-        return editorVC
-    }
 }

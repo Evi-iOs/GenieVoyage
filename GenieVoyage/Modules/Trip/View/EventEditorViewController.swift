@@ -32,6 +32,7 @@ final class EventEditorViewController: UIViewController {
     private var selectedLocationName: String?
 
     var onSave: ((EventModel) -> Void)?
+    var onClose: (() -> Void)?
 
     init(viewModel: EventEditorConfigurable) {
         self.viewModel = viewModel

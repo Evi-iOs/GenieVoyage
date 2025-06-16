@@ -125,20 +125,17 @@ extension TripDetailViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return trip.destinations?.count ?? 0
+        return trip.events?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "DestinationCell", for: indexPath)
-        let destination = trip.destinations?[indexPath.row]
-        cell.textLabel?.text = destination?.name
-        cell.detailTextLabel?.text = destination?.details
+        cell.textLabel?.text = trip.title
+        cell.detailTextLabel?.text = trip.description
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let destination = trip.destinations?[indexPath.row]
-        printContent("Selected destination: \(String(describing: destination?.name))")
     }
 }

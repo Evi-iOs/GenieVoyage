@@ -195,7 +195,6 @@ class EventViewController: UIViewController {
                 location: location,
                 category: nil
             )
-            self?.selectedDestination = newDestination
             self?.selectedLocation = location
             self?.updateMap()
         }

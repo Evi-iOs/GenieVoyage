@@ -20,7 +20,7 @@ class TripViewModel {
         }
     }
     
-    private let trip: TripModel
+    var trip: TripModel
 
     init(trip: TripModel) {
         self.trip = trip

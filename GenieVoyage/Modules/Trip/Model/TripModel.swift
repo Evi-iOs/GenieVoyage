@@ -9,43 +9,15 @@ import Foundation
 import CoreLocation
 
 struct TripModel {
-    let id: UUID
+    var id: UUID
     var title: String
     var description: String?
     var startDate: Date
     var endDate: Date
-    var destinations: [DestinationModel]?
     var notes: String?
     var coverImage: URL?
+    var events: [EventModel]?
 }
-
-struct DestinationModel {
-    let id: UUID
-    var name: String
-    var details: String?
-    var date: Date
-    var notes: String
-    var location: CLLocationCoordinate2D?
-    var category: DestinationCategory?
-}
-
-enum DestinationCategory: String {
-    case food, attraction, hotel, transport, shopping
-}
-
-struct DayPlan {
-    let date: Date
-    var events: [Event]
-}
-
-struct Event {
-    let title: String
-    let time: Date
-    let description: String?
-    let destination: DestinationModel?
-    var files: [URL]
-}
-
 
 
 //TO DO next Version:

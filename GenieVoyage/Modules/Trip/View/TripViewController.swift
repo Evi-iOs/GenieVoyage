@@ -10,10 +10,13 @@ import Photos
 
 class TripViewController: UIViewController, UIImagePickerControllerDelegate, SegmentedControlDelegate, UINavigationControllerDelegate, UITextViewDelegate {
     
-    var trip: TripModel
     var onSave: ((TripModel) -> Void)?
+    var onMapTapped: (() -> Void)?
+    var onClose: (() -> Void)?
     
-    private lazy var viewModel = TripViewModel(trip: trip)
+    weak var delegate: TripViewControllerDelegate?
+        
+    private let viewModel: TripViewModel
     
     // MARK: UI elements
     private let destinationLabel = UILabel()
@@ -29,9 +32,8 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         
     private let saveButton = UIButton(type: .system)
     
-    init(trip: TripModel, onSave: ((TripModel) -> Void)? = nil) {
-        self.trip = trip
-        self.onSave = onSave
+    init(viewModel: TripViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -81,14 +83,14 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         
-        navigationItem.title = "Trip to \(trip.title)"
+        navigationItem.title = "Trip to \(viewModel.trip.title)"
         
         destinationLabel.text = "Destination"
         destinationLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         destinationLabel.textColor = UIColor.gray
         destinationLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        titleText.text = trip.title
+        titleText.text = viewModel.trip.title
         titleText.font = UIFont.boldSystemFont(ofSize: 18)
         titleText.isScrollEnabled = true
         titleText.textContainer.lineBreakMode = .byWordWrapping
@@ -96,7 +98,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         titleText.delegate = self
         titleText.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         
-        datesLabel.text = "\(trip.startDate.formattedDateWeekDay()) - \(trip.endDate.formattedDateWeekDay())"
+        datesLabel.text = "\(viewModel.trip.startDate.formattedDateWeekDay()) - \(viewModel.trip.endDate.formattedDateWeekDay())"
         datesLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         datesLabel.translatesAutoresizingMaskIntoConstraints = false
         
@@ -136,8 +138,6 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         view.addSubview(daysCollectionView)
         view.addSubview(saveButton)
         view.addSubview(floatingMapButton)
-        
-        floatingMapButton.addTarget(self, action: #selector(mapButtonTapped), for: .touchUpInside)
     }
     
     private func setupIconButtons() {
@@ -159,13 +159,13 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     }
     
     private func configureUI() {
-        titleText.text = trip.title
+        titleText.text = viewModel.trip.title
         let dateFormater = DateFormatter()
         dateFormater.dateFormat = "dd/MM/yyyy"
-        if let startDate = dateFormater.date(from: trip.startDate.description) {
+        if let startDate = dateFormater.date(from: viewModel.trip.startDate.description) {
             startDatePicker.date = startDate
         }
-        if let endDate = dateFormater.date(from: trip.endDate.description) {
+        if let endDate = dateFormater.date(from: viewModel.trip.endDate.description) {
             endDatePicker.date = endDate
         }
     }
@@ -281,15 +281,14 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
             showAlert(message: "Enter title Trip")
             return
         }
-        let startDate = startDatePicker.date
-        let endDate = endDatePicker.date
         
-        let newTrip = TripModel(
-            id: UUID(), title: title, description: description, startDate: startDate, endDate: endDate, destinations: trip.destinations ?? [])
+        viewModel.trip.id = UUID()
+        viewModel.trip.title = title
+        viewModel.trip.description = description
+        viewModel.trip.startDate = startDatePicker.date
+        viewModel.trip.endDate = endDatePicker.date
         
-        onSave?(newTrip)
-        //TODO: save CoreData
-        navigationController?.popViewController(animated: true)
+        onSave?(viewModel.trip)
     }
     
     @objc private func addCoverTapped() {
@@ -315,13 +314,11 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     }
     
     @objc private func cancelButtonTapped() {
-        print("Cancel editing")
-        navigationController?.popViewController(animated: true)
+        onClose?()
     }
     
     @objc private func mapButtonTapped() {
-        let mapVC = MapEventsViewController(viewModel: viewModel)
-        navigationController?.pushViewController(mapVC, animated: true)
+        onMapTapped?()
     }
     
     private func showAlert(message: String) {
@@ -349,6 +346,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         button.layer.masksToBounds = false
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .black
+        button.addTarget(TripViewController.self, action: #selector(mapButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -475,48 +473,19 @@ extension TripViewController: DayCellDelegate {
     
     func dayCell(_ cell: DayCollectionViewCell, didRequestOpenEvent event: EventModel) {
         guard let dayViewModel = cell.viewModel else { return }
-        presentModalVC(VC: dayViewModel.openExistingEventEditorViewController(for: event))
+        delegate?.didRequestOpenEvent(dayViewModel: dayViewModel, event: event)
     }
     
     func dayCell(_ cell: DayCollectionViewCell, didDropEventWith category: EventCategory, at time: String) {
         guard let dayViewModel = cell.viewModel else { return }
+        let date = Date()
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        
-        guard let date = formatter.date(from: time) else { return }
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.hour, .minute], from: date)
-        guard let hour = components.hour, let minute = components.minute else { return }
-        
-        let startMinutes = hour * 60 + minute
-        
-        let vc = dayViewModel.createEventEditorViewController( category: category, startMinutes: startMinutes) { newEvent in
-            var updatedEvent = newEvent
-            updatedEvent.startMinutes = startMinutes
-            dayViewModel.addEvent(updatedEvent)
-        }
-        presentModalVC(VC: vc)
+        delegate?.didDropEvent(dayViewModel: dayViewModel, didDropEventWith: category, at: date.getStartMinutes(time: time) ?? 0)
     }
     
     func dayCell(_ cell: DayCollectionViewCell, didRequestAddEventAt minutes: Int) {
         guard let dayViewModel = cell.viewModel else { return }
-        
-        let vc = dayViewModel.createEventEditorViewController(category: .point, startMinutes: minutes) { newEvent in
-            var updatedEvent = newEvent
-            updatedEvent.startMinutes = minutes
-            dayViewModel.addEvent(updatedEvent)
-        }
-        presentModalVC(VC: vc)
-    }
-    
-    private func presentModalVC(VC: UIViewController) {
-        VC.modalPresentationStyle = .pageSheet
-        if let sheet = VC.sheetPresentationController {
-            sheet.detents = [.medium()]
-            sheet.prefersGrabberVisible = true
-        }
-        present(VC, animated: true)
+        delegate?.didDropEvent(dayViewModel: dayViewModel, didDropEventWith: .point, at: minutes)
     }
     
     func dayCellDidScroll(upward: Bool) {

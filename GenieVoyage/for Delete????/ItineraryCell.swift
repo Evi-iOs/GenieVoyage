@@ -56,24 +56,24 @@ class ItineraryCell: UITableViewCell {
         ])
     }
     
-    func configure(with dayPlan: DayPlan) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dayLabel.text = "Day: \(dateFormatter.string(from: dayPlan.date))"
-        
-        eventStackView.arrangedSubviews.forEach { $0.removeFromSuperview() } // Clear existing events
-        if dayPlan.events.isEmpty {
-            let noEventLabel = UILabel()
-            noEventLabel.text = "No events for this day."
-            noEventLabel.textColor = .gray
-            noEventLabel.font = .italicSystemFont(ofSize: 14)
-            eventStackView.addArrangedSubview(noEventLabel)
-        } else {
-            dayPlan.events.forEach { event in
-                let eventLabel = UILabel()
-                eventLabel.text = "- \(event.title) at \(DateFormatter.localizedString(from: event.time, dateStyle: .none, timeStyle: .short))"
-                eventStackView.addArrangedSubview(eventLabel)
-            }
-        }
-    }
+//    func configure(with dayPlan: DayPlan) {
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateStyle = .medium
+//        dayLabel.text = "Day: \(dateFormatter.string(from: dayPlan.date))"
+//        
+//        eventStackView.arrangedSubviews.forEach { $0.removeFromSuperview() } // Clear existing events
+//        if dayPlan.events.isEmpty {
+//            let noEventLabel = UILabel()
+//            noEventLabel.text = "No events for this day."
+//            noEventLabel.textColor = .gray
+//            noEventLabel.font = .italicSystemFont(ofSize: 14)
+//            eventStackView.addArrangedSubview(noEventLabel)
+//        } else {
+//            dayPlan.events.forEach { event in
+//                let eventLabel = UILabel()
+//                eventLabel.text = "- \(event.title) at \(DateFormatter.localizedString(from: event.time, dateStyle: .none, timeStyle: .short))"
+//                eventStackView.addArrangedSubview(eventLabel)
+//            }
+//        }
+//    }
 }

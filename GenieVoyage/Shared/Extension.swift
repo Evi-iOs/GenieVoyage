@@ -62,6 +62,19 @@ extension Date {
         formatter.dateFormat = format
         return formatter.string(from: self)
     }
+    
+    func getStartMinutes(time: String) -> Int? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        
+        guard let date = formatter.date(from: time) else { return nil }
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.hour, .minute], from: date)
+        guard let hour = components.hour, let minute = components.minute else { return nil }
+        
+        let startMinutes = hour * 60 + minute
+        return startMinutes
+    }
 }
 
 extension UIButton {

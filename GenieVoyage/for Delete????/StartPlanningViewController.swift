@@ -8,6 +8,9 @@
 import UIKit
 
 class StartPlanningViewController: UIViewController {
+    
+    var onSave: ((TripModel) -> Void)?
+    var onClose: (() -> Void)?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,13 +82,9 @@ class StartPlanningViewController: UIViewController {
             showAlert(message: "Enter title Trip")
             return
         }
-        let trip = TripModel(id: UUID(), title: title, startDate: startDatePicker.date, endDate: endDatePicker.date)
+        let trip = TripModel(id: UUID(), title: title, startDate: startDatePicker.date, endDate: endDatePicker.date, events: nil)
         
-        let addTripVC = TripViewController(trip: trip)
-
-        self.navigationController?.pushViewController(addTripVC, animated: true)
-    
-        //TODO: save CoreData
+        self.onSave?(trip)
     }
     
     private func showAlert(message: String) {
