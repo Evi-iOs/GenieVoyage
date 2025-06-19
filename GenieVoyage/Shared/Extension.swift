@@ -209,5 +209,35 @@ extension UIColor {
     }
 }
 
+extension UIView {
+    func findViewController() -> UIViewController? {
+        var responder: UIResponder? = self
+        while responder != nil {
+            if let vc = responder as? UIViewController {
+                return vc
+            }
+            responder = responder?.next
+        }
+        return nil
+    }
+}
+
+extension UIViewController {
+    func presentDeletionConfirmation(title: String = "Delete event?",
+                                     message: String = "This action cannot be undone.",
+                                     confirmTitle: String = "Delete",
+                                     cancelTitle: String = "Cancel",
+                                     onConfirm: @escaping () -> Void) {
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: cancelTitle, style: .cancel))
+        alert.addAction(UIAlertAction(title: confirmTitle, style: .destructive) { _ in
+            onConfirm()
+        })
+        
+        self.present(alert, animated: true)
+    }
+}
 
 

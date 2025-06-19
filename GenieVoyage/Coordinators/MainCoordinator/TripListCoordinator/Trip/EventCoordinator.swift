@@ -58,10 +58,18 @@ class EventCoordinator: Coordinator {
                 self?.onFinish?()
             }
         }
+        
+        editorVC.onEventDeleted = { [weak self] deleteEvent in
+            if let eventToDelete = deleteEvent {
+                self?.dayViewModel.removeEvent(eventToDelete)
+            }
+            self?.navigationController.dismiss(animated: true) {
+                self?.onFinish?()
+            }
+        }
         presentModal(viewController: editorVC)
     }
 
-        
     private func presentModal(viewController: UIViewController) {
         viewController.modalPresentationStyle = .pageSheet
         if let sheet = viewController.sheetPresentationController {

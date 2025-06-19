@@ -18,7 +18,16 @@ final class EventEditorViewController: UIViewController {
     private let headerView = UIView()
     private let saveButton = UIButton(type: .system)
     private let closeButton = UIButton(type: .system)
-
+    private let deleteEventButton = UIButton(type: .system)
+    
+    private let detailsTitleLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.boldSystemFont(ofSize: 17)
+        label.text = "Details"
+        label.textColor = .black
+        return label
+    }()
+    
     private let beginPicker = UIDatePicker()
     private let endPicker = UIDatePicker()
 
@@ -33,7 +42,8 @@ final class EventEditorViewController: UIViewController {
 
     var onSave: ((EventModel) -> Void)?
     var onClose: (() -> Void)?
-
+    var onEventDeleted: ((EventModel?) -> Void)?
+    
     init(viewModel: EventEditorConfigurable) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -47,7 +57,7 @@ final class EventEditorViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        setupHeader()
+        setupButtons()
         setupTimePickers()
         setupSearchField()
         setupSearch()
@@ -56,12 +66,14 @@ final class EventEditorViewController: UIViewController {
 
     // MARK: - Setup UI
 
-    private func setupHeader() {
+    private func setupButtons() {
         view.addSubview(headerView)
         headerView.translatesAutoresizingMaskIntoConstraints = false
 
         headerView.addSubview(saveButton)
         headerView.addSubview(closeButton)
+        headerView.addSubview(detailsTitleLabel)
+        view.addSubview(deleteEventButton)
 
         saveButton.setTitle("Save", for: .normal)
         saveButton.addTarget(self, action: #selector(saveTapped), for: .touchUpInside)
@@ -72,9 +84,16 @@ final class EventEditorViewController: UIViewController {
         closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
         closeButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         closeButton.titleLabel?.tintColor = .red
+        
+        deleteEventButton.setTitle("Delete Event", for: .normal)
+        deleteEventButton.addTarget(self, action: #selector(deleteTapped), for: .touchUpInside)
+        deleteEventButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        deleteEventButton.titleLabel?.tintColor = .red
 
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         closeButton.translatesAutoresizingMaskIntoConstraints = false
+        deleteEventButton.translatesAutoresizingMaskIntoConstraints = false
+        detailsTitleLabel.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             headerView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -86,7 +105,13 @@ final class EventEditorViewController: UIViewController {
             saveButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
             
             closeButton.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
-            closeButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor)
+            closeButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+            
+            detailsTitleLabel.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
+            detailsTitleLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+            
+            deleteEventButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            deleteEventButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16)
         ])
     }
 
@@ -188,6 +213,12 @@ final class EventEditorViewController: UIViewController {
 
     @objc private func closeTapped() {
         dismiss(animated: true)
+    }
+    
+    @objc private func deleteTapped() {
+        presentDeletionConfirmation { [weak self] in
+            self?.onEventDeleted?(self?.viewModel.existingEvent)
+        }
     }
 
     private func validateTimes() -> Bool {

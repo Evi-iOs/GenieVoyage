@@ -19,4 +19,5 @@ protocol DayCellDelegate: AnyObject {
     
     func dayCell(_ cell: DayCollectionViewCell, didRequestOpenEvent event: EventModel)
     
+    func dayCellDidDeleteEvent(_ cell: DayCollectionViewCell, event: EventModel)
 }

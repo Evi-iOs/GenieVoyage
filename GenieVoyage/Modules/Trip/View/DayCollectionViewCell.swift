@@ -182,9 +182,8 @@ class DayCollectionViewCell: UICollectionViewCell {
         
         eventView.onDelete = { [weak self] in
             guard let self = self else { return }
-            self.viewModel?.removeEvent(event)
+            self.dayCellDelegate?.dayCellDidDeleteEvent(self, event: event)
             self.renderEventsOverlay()
-            //self.dayCellDelegate?.dayCellDidDeleteEvent(event)
         }
 
         eventView.onDuplicate = { [weak self] in

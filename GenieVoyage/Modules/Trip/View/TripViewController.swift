@@ -489,6 +489,13 @@ extension TripViewController: DayCellDelegate {
         delegate?.didDropEvent(dayViewModel: dayViewModel, didDropEventWith: .point, at: minutes)
     }
     
+    func dayCellDidDeleteEvent(_ cell: DayCollectionViewCell, event: EventModel) {
+        guard let dayViewModel = cell.viewModel else { return }
+        self.presentDeletionConfirmation {
+            dayViewModel.removeEvent(event)
+        }
+    }
+    
     func dayCellDidScroll(upward: Bool) {
         if upward {
             showFloatingMapButton()
