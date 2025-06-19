@@ -45,7 +45,13 @@ final class TripListViewController: UIViewController {
     }
     
     func addNewTrip(trip: TripModel) {
-        trips.append(trip)
+        if trips.contains(where: { $0.id == trip.id }) {
+            if let index = trips.firstIndex(where: { $0.id == trip.id }) {
+                trips[index] = trip
+            }
+        } else {
+            trips.append(trip)
+        }
         tableView.reloadData()
     }
     

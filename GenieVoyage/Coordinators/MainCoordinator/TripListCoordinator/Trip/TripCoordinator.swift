@@ -23,6 +23,8 @@ class TripCoordinator: Coordinator {
     func start() {
         let viewModel = TripViewModel(trip: trip)
         let tripVC = TripViewController(viewModel: viewModel)
+        tripVC.hidesBottomBarWhenPushed = true
+        tripVC.delegate = self
         
         tripVC.onSave = { [weak self] updatedTrip in
             viewModel.trip = updatedTrip
@@ -34,7 +36,6 @@ class TripCoordinator: Coordinator {
         tripVC.onMapTapped = { [weak self] in
             self?.showMap(for: viewModel)
         }
-        
         navigationController.pushViewController(tripVC, animated: true)
     }
     

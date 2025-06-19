@@ -11,7 +11,7 @@ import UIKit
 class TripListCoordinator: Coordinator {
     var navigationController: UINavigationController
     var childCoordinators = [Coordinator]()
-    
+        
     private var tripListVC: TripListViewController?
 
     init(navigationController: UINavigationController) {
@@ -21,9 +21,16 @@ class TripListCoordinator: Coordinator {
     func start() {
         let tripListVC = TripListViewController()
         self.tripListVC = tripListVC
-        tripListVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "list.bullet.circle")?.withRenderingMode(.alwaysOriginal), selectedImage: UIImage(named: "list.bullet.circle.fill")?.withRenderingMode(.alwaysOriginal))
-        tripListVC.tabBarItem.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
-        tripListVC.tabBarItem.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: 300)
+        
+        let image = UIImage.resizedSystemImage(named: "list.bullet.circle", scale: 1.7)
+        let selectedImage = UIImage.resizedSystemImage(named: "list.bullet.circle.fill", scale: 1.7)
+        
+        tripListVC.tabBarItem = UITabBarItem(
+            title: "Trips",
+            image: image,
+            selectedImage: selectedImage
+        )
+        tripListVC.tabBarItem.imageInsets = UIEdgeInsets(top: 1, left: 0, bottom: -1, right: 0)
         
         tripListVC.onTripSelected = { [weak self] trip in
             self?.showTripDetail(for: trip)

@@ -11,13 +11,13 @@ import CoreLocation
 
 class MapEventsViewController: UIViewController {
     
-    private let viewModel: TripViewModel
+    private let viewModel: TripViewModel?
     private var selectedDayIndex = 0
     
     private var isRouteVisible = true
     private let locationManager = CLLocationManager()
     
-    init(viewModel: TripViewModel) {
+    init(viewModel: TripViewModel?) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -142,8 +142,8 @@ class MapEventsViewController: UIViewController {
         mapView.removeAnnotations(mapView.annotations)
         mapView.removeOverlays(mapView.overlays)
         
-        let day = viewModel.days[selectedDayIndex]
-        let annotations = day.events.map { event -> MKPointAnnotation in
+        let day = viewModel?.days[selectedDayIndex]
+        let annotations = day?.events.map { event -> MKPointAnnotation in
             let annotation = EventAnnotation(event: event)
             guard let eventCoordinate = event.coordinate else { return annotation }
             annotation.coordinate = eventCoordinate
@@ -152,11 +152,12 @@ class MapEventsViewController: UIViewController {
             return annotation
         }
         
-        if let first = annotations.first {
+        if let first = annotations?.first {
             let region = MKCoordinateRegion(center: first.coordinate, latitudinalMeters: 1200, longitudinalMeters: 1200)
             mapView.setRegion(region, animated: true)
         }
         
+        guard let day = day, let annotations = annotations else { return }
         mapView.addAnnotations(annotations)
         
         if isRouteVisible {
@@ -215,12 +216,12 @@ class MapEventsViewController: UIViewController {
 
   extension MapEventsViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
       func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-          return viewModel.days.count
+          return viewModel?.days.count ?? 1
       }
 
       func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
           let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DayTabCell.identifier, for: indexPath) as! DayTabCell
-          cell.configure(with: viewModel.days[indexPath.item].dateDay.formattedDay())
+          cell.configure(with: viewModel?.days[indexPath.item].dateDay.formattedDay() ?? "")
           return cell
       }
 

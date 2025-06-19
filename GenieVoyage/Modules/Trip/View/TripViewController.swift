@@ -138,6 +138,8 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         view.addSubview(daysCollectionView)
         view.addSubview(saveButton)
         view.addSubview(floatingMapButton)
+        
+        floatingMapButton.addTarget(self, action: #selector(mapButtonTapped), for: .touchUpInside)
     }
     
     private func setupIconButtons() {
@@ -346,7 +348,6 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         button.layer.masksToBounds = false
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .black
-        button.addTarget(TripViewController.self, action: #selector(mapButtonTapped), for: .touchUpInside)
         return button
     }()
 

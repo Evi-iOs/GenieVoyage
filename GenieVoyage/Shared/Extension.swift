@@ -146,6 +146,18 @@ extension UIImage {
             image.draw(in: CGRect(origin: .zero, size: size))
         }
     }
+    
+    static func resizedSystemImage(named name: String, scale: CGFloat) -> UIImage? {
+        guard let image = UIImage(systemName: name) else { return nil }
+        let newSize = CGSize(width: image.size.width * scale, height: image.size.height * scale)
+
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
+        image.draw(in: CGRect(origin: .zero, size: newSize))
+        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return resizedImage?.withRenderingMode(.alwaysTemplate)
+    }
 }
     
 extension DestinationCategory {
