@@ -11,11 +11,19 @@ class StartPlanningViewController: UIViewController {
     
     var onSave: ((TripModel) -> Void)?
     var onClose: (() -> Void)?
+    
+    var existingTrip: TripModel?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupConstraints()
+        
+        if let trip = existingTrip {
+            titleTextField.text = trip.title
+            startDatePicker.date = trip.startDate
+            endDatePicker.date = trip.endDate
+        }
     }
     
     private let titleTextField = UITextField()
@@ -82,11 +90,30 @@ class StartPlanningViewController: UIViewController {
             showAlert(message: "Enter title Trip")
             return
         }
-        let trip = TripModel(id: UUID(), title: title, startDate: startDatePicker.date, endDate: endDatePicker.date, events: nil)
-        
-        self.onSave?(trip)
+
+        let startDate = startDatePicker.date
+        let endDate = endDatePicker.date
+
+        let updatedTrip: TripModel
+
+        if var existingTrip = existingTrip {
+            existingTrip.title = title
+            existingTrip.startDate = startDate
+            existingTrip.endDate = endDate
+            updatedTrip = existingTrip
+        } else {
+            updatedTrip = TripModel(
+                id: UUID(),
+                title: title,
+                startDate: startDate,
+                endDate: endDate,
+                events: nil
+            )
+            existingTrip = updatedTrip
+        }
+        self.onSave?(updatedTrip)
     }
-    
+
     private func showAlert(message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
