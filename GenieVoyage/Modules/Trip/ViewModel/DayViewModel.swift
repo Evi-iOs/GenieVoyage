@@ -58,6 +58,25 @@ class DayViewModel {
         events[index].duration = newDuration
     }
     
+    func removeEvent(_ eventId: EventModel) {
+        events.removeAll { $0.id == eventId.id }
+        onUpdate?()
+    }
+    
+    func duplicateEvent(_ event: EventModel) {
+        let newId = UUID()
+        let newEvent = EventModel(
+            id: newId,
+            category: event.category,
+            icon: event.icon,
+            time: event.time,
+            startMinutes: event.startMinutes,
+            duration: event.duration
+        )
+        events.append(newEvent)
+        onUpdate?()
+    }
+    
     func showOccupiedSlotAlert() {
         let alert = UIAlertController(
             title: "Time is occupied",

@@ -14,7 +14,7 @@ struct TripDay {
     let itineraryEvents: [EventModel]
 }
 
-struct EventModel {
+struct EventModel: Equatable {
     let id: UUID
     let category: EventCategory
     let icon: UIImage
@@ -23,6 +23,13 @@ struct EventModel {
     var duration: Int
     var locationName: String?
     var coordinate: CLLocationCoordinate2D?
+    
+    static func == (lhs: EventModel, rhs: EventModel) -> Bool {
+            return lhs.id == rhs.id &&
+                   lhs.startMinutes == rhs.startMinutes &&
+                   lhs.duration == rhs.duration &&
+                   lhs.category == rhs.category
+        }
 }
 
 let allCases: [EventCategory] = [.transport, .transfer, .hotel, .point, .food]

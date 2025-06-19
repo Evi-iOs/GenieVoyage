@@ -20,6 +20,8 @@ class DayCollectionViewCell: UICollectionViewCell {
         
     var viewModel: DayViewModel? {
         didSet {
+            guard oldValue !== viewModel else { return }
+
             DispatchQueue.main.async {[weak self] in
                 guard let self = self else { return }
                 self.scrollToStartHour()
@@ -177,6 +179,20 @@ class DayCollectionViewCell: UICollectionViewCell {
             guard let self = self else { return }
             self.dayCellDelegate?.dayCell(self, didRequestOpenEvent: event)
         }
+        
+        eventView.onDelete = { [weak self] in
+            guard let self = self else { return }
+            self.viewModel?.removeEvent(event)
+            self.renderEventsOverlay()
+            //self.dayCellDelegate?.dayCellDidDeleteEvent(event)
+        }
+
+        eventView.onDuplicate = { [weak self] in
+            guard let self = self else { return }
+            self.viewModel?.duplicateEvent(event)
+            self.renderEventsOverlay()
+        }
+
         return eventView
     }
     

@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class EventView: UIView {
+final class EventView: UIView, UIContextMenuInteractionDelegate {
     
     var event: EventModel {
         didSet {
@@ -20,6 +20,8 @@ final class EventView: UIView {
     var onMoveEnd: (() -> Void)?
     var onResizeEnd: (() -> Void)?
     var onTap: (() -> Void)?
+    var onDelete: (() -> Void)?
+    var onDuplicate: (() -> Void)?
     
     var topConstraint: NSLayoutConstraint?
     var heightConstraint: NSLayoutConstraint?
@@ -72,6 +74,9 @@ final class EventView: UIView {
         resizeHandle.backgroundColor = .white
         resizeHandle.layer.cornerRadius = 3
         addSubview(resizeHandle)
+        
+        let interaction = UIContextMenuInteraction(delegate: self)
+        addInteraction(interaction)
         
         NSLayoutConstraint.activate([
             resizeHandle.heightAnchor.constraint(equalToConstant: 3),
@@ -160,5 +165,19 @@ final class EventView: UIView {
     
     @objc private func handleTap() {
         onTap?()
+    }
+    
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive) { _ in
+                self.onDelete?()
+            }
+
+            let duplicate = UIAction(title: "Duplicate", image: UIImage(systemName: "doc.on.doc")) { _ in
+                self.onDuplicate?()
+            }
+
+            return UIMenu(title: "", children: [duplicate, delete])
+        }
     }
 }
