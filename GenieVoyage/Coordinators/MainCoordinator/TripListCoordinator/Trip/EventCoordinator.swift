@@ -7,23 +7,29 @@
 
 import Foundation
 import UIKit
+import CoreLocation
 
 class EventCoordinator: Coordinator {
     var navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
     var onFinish: (() -> Void)?
+    var onSave: (() -> Void)?
     
     private var dayViewModel: DayViewModel
     private var event: EventModel?
     private var category: EventCategory?
     private var startMinutes: Int?
+    private var selectedLocationName: String?
+    private var coordinates: CLLocationCoordinate2D?
     
-    init(navigationController: UINavigationController, event: EventModel?, dayViewModel: DayViewModel, category: EventCategory?, startMinutes: Int?) {
+    init(navigationController: UINavigationController, event: EventModel?, dayViewModel: DayViewModel, category: EventCategory?, startMinutes: Int?, selectedLocationName: String?, coordinates: CLLocationCoordinate2D?) {
         self.navigationController = navigationController
         self.event = event
         self.dayViewModel = dayViewModel
         self.category = category
         self.startMinutes = startMinutes
+        self.selectedLocationName = selectedLocationName
+        self.coordinates = coordinates
     }
     
     func start() {
@@ -40,6 +46,8 @@ class EventCoordinator: Coordinator {
 
         let editorVC = EventEditorViewController(viewModel: viewModel)
         editorVC.preselectedStartMinutes = startMinutes
+        editorVC.selectedLocationName = selectedLocationName
+        editorVC.selectedCoordinate = coordinates
 
         editorVC.onClose = { [weak self] in
             self?.navigationController.dismiss(animated: true) {
@@ -52,7 +60,13 @@ class EventCoordinator: Coordinator {
             if let startMinutes = self?.startMinutes {
                 updatedEvent.startMinutes = startMinutes
             }
+            if let selectedLocationName = self?.selectedLocationName, let coordinate = self?.coordinates {
+                updatedEvent.locationName = selectedLocationName
+                updatedEvent.coordinate = coordinate
+            }
             self?.dayViewModel.addEvent(updatedEvent)
+            
+            self?.onSave?()
             
             self?.navigationController.dismiss(animated: true) {
                 self?.onFinish?()

@@ -12,6 +12,8 @@ import MapKit
 final class EventEditorViewController: UIViewController {
 
     var preselectedStartMinutes: Int?
+    var selectedLocationName: String?
+    var selectedCoordinate: CLLocationCoordinate2D?
 
     private var viewModel: EventEditorConfigurable
 
@@ -36,9 +38,6 @@ final class EventEditorViewController: UIViewController {
     
     private let searchCompleter = MKLocalSearchCompleter()
     private var searchResults = [MKLocalSearchCompletion]()
-    
-    private var selectedCoordinate: CLLocationCoordinate2D?
-    private var selectedLocationName: String?
 
     var onSave: ((EventModel) -> Void)?
     var onClose: (() -> Void)?
@@ -150,7 +149,7 @@ final class EventEditorViewController: UIViewController {
     }
 
     private func setupSearchField() {
-        locationTextField.placeholder = "Enter location"
+        locationTextField.placeholder = self.selectedLocationName ?? "Enter location"
         locationTextField.borderStyle = .roundedRect
         locationTextField.translatesAutoresizingMaskIntoConstraints = false
         locationTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
@@ -199,11 +198,9 @@ final class EventEditorViewController: UIViewController {
             let startOfDay = calendar.startOfDay(for: beginPicker.date)
             let rawMinutes = Int(beginPicker.date.timeIntervalSince(startOfDay) / 60)
             
-            guard let address = locationTextField.text, !address.isEmpty, validateTimes() else { return }
-            
             model.startMinutes = rawMinutes
             model.duration = Int(endPicker.date.timeIntervalSince(beginPicker.date))/60
-            model.locationName = address
+            model.locationName = locationTextField.text ?? selectedLocationName
             model.coordinate = selectedCoordinate
             
             onSave?(model)

@@ -30,7 +30,7 @@ final class MainCoordinator: Coordinator, TabBarControlling {
         addChild(tripListCoordinator)
 
         let mapNavigation = UINavigationController()
-        let mapCoordinator = MapCoordinator(navigationController: mapNavigation)
+        let mapCoordinator = MapCoordinator(navigationController: mapNavigation, tripViewModel: nil)
         mapCoordinator.start()
         addChild(mapCoordinator)
 

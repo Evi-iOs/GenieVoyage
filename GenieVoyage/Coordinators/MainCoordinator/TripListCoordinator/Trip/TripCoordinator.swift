@@ -40,15 +40,22 @@ class TripCoordinator: Coordinator {
     }
     
     private func showMap(for viewModel: TripViewModel) {
-        let mapVC = MapEventsViewController(viewModel: viewModel)
-        navigationController.pushViewController(mapVC, animated: true)
+        let mapCoordinator = MapCoordinator(navigationController: navigationController, tripViewModel: viewModel)
+        mapCoordinator.push = true
+        addChild(mapCoordinator)
+        mapCoordinator.onFinish = { [weak self, weak mapCoordinator] in
+            if let coordinator = mapCoordinator {
+                self?.removeChild(coordinator)
+            }
+        }
+        mapCoordinator.start()
     }
 }
 
 extension TripCoordinator: TripViewControllerDelegate {
     
     func didRequestOpenEvent(dayViewModel: DayViewModel, event: EventModel) {
-        let eventCoordinator = EventCoordinator(navigationController: navigationController, event: event, dayViewModel: dayViewModel, category: nil, startMinutes: nil)
+        let eventCoordinator = EventCoordinator(navigationController: navigationController, event: event, dayViewModel: dayViewModel, category: nil, startMinutes: nil, selectedLocationName: nil, coordinates: nil)
         eventCoordinator.onFinish = { [weak self, weak eventCoordinator] in
             if let coordinator = eventCoordinator {
                 self?.removeChild(coordinator)
@@ -59,7 +66,7 @@ extension TripCoordinator: TripViewControllerDelegate {
     }
     
     func didDropEvent(dayViewModel: DayViewModel, didDropEventWith category: EventCategory, at startMinutes: Int) {
-        let eventCoordinator = EventCoordinator(navigationController: navigationController, event: nil, dayViewModel: dayViewModel, category: category, startMinutes: startMinutes)
+        let eventCoordinator = EventCoordinator(navigationController: navigationController, event: nil, dayViewModel: dayViewModel, category: category, startMinutes: startMinutes, selectedLocationName: nil, coordinates: nil)
         eventCoordinator.onFinish = { [weak self, weak eventCoordinator] in
             if let coordinator = eventCoordinator {
                 self?.removeChild(coordinator)

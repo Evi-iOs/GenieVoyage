@@ -11,6 +11,9 @@ import CoreLocation
 
 class MapEventsViewController: UIViewController {
     
+    var onAddEventAtCoordinate: ((CLLocationCoordinate2D?, String?, DayViewModel) -> Void)?
+    var onFinish: (() -> Void)?
+
     private let viewModel: TripViewModel?
     private var selectedDayIndex = 0
     
@@ -24,6 +27,14 @@ class MapEventsViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if self.isMovingFromParent {
+            onFinish?()
+        }
     }
     
     private lazy var dayTabsCollectionView: UICollectionView = {
@@ -71,6 +82,9 @@ class MapEventsViewController: UIViewController {
         setupLayout()
         dayTabsCollectionView.selectItem(at: IndexPath(item: selectedDayIndex, section: 0), animated: false, scrollPosition: [])
         updateMapForSelectedDay()
+        
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        mapView.addGestureRecognizer(longPressGesture)
     }
     
     private let roadButton: UIButton = {
@@ -138,7 +152,7 @@ class MapEventsViewController: UIViewController {
         ])
     }
     
-    private func updateMapForSelectedDay() {
+    func updateMapForSelectedDay() {
         mapView.removeAnnotations(mapView.annotations)
         mapView.removeOverlays(mapView.overlays)
         
@@ -280,6 +294,27 @@ extension MapEventsViewController: MKMapViewDelegate {
         }
         return MKOverlayRenderer(overlay: overlay)
     }
+    
+    @objc private func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        guard gestureRecognizer.state == .began, let day = viewModel?.days[selectedDayIndex] else { return }
+
+        let touchPoint = gestureRecognizer.location(in: mapView)
+        let coordinate = mapView.convert(touchPoint, toCoordinateFrom: mapView)
+        
+        self.getPlaceName(from: coordinate) { [weak self] placeName in
+            guard let self = self else { return }
+            self.onAddEventAtCoordinate?(coordinate, placeName, day)
+        }
+    }
+
+    private func addAnnotation(at coordinate: CLLocationCoordinate2D) {
+        mapView.removeAnnotations(mapView.annotations)
+
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        annotation.title = "Selected Location"
+        mapView.addAnnotation(annotation)
+    }
 }
 
 // MARK: - EventAnnotation
@@ -326,6 +361,35 @@ extension MapEventsViewController: CLLocationManagerDelegate {
         })
 
         present(alert, animated: true)
+    }
+    
+    private func getPlaceName(from coordinate: CLLocationCoordinate2D, completion: @escaping (String?) -> Void) {
+        let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        let geocoder = CLGeocoder()
+        
+        geocoder.reverseGeocodeLocation(location) { placemarks, error in
+            if let error = error {
+                print("❌ Reverse geocoding error: \(error.localizedDescription)")
+                completion(nil)
+                return
+            }
+
+            guard let placemark = placemarks?.first else {
+                print("⚠️ No placemark found")
+                completion(nil)
+                return
+            }
+
+            let name = [
+                placemark.name,
+                placemark.locality,
+                placemark.administrativeArea
+            ]
+            .compactMap { $0 }
+            .joined(separator: ", ")
+
+            completion(name)
+        }
     }
 }
 
