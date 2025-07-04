@@ -48,6 +48,7 @@ class EventCoordinator: Coordinator {
         editorVC.preselectedStartMinutes = startMinutes
         editorVC.selectedLocationName = selectedLocationName
         editorVC.selectedCoordinate = coordinates
+        editorVC.selectedPDFURL = event?.pdfFileURL
 
         editorVC.onClose = { [weak self] in
             self?.navigationController.dismiss(animated: true) {

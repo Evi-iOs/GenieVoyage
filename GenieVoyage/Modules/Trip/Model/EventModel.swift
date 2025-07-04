@@ -23,6 +23,9 @@ struct EventModel: Equatable {
     var duration: Int
     var locationName: String?
     var coordinate: CLLocationCoordinate2D?
+    var notes: String?
+    var bookingLink: URL?
+    var pdfFileURL: URL?
     
     static func == (lhs: EventModel, rhs: EventModel) -> Bool {
             return lhs.id == rhs.id &&

@@ -135,6 +135,17 @@ extension UIButton {
         default: return .point
         }
     }
+    
+    func fileButton(systemName: String) {
+        self.backgroundColor = .white
+        self.contentHorizontalAlignment = .center
+        self.contentVerticalAlignment = .center
+        let configuration = UIImage.SymbolConfiguration(pointSize: 30, weight: .regular)
+        let image = UIImage(systemName: systemName, withConfiguration: configuration)
+        self.setImage(image, for: .normal)
+        self.tintColor = .black
+        self.clipsToBounds = true
+    }
 }
 
 extension UIImage {

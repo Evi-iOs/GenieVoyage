@@ -8,12 +8,14 @@
 
 import UIKit
 import MapKit
+import QuickLook
 
 final class EventEditorViewController: UIViewController {
 
     var preselectedStartMinutes: Int?
     var selectedLocationName: String?
     var selectedCoordinate: CLLocationCoordinate2D?
+    var selectedPDFURL: URL?
 
     private var viewModel: EventEditorConfigurable
 
@@ -21,6 +23,11 @@ final class EventEditorViewController: UIViewController {
     private let saveButton = UIButton(type: .system)
     private let closeButton = UIButton(type: .system)
     private let deleteEventButton = UIButton(type: .system)
+    
+    private let notesTextView = UITextView()
+    private let bookingLinkField = UITextField()
+    private let uploadPDFButton = UIButton(type: .custom)
+    private let pdfThumbnailView = UIImageView()
     
     private let detailsTitleLabel: UILabel = {
         let label = UILabel()
@@ -57,10 +64,11 @@ final class EventEditorViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         setupButtons()
-        setupTimePickers()
+        setupTimePickersPDFButton()
         setupSearchField()
         setupSearch()
         completeIfEditing()
+        setupExtraFields()
     }
 
     // MARK: - Setup UI
@@ -113,9 +121,51 @@ final class EventEditorViewController: UIViewController {
             deleteEventButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16)
         ])
     }
+    
+    private func setupExtraFields() {
+        notesTextView.font = UIFont.systemFont(ofSize: 15)
+        notesTextView.layer.borderColor = UIColor.lightGray.cgColor
+        notesTextView.layer.borderWidth = 1
+        notesTextView.layer.cornerRadius = 8
+        notesTextView.text = "Enter notes..."
 
-    private func setupTimePickers() {
-        let stack = UIStackView(arrangedSubviews: [beginPicker, endPicker])
+        bookingLinkField.placeholder = "Booking link (optional)"
+        bookingLinkField.borderStyle = .roundedRect
+        bookingLinkField.keyboardType = .URL
+        bookingLinkField.autocapitalizationType = .none
+
+        let stack = UIStackView(arrangedSubviews: [notesTextView, bookingLinkField])
+        stack.axis = .vertical
+        stack.spacing = 12
+        stack.translatesAutoresizingMaskIntoConstraints = false
+
+        view.addSubview(stack)
+
+        NSLayoutConstraint.activate([
+            stack.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 10),
+            stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            notesTextView.heightAnchor.constraint(equalToConstant: 50),
+        ])
+    }
+
+    private func setupTimePickersPDFButton() {
+        
+        uploadPDFButton.fileButton(systemName: "paperclip")
+        uploadPDFButton.addTarget(self, action: #selector(uploadPDFTapped), for: .touchUpInside)
+        
+        pdfThumbnailView.contentMode = .scaleAspectFit
+        pdfThumbnailView.clipsToBounds = true
+        pdfThumbnailView.layer.cornerRadius = 8
+        pdfThumbnailView.layer.borderColor = UIColor.black.cgColor
+        pdfThumbnailView.layer.borderWidth = 0.5
+        pdfThumbnailView.translatesAutoresizingMaskIntoConstraints = false
+        pdfThumbnailView.isHidden = false
+        let tap = UITapGestureRecognizer(target: self, action: #selector(showPDFTapped))
+        pdfThumbnailView.isUserInteractionEnabled = true
+        pdfThumbnailView.addGestureRecognizer(tap)
+
+        let stack = UIStackView(arrangedSubviews: [uploadPDFButton, pdfThumbnailView, beginPicker, endPicker])
         stack.axis = .horizontal
         stack.spacing = 12
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -167,11 +217,33 @@ final class EventEditorViewController: UIViewController {
         view.addSubview(stack)
 
         NSLayoutConstraint.activate([
-            tableView.heightAnchor.constraint(equalToConstant: 150),
+            tableView.heightAnchor.constraint(equalToConstant: 100),
             stack.topAnchor.constraint(equalTo: endPicker.bottomAnchor, constant: 20),
             stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
         ])
+    }
+    
+    private func generatePDFThumbnail(from url: URL, size: CGSize) -> UIImage? {
+        guard let pdfDocument = PDFDocument(url: url), let page = pdfDocument.page(at: 0) else { return nil }
+        
+        let pageRect = page.bounds(for: .mediaBox)
+        let scale = min(size.width / pageRect.width, size.height / pageRect.height)
+        let thumbnailSize = CGSize(width: pageRect.width * scale, height: pageRect.height * scale)
+        
+        return page.thumbnail(of: thumbnailSize, for: .mediaBox)
+    }
+    
+    @objc private func showPDFTapped() {
+        guard selectedPDFURL != nil else { return }
+        showPDFPreview()
+    }
+    
+    @objc private func uploadPDFTapped() {
+        let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.pdf], asCopy: true)
+        picker.delegate = self
+        picker.allowsMultipleSelection = false
+        present(picker, animated: true)
     }
 
     private func completeIfEditing() {
@@ -187,6 +259,16 @@ final class EventEditorViewController: UIViewController {
         locationTextField.text = event.locationName
         selectedCoordinate = event.coordinate
         selectedLocationName = event.locationName
+        
+        notesTextView.text = event.notes ?? ""
+        bookingLinkField.text = event.bookingLink?.absoluteString ?? ""
+
+        if let url = event.pdfFileURL {
+            if let thumbnail = generatePDFThumbnail(from: url, size: CGSize(width: 60, height: 60)) {
+                pdfThumbnailView.image = thumbnail
+                pdfThumbnailView.isHidden = false
+            }
+        }
     }
 
     // MARK: - Actions
@@ -202,6 +284,12 @@ final class EventEditorViewController: UIViewController {
             model.duration = Int(endPicker.date.timeIntervalSince(beginPicker.date))/60
             model.locationName = locationTextField.text ?? selectedLocationName
             model.coordinate = selectedCoordinate
+            
+            model.notes = notesTextView.text
+            if let linkText = bookingLinkField.text, let url = URL(string: linkText), UIApplication.shared.canOpenURL(url) {
+                model.bookingLink = url
+            }
+            model.pdfFileURL = selectedPDFURL
             
             onSave?(model)
         }
@@ -284,5 +372,36 @@ extension EventEditorViewController: MKLocalSearchCompleterDelegate {
 
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
         print("Search failed: \(error)")
+    }
+}
+
+// MARK: - UIDocumentPickerDelegate
+extension EventEditorViewController: UIDocumentPickerDelegate {
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        guard let url = urls.first else { return }
+        selectedPDFURL = url
+        if let thumbnail = generatePDFThumbnail(from: url, size: CGSize(width: 60, height: 60)) {
+            pdfThumbnailView.image = thumbnail
+            pdfThumbnailView.isHidden = false
+        }
+    }
+}
+
+extension EventEditorViewController: QLPreviewControllerDataSource {
+    func showPDFPreview() {
+        let previewController = QLPreviewController()
+        previewController.dataSource = self
+        present(previewController, animated: true)
+    }
+    
+    func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
+        return selectedPDFURL == nil ? 0 : 1
+    }
+    
+    func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
+        guard let pdfURL = selectedPDFURL else {
+            fatalError("Expected non-nil selectedPDFURL")
+        }
+        return pdfURL as NSURL
     }
 }
