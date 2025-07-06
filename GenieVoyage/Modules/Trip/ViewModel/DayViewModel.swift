@@ -63,6 +63,10 @@ class DayViewModel {
         onUpdate?()
     }
     
+    func event(withId id: UUID) -> EventModel? {
+        return events.first(where: { $0.id == id })
+    }
+    
     func duplicateEvent(_ event: EventModel) {
         let newId = UUID()
         let newEvent = EventModel(

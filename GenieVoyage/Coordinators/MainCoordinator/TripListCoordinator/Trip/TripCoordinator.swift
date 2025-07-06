@@ -55,7 +55,7 @@ class TripCoordinator: Coordinator {
 extension TripCoordinator: TripViewControllerDelegate {
     
     func didRequestOpenEvent(dayViewModel: DayViewModel, event: EventModel) {
-        let eventCoordinator = EventCoordinator(navigationController: navigationController, event: event, dayViewModel: dayViewModel, category: nil, startMinutes: nil, selectedLocationName: nil, coordinates: nil)
+        let eventCoordinator = EventCoordinator(navigationController: navigationController, eventID: event.id, dayViewModel: dayViewModel, category: nil, startMinutes: nil, selectedLocationName: nil, coordinates: nil)
         eventCoordinator.onFinish = { [weak self, weak eventCoordinator] in
             if let coordinator = eventCoordinator {
                 self?.removeChild(coordinator)
@@ -66,7 +66,7 @@ extension TripCoordinator: TripViewControllerDelegate {
     }
     
     func didDropEvent(dayViewModel: DayViewModel, didDropEventWith category: EventCategory, at startMinutes: Int) {
-        let eventCoordinator = EventCoordinator(navigationController: navigationController, event: nil, dayViewModel: dayViewModel, category: category, startMinutes: startMinutes, selectedLocationName: nil, coordinates: nil)
+        let eventCoordinator = EventCoordinator(navigationController: navigationController, eventID: nil, dayViewModel: dayViewModel, category: category, startMinutes: startMinutes, selectedLocationName: nil, coordinates: nil)
         eventCoordinator.onFinish = { [weak self, weak eventCoordinator] in
             if let coordinator = eventCoordinator {
                 self?.removeChild(coordinator)

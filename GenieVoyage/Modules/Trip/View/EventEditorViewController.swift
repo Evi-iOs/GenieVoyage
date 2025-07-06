@@ -264,7 +264,8 @@ final class EventEditorViewController: UIViewController {
         bookingLinkField.text = event.bookingLink?.absoluteString ?? ""
 
         if let url = event.pdfFileURL {
-            if let thumbnail = generatePDFThumbnail(from: url, size: CGSize(width: 60, height: 60)) {
+            selectedPDFURL = url
+            if let thumbnail = generatePDFThumbnail(from: url, size: CGSize(width: 50, height: 50)) {
                 pdfThumbnailView.image = thumbnail
                 pdfThumbnailView.isHidden = false
             }
@@ -289,8 +290,8 @@ final class EventEditorViewController: UIViewController {
             if let linkText = bookingLinkField.text, let url = URL(string: linkText), UIApplication.shared.canOpenURL(url) {
                 model.bookingLink = url
             }
-            model.pdfFileURL = selectedPDFURL
-            
+            model.pdfFileURL = selectedPDFURL ?? viewModel.existingEvent?.pdfFileURL
+
             onSave?(model)
         }
         dismiss(animated: true)
@@ -379,8 +380,21 @@ extension EventEditorViewController: MKLocalSearchCompleterDelegate {
 extension EventEditorViewController: UIDocumentPickerDelegate {
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         guard let url = urls.first else { return }
-        selectedPDFURL = url
-        if let thumbnail = generatePDFThumbnail(from: url, size: CGSize(width: 60, height: 60)) {
+        
+        let fileManager = FileManager.default
+        let documents = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let destURL = documents.appendingPathComponent(url.lastPathComponent)
+        
+        try? fileManager.removeItem(at: destURL)
+        do {
+            try fileManager.copyItem(at: url, to: destURL)
+            selectedPDFURL = destURL
+        } catch {
+            print("Error copying file: \(error)")
+            selectedPDFURL = url
+        }
+        
+        if let thumbnail = generatePDFThumbnail(from: selectedPDFURL!, size: CGSize(width: 50, height: 50)) {
             pdfThumbnailView.image = thumbnail
             pdfThumbnailView.isHidden = false
         }

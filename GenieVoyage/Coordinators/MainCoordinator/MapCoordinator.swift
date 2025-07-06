@@ -57,7 +57,7 @@ class MapCoordinator: Coordinator {
     }
     
     private func showAddEventScreen(at coordinate: CLLocationCoordinate2D?, selectedLocationName: String?, forDay dayViewModel: DayViewModel) {
-        let eventCoordinator = EventCoordinator(navigationController: navigationController, event: nil, dayViewModel: dayViewModel, category: .point, startMinutes: nil, selectedLocationName: selectedLocationName, coordinates: coordinate)
+        let eventCoordinator = EventCoordinator(navigationController: navigationController, eventID: nil, dayViewModel: dayViewModel, category: .point, startMinutes: nil, selectedLocationName: selectedLocationName, coordinates: coordinate)
         
         eventCoordinator.onSave = { [weak self]  in
             guard let self = self else { return }
