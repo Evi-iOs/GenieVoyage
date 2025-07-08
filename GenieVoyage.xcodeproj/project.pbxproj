@@ -43,6 +43,7 @@
 		D0A39AA72DFCBDD1007F3F9A /* SettingsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A39AA62DFCBDD1007F3F9A /* SettingsCoordinator.swift */; };
 		D0A39AA92DFCBE37007F3F9A /* MapCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A39AA82DFCBE37007F3F9A /* MapCoordinator.swift */; };
 		D0A39AAB2E035FD2007F3F9A /* TabBarControlling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A39AAA2E035FD2007F3F9A /* TabBarControlling.swift */; };
+		D0B5ADD32E1C6542009A74A5 /* TransportSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5ADD22E1C6542009A74A5 /* TransportSegmentControl.swift */; };
 		D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */; };
 		D0D192D42A6FFF9A000853B8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D32A6FFF9A000853B8 /* SceneDelegate.swift */; };
 		D0D192D62A6FFF9A000853B8 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D52A6FFF9A000853B8 /* CalendarViewController.swift */; };
@@ -145,6 +146,7 @@
 		D0A39AA62DFCBDD1007F3F9A /* SettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
 		D0A39AA82DFCBE37007F3F9A /* MapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCoordinator.swift; sourceTree = "<group>"; };
 		D0A39AAA2E035FD2007F3F9A /* TabBarControlling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarControlling.swift; sourceTree = "<group>"; };
+		D0B5ADD22E1C6542009A74A5 /* TransportSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportSegmentControl.swift; sourceTree = "<group>"; };
 		D0D192CE2A6FFF9A000853B8 /* GenieVoyage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GenieVoyage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D0D192D32A6FFF9A000853B8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -243,6 +245,7 @@
 				D05D92E52D4B8CB10022C734 /* DayCollectionViewCell.swift */,
 				D06C7F292DE24BA600402EA0 /* EventView.swift */,
 				D0FC225E2DE7AF6F0074C9AF /* PointEventEditorView.swift */,
+				D0B5ADD22E1C6542009A74A5 /* TransportSegmentControl.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -669,6 +672,7 @@
 				D0FC22822DF77A300074C9AF /* EventCoordinator.swift in Sources */,
 				D06C7F1B2DB26C2600402EA0 /* DayCellDelegate.swift in Sources */,
 				D03D08692D08544D009F8E63 /* EventViewController.swift in Sources */,
+				D0B5ADD32E1C6542009A74A5 /* TransportSegmentControl.swift in Sources */,
 				D04945B32D3A451B00232F26 /* EventCollectionViewCell.swift in Sources */,
 				D06C7F372DE7AB3B00402EA0 /* EventEditorFactory.swift in Sources */,
 				D06C7F342DE7AACC00402EA0 /* PointEventEditorViewModel.swift in Sources */,

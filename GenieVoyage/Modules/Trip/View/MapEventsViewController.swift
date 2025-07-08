@@ -19,6 +19,7 @@ class MapEventsViewController: UIViewController {
     
     private var isRouteVisible = true
     private let locationManager = CLLocationManager()
+    private var currentTransportType: MKDirectionsTransportType = .automobile
     
     init(viewModel: TripViewModel?) {
         self.viewModel = viewModel
@@ -51,6 +52,15 @@ class MapEventsViewController: UIViewController {
         return cv
     }()
     
+    private lazy var transportControl: TransportSegmentedControl = {
+        let control = TransportSegmentedControl()
+        control.onSelect = { [weak self] selectedType in
+            self?.currentTransportType = selectedType
+            self?.updateMapForSelectedDay()
+        }
+        return control
+    }()
+    
     private let mapView: MKMapView = {
         let map = MKMapView()
         return map
@@ -71,14 +81,16 @@ class MapEventsViewController: UIViewController {
         
         mapView.delegate = self
         view.addSubview(mapView)
+        view.sendSubviewToBack(mapView)
         view.addSubview(dayTabsCollectionView)
         view.addSubview(zoomInButton)
         view.addSubview(zoomOutButton)
         view.addSubview(roadButton)
         view.addSubview(locationButton)
+        view.addSubview(transportControl)
         
         mapView.showsUserLocation = true
-        
+        transportControl.translatesAutoresizingMaskIntoConstraints = false
         setupLayout()
         dayTabsCollectionView.selectItem(at: IndexPath(item: selectedDayIndex, section: 0), animated: false, scrollPosition: [])
         updateMapForSelectedDay()
@@ -148,7 +160,12 @@ class MapEventsViewController: UIViewController {
             roadButton.widthAnchor.constraint(equalToConstant: 50),
             roadButton.heightAnchor.constraint(equalToConstant: 50),
             roadButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            roadButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+            roadButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            
+            transportControl.bottomAnchor.constraint(equalTo: zoomInButton.topAnchor, constant: -20),
+            transportControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            transportControl.heightAnchor.constraint(equalToConstant: 150),
+            transportControl.widthAnchor.constraint(equalToConstant: 50)
         ])
     }
     
@@ -172,7 +189,7 @@ class MapEventsViewController: UIViewController {
         }
         
         guard let day = day, let annotations = annotations else { return }
-        mapView.addAnnotations(annotations)
+        mapView.showAnnotations(annotations, animated: true)
         
         if isRouteVisible {
             drawRoutesBetweenEvents(for: day.events)
@@ -182,7 +199,9 @@ class MapEventsViewController: UIViewController {
     private func drawRoutesBetweenEvents(for events: [EventModel]) {
         mapView.removeOverlays(mapView.overlays)
         
-        let coordinates = events.compactMap { $0.coordinate }
+        let sortedEvents = events.sorted { $0.startTimeEvent < $1.startTimeEvent }
+
+        let coordinates = sortedEvents.compactMap { $0.coordinate }
         guard coordinates.count >= 2 else { return }
         
         for i in 0..<coordinates.count - 1 {
@@ -224,6 +243,16 @@ class MapEventsViewController: UIViewController {
         region.span.longitudeDelta *= 2
         mapView.setRegion(region, animated: true)
     }
+    
+//    @objc private func transportTypeChanged(_ sender: UISegmentedControl) {
+//        switch sender.selectedSegmentIndex {
+//        case 0: currentTransportType = .automobile
+//        case 1: currentTransportType = .walking
+//        case 2: currentTransportType = .transit
+//        default: break
+//        }
+//        updateMapForSelectedDay()
+//    }
 }
 
   // MARK: - CollectionView Delegate & DataSource
@@ -286,13 +315,31 @@ extension MapEventsViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        if let polyline = overlay as? MKPolyline {
-            let renderer = MKPolylineRenderer(polyline: polyline)
-            renderer.strokeColor = .systemBlue
-            renderer.lineWidth = 4
-            return renderer
+        guard let polyline = overlay as? MKPolyline else {
+            return MKOverlayRenderer()
         }
-        return MKOverlayRenderer(overlay: overlay)
+
+        let renderer = MKPolylineRenderer(overlay: polyline)
+
+        switch currentTransportType {
+        case .walking:
+            renderer.strokeColor = .orange
+            renderer.lineWidth = 4
+            renderer.lineDashPattern = [4, 6]
+        case .automobile:
+            renderer.strokeColor = .systemBlue
+            renderer.lineWidth = 5
+            renderer.lineDashPattern = nil
+        case .transit:
+            renderer.strokeColor = .systemPurple
+            renderer.lineWidth = 4
+            renderer.lineDashPattern = [10, 5]
+        default:
+            renderer.strokeColor = .gray
+            renderer.lineWidth = 3
+        }
+
+        return renderer
     }
     
     @objc private func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {

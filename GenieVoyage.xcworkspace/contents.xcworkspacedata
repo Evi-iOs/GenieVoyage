@@ -2,18 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:GenieVoyage/CoreData/Destination+CoreDataClass.swift">
-   </FileRef>
-   <FileRef
-      location = "group:GenieVoyage/CoreData/Destination+CoreDataProperties.swift">
-   </FileRef>
-   <FileRef
-      location = "group:GenieVoyage/CoreData/Trip+CoreDataClass.swift">
-   </FileRef>
-   <FileRef
-      location = "group:GenieVoyage/CoreData/Trip+CoreDataProperties.swift">
-   </FileRef>
-   <FileRef
       location = "group:GenieVoyage.xcodeproj">
    </FileRef>
    <FileRef
