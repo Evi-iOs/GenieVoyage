@@ -28,7 +28,7 @@
 		D0605DF92D3FF24C00465BD2 /* Pods_GenieVoyage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 071C3747FA4F0ADB75D5CC99 /* Pods_GenieVoyage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D06C7F1B2DB26C2600402EA0 /* DayCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F1A2DB26C1B00402EA0 /* DayCellDelegate.swift */; };
 		D06C7F1E2DBAC2E500402EA0 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F1D2DBAC2D700402EA0 /* MainTabBarController.swift */; };
-		D06C7F202DBAC3CD00402EA0 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F1F2DBAC3CD00402EA0 /* ProfileViewController.swift */; };
+		D06C7F202DBAC3CD00402EA0 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F1F2DBAC3CD00402EA0 /* SignInViewController.swift */; };
 		D06C7F222DBC19CC00402EA0 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F212DBC19CC00402EA0 /* CustomTabBar.swift */; };
 		D06C7F242DBC1E4100402EA0 /* CheckListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F232DBC1E4100402EA0 /* CheckListViewController.swift */; };
 		D06C7F262DBCF32D00402EA0 /* PointViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F252DBCF32D00402EA0 /* PointViewController.swift */; };
@@ -44,6 +44,7 @@
 		D0A39AA92DFCBE37007F3F9A /* MapCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A39AA82DFCBE37007F3F9A /* MapCoordinator.swift */; };
 		D0A39AAB2E035FD2007F3F9A /* TabBarControlling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A39AAA2E035FD2007F3F9A /* TabBarControlling.swift */; };
 		D0B5ADD32E1C6542009A74A5 /* TransportSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5ADD22E1C6542009A74A5 /* TransportSegmentControl.swift */; };
+		D0B5ADD52E20669C009A74A5 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5ADD42E20669C009A74A5 /* ProfileViewController.swift */; };
 		D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */; };
 		D0D192D42A6FFF9A000853B8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D32A6FFF9A000853B8 /* SceneDelegate.swift */; };
 		D0D192D62A6FFF9A000853B8 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D52A6FFF9A000853B8 /* CalendarViewController.swift */; };
@@ -131,7 +132,7 @@
 		D05D92E52D4B8CB10022C734 /* DayCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCollectionViewCell.swift; sourceTree = "<group>"; };
 		D06C7F1A2DB26C1B00402EA0 /* DayCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCellDelegate.swift; sourceTree = "<group>"; };
 		D06C7F1D2DBAC2D700402EA0 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
-		D06C7F1F2DBAC3CD00402EA0 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		D06C7F1F2DBAC3CD00402EA0 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		D06C7F212DBC19CC00402EA0 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
 		D06C7F232DBC1E4100402EA0 /* CheckListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListViewController.swift; sourceTree = "<group>"; };
 		D06C7F252DBCF32D00402EA0 /* PointViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointViewController.swift; sourceTree = "<group>"; };
@@ -147,6 +148,7 @@
 		D0A39AA82DFCBE37007F3F9A /* MapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCoordinator.swift; sourceTree = "<group>"; };
 		D0A39AAA2E035FD2007F3F9A /* TabBarControlling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarControlling.swift; sourceTree = "<group>"; };
 		D0B5ADD22E1C6542009A74A5 /* TransportSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportSegmentControl.swift; sourceTree = "<group>"; };
+		D0B5ADD42E20669C009A74A5 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		D0D192CE2A6FFF9A000853B8 /* GenieVoyage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GenieVoyage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D0D192D32A6FFF9A000853B8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -247,6 +249,8 @@
 				D0FC225E2DE7AF6F0074C9AF /* PointEventEditorView.swift */,
 				D026365B2D84ADBB0070D28C /* SegmentedControlView.swift */,
 				D0B5ADD22E1C6542009A74A5 /* TransportSegmentControl.swift */,
+				D06C7F1F2DBAC3CD00402EA0 /* SignInViewController.swift */,
+				D0B5ADD42E20669C009A74A5 /* ProfileViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -366,7 +370,6 @@
 				D0D193072A71AC36000853B8 /* EKWrapper.swift */,
 				D06C7F252DBCF32D00402EA0 /* PointViewController.swift */,
 				D06C7F232DBC1E4100402EA0 /* CheckListViewController.swift */,
-				D06C7F1F2DBAC3CD00402EA0 /* ProfileViewController.swift */,
 				D06C7F212DBC19CC00402EA0 /* CustomTabBar.swift */,
 				D0365DF22CFA6D3500D711A9 /* AllTripsViewController.swift */,
 				D03D086A2D08C14F009F8E63 /* MapLocationViewController.swift */,
@@ -666,12 +669,13 @@
 				D0010B2C2B12A24200BAEC46 /* Extension.swift in Sources */,
 				D0A39AA92DFCBE37007F3F9A /* MapCoordinator.swift in Sources */,
 				D06C7F392DE7ABC300402EA0 /* EventEditorViewController.swift in Sources */,
-				D06C7F202DBAC3CD00402EA0 /* ProfileViewController.swift in Sources */,
+				D06C7F202DBAC3CD00402EA0 /* SignInViewController.swift in Sources */,
 				D0FC22652DE8AC430074C9AF /* TransportEditorViewModel.swift in Sources */,
 				D06C7F2C2DE6197600402EA0 /* Constants.swift in Sources */,
 				D0FC22822DF77A300074C9AF /* EventCoordinator.swift in Sources */,
 				D06C7F1B2DB26C2600402EA0 /* DayCellDelegate.swift in Sources */,
 				D03D08692D08544D009F8E63 /* EventViewController.swift in Sources */,
+				D0B5ADD52E20669C009A74A5 /* ProfileViewController.swift in Sources */,
 				D0B5ADD32E1C6542009A74A5 /* TransportSegmentControl.swift in Sources */,
 				D04945B32D3A451B00232F26 /* EventCollectionViewCell.swift in Sources */,
 				D06C7F372DE7AB3B00402EA0 /* EventEditorFactory.swift in Sources */,

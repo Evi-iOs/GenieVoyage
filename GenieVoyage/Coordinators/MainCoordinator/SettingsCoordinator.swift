@@ -17,7 +17,18 @@ class SettingsCoordinator: Coordinator {
     }
     
     func start() {
+        let vc = ProfileViewController()
+        navigationController.viewControllers = [vc]
+        
+        let image = UIImage.resizedSystemImage(named: "person.crop.circle", scale: 1.7)
+        let selectedImage = UIImage.resizedSystemImage(named: "person.crop.circle.fill", scale: 1.7)
+        
+        vc.tabBarItem = UITabBarItem(
+            title: "Profile",
+            image: image,
+            selectedImage: selectedImage
+        )
+        vc.tabBarItem.imageInsets = UIEdgeInsets(top: 1, left: 0, bottom: -1, right: 0)
         
     }
-    
 }

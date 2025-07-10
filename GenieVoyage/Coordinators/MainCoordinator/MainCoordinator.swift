@@ -34,7 +34,12 @@ final class MainCoordinator: Coordinator, TabBarControlling {
         mapCoordinator.start()
         addChild(mapCoordinator)
 
-        tabBarController.viewControllers = [tripNavigation, mapNavigation]
+        let profileNavigation = UINavigationController()
+        let settingsCoordinator = SettingsCoordinator(navigationController: profileNavigation)
+        settingsCoordinator.start()
+        addChild(settingsCoordinator)
+        
+        tabBarController.viewControllers = [tripNavigation, mapNavigation, profileNavigation]
 
         navigationController.viewControllers = [tabBarController]
     }
