@@ -63,11 +63,7 @@ class DayCollectionViewCell: UICollectionViewCell {
         itineraryCollectionView.addInteraction(UIDropInteraction(delegate: self))
         
         backgroundColor = .white
-        layer.shadowColor = UIColor.darkGray.cgColor
-        layer.shadowOpacity = 0.1
-        layer.shadowRadius = 5
-        layer.shadowOffset = CGSize(width: 0, height: 2)
-        
+
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
         itineraryCollectionView.addGestureRecognizer(longPressGesture)
         

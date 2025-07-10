@@ -245,6 +245,7 @@
 				D05D92E52D4B8CB10022C734 /* DayCollectionViewCell.swift */,
 				D06C7F292DE24BA600402EA0 /* EventView.swift */,
 				D0FC225E2DE7AF6F0074C9AF /* PointEventEditorView.swift */,
+				D026365B2D84ADBB0070D28C /* SegmentedControlView.swift */,
 				D0B5ADD22E1C6542009A74A5 /* TransportSegmentControl.swift */,
 			);
 			path = View;
@@ -369,7 +370,6 @@
 				D06C7F212DBC19CC00402EA0 /* CustomTabBar.swift */,
 				D0365DF22CFA6D3500D711A9 /* AllTripsViewController.swift */,
 				D03D086A2D08C14F009F8E63 /* MapLocationViewController.swift */,
-				D026365B2D84ADBB0070D28C /* SegmentedControlView.swift */,
 				D026365D2D84AE0D0070D28C /* SegmentCell.swift */,
 				D03D08642D0730CE009F8E63 /* PlanDayDetailViewController.swift */,
 				D0D192D52A6FFF9A000853B8 /* CalendarViewController.swift */,

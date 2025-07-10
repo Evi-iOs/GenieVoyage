@@ -26,7 +26,7 @@ class SegmentedControlView: UIView, UICollectionViewDelegate, UICollectionViewDa
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = .clear
+        collectionView.backgroundColor = .systemGray6
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(SegmentCell.self, forCellWithReuseIdentifier: SegmentCell.identifier)
         return collectionView

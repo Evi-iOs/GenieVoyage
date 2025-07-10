@@ -99,21 +99,33 @@ final class EventView: UIView, UIContextMenuInteractionDelegate {
         iconView.translatesAutoresizingMaskIntoConstraints = false
         iconView.widthAnchor.constraint(equalToConstant: 20).isActive = true
         iconView.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        
+
         let titleLabel = UILabel()
         titleLabel.text = event.locationName ?? "Event"
         titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         titleLabel.textColor = .white
         titleLabel.numberOfLines = 1
-        
+
         let hStack = UIStackView(arrangedSubviews: [iconView, titleLabel])
         hStack.axis = .horizontal
         hStack.spacing = 8
         hStack.alignment = .center
         hStack.translatesAutoresizingMaskIntoConstraints = false
-        
+
+        if event.pdfFileURL != nil {
+            let pdfIcon = UIImageView()
+            let config = UIImage.SymbolConfiguration(pointSize: 14, weight: .regular)
+            pdfIcon.image = UIImage(systemName: "paperclip", withConfiguration: config)
+            pdfIcon.tintColor = .white
+            pdfIcon.translatesAutoresizingMaskIntoConstraints = false
+            pdfIcon.widthAnchor.constraint(equalToConstant: 20).isActive = true
+            pdfIcon.heightAnchor.constraint(equalToConstant: 20).isActive = true
+
+            hStack.addArrangedSubview(pdfIcon)
+        }
+
         addSubview(hStack)
-        
+
         NSLayoutConstraint.activate([
             hStack.topAnchor.constraint(equalTo: topAnchor, constant: 4),
             hStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),

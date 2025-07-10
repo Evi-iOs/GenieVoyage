@@ -243,16 +243,6 @@ class MapEventsViewController: UIViewController {
         region.span.longitudeDelta *= 2
         mapView.setRegion(region, animated: true)
     }
-    
-//    @objc private func transportTypeChanged(_ sender: UISegmentedControl) {
-//        switch sender.selectedSegmentIndex {
-//        case 0: currentTransportType = .automobile
-//        case 1: currentTransportType = .walking
-//        case 2: currentTransportType = .transit
-//        default: break
-//        }
-//        updateMapForSelectedDay()
-//    }
 }
 
   // MARK: - CollectionView Delegate & DataSource
