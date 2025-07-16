@@ -203,6 +203,15 @@ final class EventEditorViewController: UIViewController {
         locationTextField.borderStyle = .roundedRect
         locationTextField.translatesAutoresizingMaskIntoConstraints = false
         locationTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        
+        let clearButton = UIButton(type: .custom)
+        clearButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+        clearButton.tintColor = .gray
+        clearButton.addTarget(self, action: #selector(clearLocationField), for: .touchUpInside)
+        clearButton.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
+        
+        locationTextField.rightView = clearButton
+        locationTextField.rightViewMode = .whileEditing
 
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.isHidden = true
@@ -244,6 +253,13 @@ final class EventEditorViewController: UIViewController {
         picker.delegate = self
         picker.allowsMultipleSelection = false
         present(picker, animated: true)
+    }
+    
+    @objc private func clearLocationField() {
+        locationTextField.text = ""
+        searchResults.removeAll()
+        tableView.reloadData()
+        tableView.isHidden = true
     }
 
     private func completeIfEditing() {
