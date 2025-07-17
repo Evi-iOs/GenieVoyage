@@ -212,7 +212,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
             destinationLabel.leadingAnchor.constraint(equalTo: coverImageView.trailingAnchor, constant: 20),
             destinationLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
             
-            titleText.topAnchor.constraint(equalTo: destinationLabel.bottomAnchor, constant: 10),
+            titleText.topAnchor.constraint(equalTo: destinationLabel.bottomAnchor, constant: 3),
             titleText.leadingAnchor.constraint(equalTo: coverImageView.trailingAnchor, constant: 20),
             titleText.trailingAnchor.constraint(equalTo: datesLabel.leadingAnchor, constant: -20),
             titleText.bottomAnchor.constraint(equalTo: coverImageView.bottomAnchor),
@@ -276,6 +276,15 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         collectionView.isPagingEnabled = false
         return collectionView
     }()
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let currentText = textView.text ?? ""
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: text)
+        
+        return updatedText.count <= 20
+    }
     
     // MARK: - Actions
     @objc private func saveButtonTapped() {

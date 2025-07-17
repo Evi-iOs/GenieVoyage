@@ -52,6 +52,10 @@ class TripListCoordinator: Coordinator {
     }
     
     private func startPlanning() {
+        if navigationController.viewControllers.contains(where: { $0 is StartPlanningViewController }) {
+            return
+        }
+        
         let startPlanningVC = StartPlanningViewController()
         startPlanningVC.hidesBottomBarWhenPushed = true
         startPlanningVC.onSave = { [weak self] newTrip in
@@ -62,5 +66,7 @@ class TripListCoordinator: Coordinator {
             self?.navigationController.popViewController(animated: true)
         }
         self.navigationController.pushViewController(startPlanningVC, animated: true)
+        self.navigationController.view.setNeedsLayout()
+        self.navigationController.view.layoutIfNeeded()
     }
 }

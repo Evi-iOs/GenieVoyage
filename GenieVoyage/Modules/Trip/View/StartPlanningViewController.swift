@@ -54,7 +54,7 @@ class StartPlanningViewController: UIViewController {
         titleTextField.layer.borderColor = UIColor.lightGray.cgColor
         titleTextField.layer.cornerRadius = 8
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: titleTextField.frame.height))
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 50))
         titleTextField.leftView = paddingView
         titleTextField.leftViewMode = .always
         
@@ -150,18 +150,21 @@ class StartPlanningViewController: UIViewController {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            dateView.topAnchor.constraint(equalTo: view.topAnchor, constant: 150),
+            dateView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 150),
             dateView.heightAnchor.constraint(equalToConstant: 120),
             dateView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             dateView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             
             startDateLabel.topAnchor.constraint(equalTo: dateView.topAnchor, constant: 20),
             startDateLabel.leadingAnchor.constraint(equalTo: dateView.leadingAnchor, constant: 30),
+            
             startDatePicker.topAnchor.constraint(equalTo: startDateLabel.bottomAnchor, constant: 20),
             startDatePicker.leadingAnchor.constraint(equalTo: dateView.leadingAnchor, constant: 30),
             
             endDateLabel.topAnchor.constraint(equalTo: dateView.topAnchor, constant: 20),
             endDateLabel.leadingAnchor.constraint(equalTo: endDatePicker.leadingAnchor),
+            endDateLabel.trailingAnchor.constraint(equalTo: dateView.trailingAnchor, constant: -30),
+            
             endDatePicker.topAnchor.constraint(equalTo: endDateLabel.bottomAnchor, constant: 20),
             endDatePicker.trailingAnchor.constraint(equalTo: dateView.trailingAnchor, constant: -30),
             
