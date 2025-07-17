@@ -230,17 +230,19 @@ class MapEventsViewController: UIViewController {
         mapView.setRegion(region, animated: true)
     }
     
-    @objc private func zoomIn() {
+    @objc private func zoomOut() {
         var region = mapView.region
-        region.span.latitudeDelta /= 2
-        region.span.longitudeDelta /= 2
+        region.span.latitudeDelta = min(region.span.latitudeDelta * 2, 180)
+        region.span.longitudeDelta = min(region.span.longitudeDelta * 2, 360)
+        
         mapView.setRegion(region, animated: true)
     }
 
-    @objc private func zoomOut() {
+    @objc private func zoomIn() {
         var region = mapView.region
-        region.span.latitudeDelta *= 2
-        region.span.longitudeDelta *= 2
+        region.span.latitudeDelta = max(region.span.latitudeDelta / 2, 0.0005)
+        region.span.longitudeDelta = max(region.span.longitudeDelta / 2, 0.0005)
+        
         mapView.setRegion(region, animated: true)
     }
 }
