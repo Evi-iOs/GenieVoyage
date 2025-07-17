@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MapKit
 
 class StartPlanningViewController: UIViewController {
     
@@ -13,12 +14,20 @@ class StartPlanningViewController: UIViewController {
     var onClose: (() -> Void)?
     
     var existingTrip: TripModel?
+    
+    private var searchCompleter = MKLocalSearchCompleter()
+    private var suggestions: [MKLocalSearchCompletion] = []
+    private let suggestionsTableView = UITableView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupConstraints()
         
+        searchCompleter.delegate = self
+        searchCompleter.resultTypes = .address
+        titleTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+
         if let trip = existingTrip {
             titleTextField.text = trip.title
             startDatePicker.date = trip.startDate
@@ -74,6 +83,17 @@ class StartPlanningViewController: UIViewController {
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         
+        suggestionsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "SuggestionCell")
+        suggestionsTableView.delegate = self
+        suggestionsTableView.dataSource = self
+        suggestionsTableView.isHidden = true
+        suggestionsTableView.layer.borderWidth = 0.5
+        suggestionsTableView.layer.borderColor = UIColor.lightGray.cgColor
+        suggestionsTableView.layer.cornerRadius = 8
+        suggestionsTableView.translatesAutoresizingMaskIntoConstraints = false
+
+        view.addSubview(suggestionsTableView)
+        
         view.addSubview(titleTextField)
         
         view.addSubview(dateView)
@@ -113,6 +133,14 @@ class StartPlanningViewController: UIViewController {
         }
         self.onSave?(updatedTrip)
     }
+    
+    @objc private func textFieldDidChange() {
+        guard let text = titleTextField.text, !text.isEmpty else {
+            suggestionsTableView.isHidden = true
+            return
+        }
+        searchCompleter.queryFragment = text
+    }
 
     private func showAlert(message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
@@ -122,12 +150,7 @@ class StartPlanningViewController: UIViewController {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            titleTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 150),
-            titleTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            titleTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-            titleTextField.heightAnchor.constraint(equalToConstant: 50),
-            
-            dateView.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 50),
+            dateView.topAnchor.constraint(equalTo: view.topAnchor, constant: 150),
             dateView.heightAnchor.constraint(equalToConstant: 120),
             dateView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             dateView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
@@ -141,10 +164,52 @@ class StartPlanningViewController: UIViewController {
             endDateLabel.leadingAnchor.constraint(equalTo: endDatePicker.leadingAnchor),
             endDatePicker.topAnchor.constraint(equalTo: endDateLabel.bottomAnchor, constant: 20),
             endDatePicker.trailingAnchor.constraint(equalTo: dateView.trailingAnchor, constant: -30),
-           
-            saveButton.topAnchor.constraint(equalTo: dateView.bottomAnchor, constant: 50),
+            
+            titleTextField.topAnchor.constraint(equalTo: dateView.bottomAnchor, constant: 50),
+            titleTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            titleTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            titleTextField.heightAnchor.constraint(equalToConstant: 50),
+            
+            suggestionsTableView.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 5),
+            suggestionsTableView.leadingAnchor.constraint(equalTo: titleTextField.leadingAnchor),
+            suggestionsTableView.trailingAnchor.constraint(equalTo: titleTextField.trailingAnchor),
+            suggestionsTableView.heightAnchor.constraint(equalToConstant: 180),
+            
+            saveButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
             saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30)
         ])
+    }
+}
+
+extension StartPlanningViewController: MKLocalSearchCompleterDelegate {
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        suggestions = completer.results
+        suggestionsTableView.isHidden = suggestions.isEmpty
+        suggestionsTableView.reloadData()
+    }
+
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        print("Search completer error: \(error.localizedDescription)")
+    }
+}
+
+extension StartPlanningViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return suggestions.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SuggestionCell", for: indexPath)
+        let suggestion = suggestions[indexPath.row]
+        cell.textLabel?.text = suggestion.title + " " + suggestion.subtitle
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selected = suggestions[indexPath.row]
+        titleTextField.text = selected.title
+        suggestionsTableView.isHidden = true
+        titleTextField.resignFirstResponder()
     }
 }
