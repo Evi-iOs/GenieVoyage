@@ -263,6 +263,10 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         daysCollectionView.register(DayCollectionViewCell.self, forCellWithReuseIdentifier: "DayCell")
     }
     
+    func reloadItinerary() {
+        daysCollectionView.reloadData()
+    }
+    
     private let daysCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal

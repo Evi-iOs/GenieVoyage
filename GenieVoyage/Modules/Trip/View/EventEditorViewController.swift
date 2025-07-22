@@ -183,10 +183,16 @@ final class EventEditorViewController: UIViewController {
             components.hour = hour
             components.minute = minute
 
-            if let date = Calendar.current.date(from: components) {
-                beginPicker.date = date
-                endPicker.date = date
+            if let startDate = Calendar.current.date(from: components),
+               let endDate = Calendar.current.date(byAdding: .minute, value: 60, to: startDate) {
+
+                beginPicker.date = startDate
+                endPicker.date = endDate
             }
+        } else {
+            let now = Date()
+            beginPicker.date = now
+            endPicker.date = Calendar.current.date(byAdding: .minute, value: 60, to: now) ?? now.addingTimeInterval(60 * 60)
         }
 
         view.addSubview(stack)
@@ -298,7 +304,7 @@ final class EventEditorViewController: UIViewController {
             let rawMinutes = Int(beginPicker.date.timeIntervalSince(startOfDay) / 60)
             
             model.startMinutes = rawMinutes
-            model.duration = Int(endPicker.date.timeIntervalSince(beginPicker.date))/60
+            model.duration = Int(endPicker.date.timeIntervalSince(beginPicker.date) / 60)
             model.locationName = locationTextField.text ?? selectedLocationName
             model.coordinate = selectedCoordinate
             

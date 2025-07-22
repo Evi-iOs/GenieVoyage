@@ -296,6 +296,7 @@ extension MapEventsViewController: MKMapViewDelegate {
         return view
     }
     
+    //TODO: To Coordinator
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView,
                  calloutAccessoryControlTapped control: UIControl) {
         guard let eventAnnotation = view.annotation as? EventAnnotation else { return }

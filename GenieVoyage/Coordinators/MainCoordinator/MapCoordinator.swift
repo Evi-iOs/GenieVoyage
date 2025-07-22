@@ -15,7 +15,8 @@ class MapCoordinator: Coordinator {
     var push: Bool = false
     
     var onFinish: (() -> Void)?
-    
+    var onSave: (() -> Void)?
+
     private let tripViewModel: TripViewModel?
     private var updateAnnotations: (() -> Void)?
     
@@ -62,6 +63,7 @@ class MapCoordinator: Coordinator {
         eventCoordinator.onSave = { [weak self]  in
             guard let self = self else { return }
             self.updateAnnotations?()
+            self.onSave?()  
         }
     
         eventCoordinator.onFinish = { [weak self, weak eventCoordinator] in

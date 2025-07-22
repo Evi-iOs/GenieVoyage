@@ -14,6 +14,7 @@ class TripCoordinator: Coordinator {
     var onFinish: (() -> Void)?
         
     private let trip: TripModel
+    private var tripViewController: TripViewController?
     
     init(navigationController: UINavigationController, trip: TripModel) {
         self.navigationController = navigationController
@@ -25,6 +26,7 @@ class TripCoordinator: Coordinator {
         let tripVC = TripViewController(viewModel: viewModel)
         tripVC.hidesBottomBarWhenPushed = true
         tripVC.delegate = self
+        self.tripViewController = tripVC
         
         tripVC.onSave = { [weak self] updatedTrip in
             viewModel.trip = updatedTrip
@@ -43,6 +45,11 @@ class TripCoordinator: Coordinator {
         let mapCoordinator = MapCoordinator(navigationController: navigationController, tripViewModel: viewModel)
         mapCoordinator.push = true
         addChild(mapCoordinator)
+        
+        mapCoordinator.onSave = { [weak self] in
+            guard let self = self else { return }
+            self.tripViewController?.reloadItinerary()
+        }
         mapCoordinator.onFinish = { [weak self, weak mapCoordinator] in
             if let coordinator = mapCoordinator {
                 self?.removeChild(coordinator)
