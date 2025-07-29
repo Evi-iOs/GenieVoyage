@@ -8,35 +8,86 @@
 import UIKit
 
 final class TripListViewController: UIViewController {
-
+    
     var onTripSelected: ((TripModel) -> Void)?
     var startPlanningSelected: (() -> Void)?
 
-    private var trips: [TripModel] = []
-    private let tableView = UITableView()
+    enum Section: Int, CaseIterable {
+        case templates
+        case myTrips
+    }
 
+    private var templates: [TripTemplate] = TripTemplate.sampleTemplates()
+    private var myTrips: [TripModel] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Trips"
         view.backgroundColor = .systemBackground
-
-        setupTableView()
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTrip))
         navigationController?.navigationBar.tintColor = .darkGray
+        setupCollectionView()
+        loadMyTrips()
     }
 
-    private func setupTableView() {
-        view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "TripCell")
-        tableView.delegate = self
-        tableView.dataSource = self
+    private let collectionView: UICollectionView = {
+        let layout = UICollectionViewCompositionalLayout { sectionIndex, _ in
+            guard let sectionType = Section(rawValue: sectionIndex) else { return nil }
+
+            let headerItem = NSCollectionLayoutBoundarySupplementaryItem(
+                layoutSize: NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .absolute(40)
+                ),
+                elementKind: UICollectionView.elementKindSectionHeader,
+                alignment: .top
+            )
+            headerItem.pinToVisibleBounds = false
+
+            switch sectionType {
+            case .templates:
+                let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(0.5), heightDimension: .estimated(150)))
+                item.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 4, bottom: 12, trailing: 4)
+
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(150)), subitems: [item])
+                group.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
+
+                let section = NSCollectionLayoutSection(group: group)
+                section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
+                section.contentInsets = .init(top: 0, leading: 16, bottom: 32, trailing: 16)
+                section.boundarySupplementaryItems = [headerItem]
+                return section
+
+            case .myTrips:
+                let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(100)))
+                item.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
+
+                let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(160)), subitems: [item])
+                group.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
+
+                let section = NSCollectionLayoutSection(group: group)
+                section.contentInsets = .init(top: 0, leading: 16, bottom: 32, trailing: 16)
+                section.boundarySupplementaryItems = [headerItem]
+                return section
+            }
+        }
+        return UICollectionView(frame: .zero, collectionViewLayout: layout)
+    }()
+
+    private func setupCollectionView() {
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(TemplateCell.self, forCellWithReuseIdentifier: "TemplateCell")
+        collectionView.register(MyTripCell.self, forCellWithReuseIdentifier: "MyTripCell")
+        collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView")
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(collectionView)
 
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     
@@ -45,40 +96,103 @@ final class TripListViewController: UIViewController {
     }
     
     func addNewTrip(trip: TripModel) {
-        if trips.contains(where: { $0.id == trip.id }) {
-            if let index = trips.firstIndex(where: { $0.id == trip.id }) {
-                trips[index] = trip
+        if myTrips.contains(where: { $0.id == trip.id }) {
+            if let index = myTrips.firstIndex(where: { $0.id == trip.id }) {
+                myTrips[index] = trip
             }
         } else {
-            trips.append(trip)
+            myTrips.append(trip)
         }
-        tableView.reloadData()
+        collectionView.reloadData()
     }
     
     func reloadTrips() {
-        tableView.reloadData()
+        collectionView.reloadData()
+    }
+    
+    //TODO: CoreData
+    private func loadMyTrips() {
+//        self.myTrips = TripModel.loadUserTrips()
+//        collectionView.reloadData()
     }
 }
 
-// MARK: - UITableViewDataSource
-extension TripListViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return trips.count
+// MARK: - UICollectionViewDataSource & Delegate
+
+extension TripListViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return Section.allCases.count
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TripCell", for: indexPath)
-        let trip = trips[indexPath.row]
-        cell.textLabel?.text = trip.title
-        return cell
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        switch Section(rawValue: section) {
+        case .templates: return templates.count
+        case .myTrips: return myTrips.count
+        default: return 0
+        }
     }
-}
 
-// MARK: - UITableViewDelegate
-extension TripListViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        let selectedTrip = trips[indexPath.row]
-        onTripSelected?(selectedTrip)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let section = Section(rawValue: indexPath.section) else {
+            return UICollectionViewCell()
+        }
+
+        switch section {
+        case .templates:
+            guard indexPath.item < templates.count,
+                  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TemplateCell", for: indexPath) as? TemplateCell else {
+                return UICollectionViewCell()
+            }
+            cell.configure(with: templates[indexPath.item])
+            return cell
+
+        case .myTrips:
+            guard indexPath.item < myTrips.count,
+                  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MyTripCell", for: indexPath) as? MyTripCell else {
+                return UICollectionViewCell()
+            }
+            cell.configure(with: myTrips[indexPath.item])
+            return cell
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch Section(rawValue: indexPath.section) {
+        case .templates:
+            let template = templates[indexPath.item]
+            break
+        case .myTrips:
+            let trip = myTrips[indexPath.item]
+            onTripSelected?(trip)
+            break
+        default:
+            break
+        }
+    }
+
+    // MARK: - Headers
+
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
+        guard kind == UICollectionView.elementKindSectionHeader else { return UICollectionReusableView() }
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                      withReuseIdentifier: "HeaderView",
+                                                                      for: indexPath) as! HeaderView
+        switch Section(rawValue: indexPath.section) {
+        case .templates:
+            header.title = "Templates for You"
+        case .myTrips:
+            header.title = "My Trips"
+        default:
+            break
+        }
+        return header
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.bounds.width, height: 40)
     }
 }

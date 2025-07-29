@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		1B28A79DB26C7026E5FD14EA /* Pods_GenieVoyage_GenieVoyageUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B04908D54247C8A3BBBE049A /* Pods_GenieVoyage_GenieVoyageUITests.framework */; };
 		D0010B2C2B12A24200BAEC46 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0010B2B2B12A24200BAEC46 /* Extension.swift */; };
+		D023B2F42E3584FB009B382C /* TemplateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D023B2F32E3584FB009B382C /* TemplateCell.swift */; };
+		D023B2F62E358530009B382C /* MyTripCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D023B2F52E358530009B382C /* MyTripCell.swift */; };
+		D023B2F82E35858C009B382C /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D023B2F72E35858C009B382C /* HeaderView.swift */; };
+		D023B2FA2E3585BF009B382C /* TripTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D023B2F92E3585BF009B382C /* TripTemplate.swift */; };
 		D026365C2D84ADBB0070D28C /* SegmentedControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D026365B2D84ADBB0070D28C /* SegmentedControlView.swift */; };
 		D026365E2D84AE0D0070D28C /* SegmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D026365D2D84AE0D0070D28C /* SegmentCell.swift */; };
 		D0365DF12CFA6BEA00D711A9 /* TripModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0365DF02CFA6BE700D711A9 /* TripModel.swift */; };
@@ -115,6 +119,10 @@
 		9987FB9B0F0ED0A38BD352E5 /* Pods-GenieVoyage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GenieVoyage.release.xcconfig"; path = "Target Support Files/Pods-GenieVoyage/Pods-GenieVoyage.release.xcconfig"; sourceTree = "<group>"; };
 		B04908D54247C8A3BBBE049A /* Pods_GenieVoyage_GenieVoyageUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GenieVoyage_GenieVoyageUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0010B2B2B12A24200BAEC46 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		D023B2F32E3584FB009B382C /* TemplateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateCell.swift; sourceTree = "<group>"; };
+		D023B2F52E358530009B382C /* MyTripCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTripCell.swift; sourceTree = "<group>"; };
+		D023B2F72E35858C009B382C /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		D023B2F92E3585BF009B382C /* TripTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripTemplate.swift; sourceTree = "<group>"; };
 		D026365B2D84ADBB0070D28C /* SegmentedControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedControlView.swift; sourceTree = "<group>"; };
 		D026365D2D84AE0D0070D28C /* SegmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentCell.swift; sourceTree = "<group>"; };
 		D0365DF02CFA6BE700D711A9 /* TripModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripModel.swift; sourceTree = "<group>"; };
@@ -238,6 +246,10 @@
 			children = (
 				D06C7F1D2DBAC2D700402EA0 /* MainTabBarController.swift */,
 				D0FC227F2DF7662A0074C9AF /* TripListViewController.swift */,
+				D023B2F32E3584FB009B382C /* TemplateCell.swift */,
+				D023B2F52E358530009B382C /* MyTripCell.swift */,
+				D023B2F72E35858C009B382C /* HeaderView.swift */,
+				D023B2F92E3585BF009B382C /* TripTemplate.swift */,
 				D043B43C2CFF6DDE00151ED0 /* TripViewController.swift */,
 				D0FC22692DEA406A0074C9AF /* MapEventsViewController.swift */,
 				D06C7F382DE7ABC300402EA0 /* EventEditorViewController.swift */,
@@ -658,6 +670,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D023B2F62E358530009B382C /* MyTripCell.swift in Sources */,
 				D0365DF52CFA723600D711A9 /* TripDetailViewController.swift in Sources */,
 				D0D192D62A6FFF9A000853B8 /* CalendarViewController.swift in Sources */,
 				D0FC22882DFA13BD0074C9AF /* TripViewControllerDelegate.swift in Sources */,
@@ -675,6 +688,7 @@
 				D0FC22822DF77A300074C9AF /* EventCoordinator.swift in Sources */,
 				D06C7F1B2DB26C2600402EA0 /* DayCellDelegate.swift in Sources */,
 				D03D08692D08544D009F8E63 /* EventViewController.swift in Sources */,
+				D023B2F42E3584FB009B382C /* TemplateCell.swift in Sources */,
 				D0B5ADD52E20669C009A74A5 /* ProfileViewController.swift in Sources */,
 				D0B5ADD32E1C6542009A74A5 /* TransportSegmentControl.swift in Sources */,
 				D04945B32D3A451B00232F26 /* EventCollectionViewCell.swift in Sources */,
@@ -684,6 +698,7 @@
 				D0D192D42A6FFF9A000853B8 /* SceneDelegate.swift in Sources */,
 				D026365C2D84ADBB0070D28C /* SegmentedControlView.swift in Sources */,
 				D05D92E62D4B8CB10022C734 /* DayCollectionViewCell.swift in Sources */,
+				D023B2FA2E3585BF009B382C /* TripTemplate.swift in Sources */,
 				D026365E2D84AE0D0070D28C /* SegmentCell.swift in Sources */,
 				D06C7F2A2DE24BA600402EA0 /* EventView.swift in Sources */,
 				D06C7F262DBCF32D00402EA0 /* PointViewController.swift in Sources */,
@@ -705,6 +720,7 @@
 				D03D08672D074316009F8E63 /* ItineraryCell.swift in Sources */,
 				D06C7F1E2DBAC2E500402EA0 /* MainTabBarController.swift in Sources */,
 				D0D193082A71AC36000853B8 /* EKWrapper.swift in Sources */,
+				D023B2F82E35858C009B382C /* HeaderView.swift in Sources */,
 				D0365DF12CFA6BEA00D711A9 /* TripModel.swift in Sources */,
 				D0FC22782DF7641B0074C9AF /* TripCoordinator.swift in Sources */,
 				D04945B92D3EB26900232F26 /* TripViewModel.swift in Sources */,
