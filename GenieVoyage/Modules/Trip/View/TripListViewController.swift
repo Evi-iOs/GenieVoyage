@@ -82,6 +82,9 @@ final class TripListViewController: UIViewController {
         collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView")
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView)
+        
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        collectionView.addGestureRecognizer(longPressGesture)
 
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -108,6 +111,32 @@ final class TripListViewController: UIViewController {
     
     func reloadTrips() {
         collectionView.reloadData()
+    }
+    
+    @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
+        guard gesture.state == .began else { return }
+        let point = gesture.location(in: collectionView)
+
+        guard let indexPath = collectionView.indexPathForItem(at: point),
+              let section = Section(rawValue: indexPath.section),
+              section == .myTrips else {
+            return
+        }
+
+        let trip = myTrips[indexPath.item]
+
+        let alert = UIAlertController(title: "Delete Trip",
+                                      message: "Are you sure you want to delete \"\(trip.title)\"?",
+                                      preferredStyle: .actionSheet)
+
+        alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
+            self?.myTrips.remove(at: indexPath.item)
+            self?.collectionView.deleteItems(at: [indexPath])
+        }))
+
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+
+        present(alert, animated: true)
     }
     
     //TODO: CoreData
