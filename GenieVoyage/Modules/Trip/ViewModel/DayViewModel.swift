@@ -37,17 +37,31 @@ class DayViewModel {
         events = allEvents.sorted(by: { $0.startMinutes < $1.startMinutes })
         }
     
-    func saveEvent(_ event: EventModel) {
-        Task {
-            await storage.saveEvent(event, to: trip)
-            await loadEvents()
-            onUpdate?()
+    func saveEvent(_ event: EventModel) async {
+        await storage.saveEvent(event, to: trip)
+        
+        if let index = events.firstIndex(where: { $0.id == event.id }) {
+            events[index] = event
+        } else {
+            events.append(event)
+        }
+        
+        await MainActor.run {
+            self.onUpdate?()
         }
     }
     
     func deleteEvent(_ event: EventModel) async {
         await storage.deleteEvent(event)
-        await loadEvents()
+        
+        if let index = events.firstIndex(where: { $0.id == event.id }) {
+            events.remove(at: index)
+        } else {
+            await loadEvents()
+        }
+        await MainActor.run {
+            self.onUpdate?()
+        }
     }
     
     func hasEvent(id: UUID) -> Bool {
@@ -89,7 +103,6 @@ class DayViewModel {
     }
     
     func duplicateEvent(_ event: EventModel, dateEvent: Date) {
-        let newId = UUID()
         let newEvent = EventModel(
             id: UUID(),
             dateEvent: dateEvent,

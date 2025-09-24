@@ -14,7 +14,7 @@ class TripListCoordinator: Coordinator {
         
     private var tripListVC: TripListViewController?
     private let storage: TripStorage
-    private lazy var tripListViewModel = TripListViewModel(storage: storage)
+    private var tripListViewModel: TripListViewModel?
     
     init(navigationController: UINavigationController, storage: TripStorage) {
         self.navigationController = navigationController
@@ -22,29 +22,33 @@ class TripListCoordinator: Coordinator {
     }
 
     func start() {
-        let tripListVC = TripListViewController(viewModel: tripListViewModel)
-        self.tripListVC = tripListVC
-        
-        let image = UIImage.resizedSystemImage(named: "list.bullet.circle", scale: 1.7)
-        let selectedImage = UIImage.resizedSystemImage(named: "list.bullet.circle.fill", scale: 1.7)
-        
-        tripListVC.tabBarItem = UITabBarItem(
-            title: "Trips",
-            image: image,
-            selectedImage: selectedImage
-        )
-        tripListVC.tabBarItem.imageInsets = UIEdgeInsets(top: 1, left: 0, bottom: -1, right: 0)
-        
-        tripListVC.onTripSelected = { [weak self] trip in
-            self?.showTripDetail(for: trip)
+        Task { @MainActor in
+            tripListViewModel = TripListViewModel(storage: storage)
+            guard let tripListViewModel else { return }
+            let tripListVC = TripListViewController(viewModel: tripListViewModel)
+            self.tripListVC = tripListVC
+            
+            let image = UIImage.resizedSystemImage(named: "list.bullet.circle", scale: 1.7)
+            let selectedImage = UIImage.resizedSystemImage(named: "list.bullet.circle.fill", scale: 1.7)
+            
+            tripListVC.tabBarItem = UITabBarItem(
+                title: "Trips",
+                image: image,
+                selectedImage: selectedImage
+            )
+            tripListVC.tabBarItem.imageInsets = UIEdgeInsets(top: 1, left: 0, bottom: -1, right: 0)
+            
+            tripListVC.onTripSelected = { [weak self] trip in
+                self?.showTripDetail(for: trip)
+            }
+            tripListVC.startPlanningSelected = { [weak self] in
+                self?.startPlanning()
+            }
+            navigationController.setViewControllers([tripListVC], animated: false)
         }
-        tripListVC.startPlanningSelected = { [weak self] in
-            self?.startPlanning()
-        }
-        navigationController.setViewControllers([tripListVC], animated: false)
     }
 
-     private func showTripDetail(for trip: TripModel) {
+    private func showTripDetail(for trip: TripModel) {
         let tripCoordinator = TripCoordinator(navigationController: navigationController, trip: trip, storage: storage)
         tripCoordinator.onFinish = { [weak self] in
             self?.childCoordinators.removeAll()
@@ -60,7 +64,9 @@ class TripListCoordinator: Coordinator {
         if navigationController.viewControllers.contains(where: { $0 is StartPlanningViewController }) {
             return
         }
-        
+        guard let tripListViewModel = self.tripListViewModel else {
+            fatalError("tripListViewModel should not be nil")
+        }
         let startPlanningVC = StartPlanningViewController(tripListViewModel: tripListViewModel)
         startPlanningVC.hidesBottomBarWhenPushed = true
         startPlanningVC.onSave = { [weak self] newTrip in

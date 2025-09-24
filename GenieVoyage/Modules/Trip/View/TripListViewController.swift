@@ -140,31 +140,32 @@ final class TripListViewController: UIViewController {
     @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
         guard gesture.state == .began else { return }
         let point = gesture.location(in: collectionView)
-
+        
         guard let indexPath = collectionView.indexPathForItem(at: point),
               let section = Section(rawValue: indexPath.section),
               section == .myTrips else {
             return
         }
-
+        
         let trip = myTrips[indexPath.item]
-
+        
         let alert = UIAlertController(title: "Delete Trip",
                                       message: "Are you sure you want to delete \"\(trip.title)\"?",
                                       preferredStyle: .actionSheet)
-
+        
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
-            self?.myTrips.remove(at: indexPath.item)
-            self?.collectionView.deleteItems(at: [indexPath])
+            Task {
+                await self?.viewModel.removeTrip(trip)
+            }
         }))
-
+        
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-
+        
         present(alert, animated: true)
     }
     
     private func loadMyTrips() {
-        Task { 
+        Task {
             await viewModel.loadTrips()
         }
     }

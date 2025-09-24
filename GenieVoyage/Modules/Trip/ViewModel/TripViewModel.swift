@@ -53,9 +53,9 @@ final class TripViewModel: ObservableObject {
         }
     }
     
-    func addEvent(_ event: EventModel) {
+    func addEvent(_ event: EventModel) async {
         if let dayVM = days.first(where: { Calendar.current.isDate($0.dateDay, inSameDayAs: event.dateEvent) }) {
-            dayVM.saveEvent(event)
+            await dayVM.saveEvent(event)
         }
     }
 }

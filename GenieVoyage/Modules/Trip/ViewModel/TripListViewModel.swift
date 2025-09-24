@@ -7,15 +7,17 @@
 
 import Foundation
 
-final class TripListViewModel {
+@MainActor
+final class TripListViewModel: ObservableObject {
+    
     private let storage: TripStorage
     
+    @Published private(set) var trips: [TripModel] = []
+
     init(storage: TripStorage) {
         self.storage = storage
     }
-    
-    @Published private(set) var trips: [TripModel] = []
-    
+        
     func loadTrips() async {
         self.trips = await storage.loadTrips()
     }

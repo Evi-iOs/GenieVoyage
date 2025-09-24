@@ -77,7 +77,7 @@ final class EventCoordinator: @preconcurrency Coordinator {
                     updatedEvent.coordinate = coordinate
                 }
                 
-                self.dayViewModel.saveEvent(updatedEvent)
+                await self.dayViewModel.saveEvent(updatedEvent)
                 
                 self.onSave?()
                 self.navigationController.dismiss(animated: true) {
