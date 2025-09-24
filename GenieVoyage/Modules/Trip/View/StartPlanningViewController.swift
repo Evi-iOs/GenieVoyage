@@ -18,7 +18,18 @@ class StartPlanningViewController: UIViewController {
     private var searchCompleter = MKLocalSearchCompleter()
     private var suggestions: [MKLocalSearchCompletion] = []
     private let suggestionsTableView = UITableView()
-
+    
+    private let tripListViewModel: TripListViewModel
+    
+    init(tripListViewModel: TripListViewModel) {
+        self.tripListViewModel = tripListViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -127,11 +138,15 @@ class StartPlanningViewController: UIViewController {
                 title: title,
                 startDate: startDate,
                 endDate: endDate,
-                events: nil
+                days: [TripDay]()
             )
             existingTrip = updatedTrip
         }
-        self.onSave?(updatedTrip)
+        Task { [weak self] in
+            guard let self else { return }
+            await self.tripListViewModel.addTrip(updatedTrip)
+            self.onSave?(updatedTrip)
+        }
     }
     
     @objc private func textFieldDidChange() {

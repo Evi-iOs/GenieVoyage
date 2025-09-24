@@ -16,20 +16,25 @@ class MapCoordinator: Coordinator {
     
     var onFinish: (() -> Void)?
     var onSave: (() -> Void)?
-
+    
     private let tripViewModel: TripViewModel?
     private var updateAnnotations: (() -> Void)?
+    private let storage: TripStorage
     
-    init(navigationController: UINavigationController, tripViewModel: TripViewModel?) {
+    init(navigationController: UINavigationController, tripViewModel: TripViewModel?, storage: TripStorage) {
         self.navigationController = navigationController
         self.tripViewModel = tripViewModel
+        self.storage = storage
     }
     
     func start() {
         let mapVC = MapEventsViewController(viewModel: tripViewModel)
         
         mapVC.onAddEventAtCoordinate = { [weak self] coordinate, selectedLocationName, dayViewModel in
-            self?.showAddEventScreen(at: coordinate, selectedLocationName: selectedLocationName, forDay: dayViewModel)
+            guard let self = self else { return }
+            Task { @MainActor in
+                self.showAddEventScreen(at: coordinate, selectedLocationName: selectedLocationName, forDay: dayViewModel)
+            }
         }
         mapVC.onFinish = { [weak self] in
             self?.onFinish?()
@@ -58,20 +63,24 @@ class MapCoordinator: Coordinator {
     }
     
     private func showAddEventScreen(at coordinate: CLLocationCoordinate2D?, selectedLocationName: String?, forDay dayViewModel: DayViewModel) {
+        guard let tripViewModel = self.tripViewModel  else { return }
+        
         let eventCoordinator = EventCoordinator(navigationController: navigationController, eventID: nil, dayViewModel: dayViewModel, category: .point, startMinutes: nil, selectedLocationName: selectedLocationName, coordinates: coordinate)
         
         eventCoordinator.onSave = { [weak self]  in
             guard let self = self else { return }
             self.updateAnnotations?()
-            self.onSave?()  
+            self.onSave?()
         }
-    
+        
         eventCoordinator.onFinish = { [weak self, weak eventCoordinator] in
             if let coordinator = eventCoordinator {
                 self?.removeChild(coordinator)
             }
         }
         addChild(eventCoordinator)
-        eventCoordinator.start()
+        Task {
+            await eventCoordinator.start()
+        }
     }
 }

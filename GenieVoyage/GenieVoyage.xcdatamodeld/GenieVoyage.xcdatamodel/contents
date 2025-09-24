@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23507" systemVersion="24B91" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Destination" representedClassName="Destination" syncable="YES">
-        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="details" optional="YES" attributeType="String"/>
+    <entity name="EventEntity" representedClassName="EventEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="bookingLink" optional="YES" attributeType="URI"/>
+        <attribute name="category" optional="YES" attributeType="String"/>
+        <attribute name="duration" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="location" optional="YES" attributeType="Transformable"/>
-        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="locationName" optional="YES" attributeType="String"/>
+        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="notes" optional="YES" attributeType="String"/>
-        <relationship name="trip" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Trip" inverseName="destination" inverseEntity="Trip"/>
+        <attribute name="pdfFileURL" optional="YES" attributeType="URI"/>
+        <attribute name="startMinutes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="time" optional="YES" attributeType="String"/>
+        <relationship name="day" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TripDayEntity" inverseName="events" inverseEntity="TripDayEntity"/>
     </entity>
-    <entity name="Trip" representedClassName="Trip" syncable="YES">
+    <entity name="TripDayEntity" representedClassName="TripDayEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventEntity" inverseName="day" inverseEntity="EventEntity"/>
+        <relationship name="trip" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TripEntity" inverseName="days" inverseEntity="TripEntity"/>
+    </entity>
+    <entity name="TripEntity" representedClassName="TripEntity" syncable="YES" codeGenerationType="class">
         <attribute name="coverImage" optional="YES" attributeType="URI"/>
-        <attribute name="descriptionTrip" optional="YES" attributeType="String"/>
         <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="notes" optional="YES" attributeType="String"/>
         <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="titel" optional="YES" attributeType="String"/>
-        <relationship name="destination" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Destination" inverseName="trip" inverseEntity="Destination"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="days" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TripDayEntity" inverseName="trip" inverseEntity="TripDayEntity"/>
+        <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventEntity"/>
     </entity>
 </model>

@@ -6,47 +6,56 @@
 //
 
 import Foundation
-import UIKit
+import Combine
 
-class TripViewModel {
+@MainActor
+final class TripViewModel: ObservableObject {
     
-    var days: [DayViewModel] = []
-    var onDayChanged: (() -> Void)?
-    var onUpdate: (() -> Void)?
-
-    var selectedDayIndex: Int = 0 {
-        didSet {
-            onDayChanged?()
-        }
-    }
+    @Published private(set) var days: [DayViewModel] = []
+    @Published var selectedDayIndex: Int = 0
     
-    var trip: TripModel
-
-    init(trip: TripModel) {
+    private(set) var trip: TripModel
+    private let storage: TripStorage
+    private var cancellables = Set<AnyCancellable>()
+    
+    init(trip: TripModel, storage: TripStorage) {
         self.trip = trip
+        self.storage = storage
         setupData()
+        observeDays()
     }
     
-    func allEvents() -> [EventModel] {
-        days.flatMap { $0.events }
-    }
-    
-    // MARK: - Data Setup
     private func setupData() {
-        self.days = generateDatesViewModelsArray(from: trip.startDate, to: trip.endDate)
+        days = generateDatesViewModelsArray(from: trip.startDate, to: trip.endDate)
     }
     
     private func generateDatesViewModelsArray(from startDate: Date, to endDate: Date) -> [DayViewModel] {
-        var dayViewModels: [DayViewModel] = []
+        var models: [DayViewModel] = []
         let calendar = Calendar.current
-        let normalizedStartDate = calendar.startOfDay(for: startDate)
-        let normalizedEndDate = calendar.startOfDay(for: endDate)
+        var currentDate = calendar.startOfDay(for: startDate)
+        let endDate = calendar.startOfDay(for: endDate)
         
-        var currentDate = normalizedStartDate
-        while currentDate <= normalizedEndDate {
-            dayViewModels.append(DayViewModel(dateDay: currentDate))
+        while currentDate <= endDate {
+            models.append(DayViewModel(dateDay: currentDate, storage: storage, trip: trip))
             currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
         }
-        return dayViewModels
+        return models
+    }
+    
+    private func observeDays() {
+        days.forEach { dayVM in
+            dayVM.$events
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] _ in
+                    self?.objectWillChange.send()
+                }
+                .store(in: &cancellables)
+        }
+    }
+    
+    func addEvent(_ event: EventModel) {
+        if let dayVM = days.first(where: { Calendar.current.isDate($0.dateDay, inSameDayAs: event.dateEvent) }) {
+            dayVM.saveEvent(event)
+        }
     }
 }

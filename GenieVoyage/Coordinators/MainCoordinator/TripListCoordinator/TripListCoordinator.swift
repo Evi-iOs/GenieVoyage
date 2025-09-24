@@ -13,13 +13,16 @@ class TripListCoordinator: Coordinator {
     var childCoordinators = [Coordinator]()
         
     private var tripListVC: TripListViewController?
-
-    init(navigationController: UINavigationController) {
+    private let storage: TripStorage
+    private lazy var tripListViewModel = TripListViewModel(storage: storage)
+    
+    init(navigationController: UINavigationController, storage: TripStorage) {
         self.navigationController = navigationController
+        self.storage = storage
     }
 
     func start() {
-        let tripListVC = TripListViewController()
+        let tripListVC = TripListViewController(viewModel: tripListViewModel)
         self.tripListVC = tripListVC
         
         let image = UIImage.resizedSystemImage(named: "list.bullet.circle", scale: 1.7)
@@ -41,14 +44,16 @@ class TripListCoordinator: Coordinator {
         navigationController.setViewControllers([tripListVC], animated: false)
     }
 
-    private func showTripDetail(for trip: TripModel) {
-        let tripCoordinator = TripCoordinator(navigationController: navigationController, trip: trip)
+     private func showTripDetail(for trip: TripModel) {
+        let tripCoordinator = TripCoordinator(navigationController: navigationController, trip: trip, storage: storage)
         tripCoordinator.onFinish = { [weak self] in
             self?.childCoordinators.removeAll()
             self?.tripListVC?.reloadTrips()
         }
         addChild(tripCoordinator)
-        tripCoordinator.start()
+        Task {
+             await tripCoordinator.start()
+         }
     }
     
     private func startPlanning() {
@@ -56,7 +61,7 @@ class TripListCoordinator: Coordinator {
             return
         }
         
-        let startPlanningVC = StartPlanningViewController()
+        let startPlanningVC = StartPlanningViewController(tripListViewModel: tripListViewModel)
         startPlanningVC.hidesBottomBarWhenPushed = true
         startPlanningVC.onSave = { [weak self] newTrip in
             self?.tripListVC?.addNewTrip(trip: newTrip)

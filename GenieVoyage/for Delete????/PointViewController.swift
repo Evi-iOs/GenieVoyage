@@ -182,8 +182,8 @@ class PointViewController: UIViewController {
         
         let event = EventModel(
             id: UUID(),
+            dateEvent: startOfDay,
             category: selectedCategory ?? .point,
-            icon: UIImage(systemName: selectedCategory?.iconSystemName ?? "car") ?? UIImage(),
             time: DateFormatter.localizedString(from: beginPicker.date, dateStyle: .none, timeStyle: .short),
             startMinutes: rawMinutes,
             duration: Int(endPicker.date.timeIntervalSince(beginPicker.date))/60,

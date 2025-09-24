@@ -7,6 +7,7 @@
 
 import UIKit
 import Photos
+import Combine
 
 class TripViewController: UIViewController, UIImagePickerControllerDelegate, SegmentedControlDelegate, UINavigationControllerDelegate, UITextViewDelegate {
     
@@ -15,8 +16,9 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     var onClose: (() -> Void)?
     
     weak var delegate: TripViewControllerDelegate?
-        
+    
     private let viewModel: TripViewModel
+    private var cancellables = Set<AnyCancellable>()
     
     // MARK: UI elements
     private let destinationLabel = UILabel()
@@ -29,7 +31,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     
     private let coverImageView = UIImageView()
     private let addCoverButton = UIButton(type: .system)
-        
+    
     private let saveButton = UIButton(type: .system)
     
     init(viewModel: TripViewModel) {
@@ -52,9 +54,16 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         segmentedControl.delegate = self
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
         
-        viewModel.onUpdate = { [weak self] in
-            self?.daysCollectionView.reloadData()
-        }
+        //        viewModel.onUpdate = { [weak self] in
+        //            self?.daysCollectionView.reloadData()
+        //        }
+        
+        viewModel.$days
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.daysCollectionView.reloadData()
+            }
+            .store(in: &cancellables)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -123,7 +132,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         addCoverButton.isUserInteractionEnabled = true
         addCoverButton.isHidden = false
         addCoverButton.alpha = 1
-
+        
         saveButton.bigBlackButtonStyle(text: "Save")
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
@@ -297,11 +306,11 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
             return
         }
         
-        viewModel.trip.id = UUID()
-        viewModel.trip.title = title
-        viewModel.trip.description = description
-        viewModel.trip.startDate = startDatePicker.date
-        viewModel.trip.endDate = endDatePicker.date
+//        viewModel.trip.id = UUID()
+//        viewModel.trip.title = title
+//        viewModel.trip.description = description
+//        viewModel.trip.startDate = startDatePicker.date
+//        viewModel.trip.endDate = endDatePicker.date
         
         onSave?(viewModel.trip)
     }
@@ -344,13 +353,26 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     
     // MARK: - Binding
     private func bindViewModel() {
-        viewModel.onDayChanged = { [weak self] in
-            self?.daysCollectionView.reloadData()
-        }
+//        viewModel.onDayChanged = { [weak self] in
+//            self?.daysCollectionView.reloadData()
+//        }
+        viewModel.$days
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.reloadItinerary()
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$selectedDayIndex
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                //self?.updateSelectedDay()
+            }
+            .store(in: &cancellables)
     }
     
     //MARK: - MapButton
-
+    
     private let floatingMapButton: UIButton = {
         let button = UIButton(type: .system)
         let config = UIImage.SymbolConfiguration(pointSize: 16, weight: .light)
@@ -363,7 +385,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         button.backgroundColor = .black
         return button
     }()
-
+    
     private func showFloatingMapButton() {
         guard floatingMapButton.alpha != 1 else { return }
         
@@ -378,7 +400,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
             self.floatingMapButton.transform = .identity
         }
     }
-
+    
     private func hideFloatingMapButton() {
         guard floatingMapButton.alpha != 0 else { return }
         
@@ -386,7 +408,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
             self.floatingMapButton.alpha = 0
         }
     }
-
+    
     // MARK: - UIImagePickerControllerDelegate
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let selectedImage = info[.originalImage] as? UIImage {
@@ -462,8 +484,8 @@ extension TripViewController: UIDragInteractionDelegate {
         
         let event = EventModel(
             id: UUID(),
+            dateEvent: Date(),
             category: category,
-            icon: icon,
             time: "",
             startMinutes: 0,
             duration: 60,
@@ -505,7 +527,9 @@ extension TripViewController: DayCellDelegate {
     func dayCellDidDeleteEvent(_ cell: DayCollectionViewCell, event: EventModel) {
         guard let dayViewModel = cell.viewModel else { return }
         self.presentDeletionConfirmation {
-            dayViewModel.removeEvent(event)
+            Task {
+                await dayViewModel.deleteEvent(event)
+            }
         }
     }
     

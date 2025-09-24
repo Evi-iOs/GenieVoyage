@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 final class TripListViewController: UIViewController {
     
@@ -17,8 +18,20 @@ final class TripListViewController: UIViewController {
         case myTrips
     }
 
+    private let viewModel: TripListViewModel
     private var templates: [TripTemplate] = TripTemplate.sampleTemplates()
     private var myTrips: [TripModel] = []
+    
+    private var cancellables = Set<AnyCancellable>()
+    
+    init(viewModel: TripListViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +40,18 @@ final class TripListViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTrip))
         navigationController?.navigationBar.tintColor = .darkGray
         setupCollectionView()
+        bindViewModel()
         loadMyTrips()
+    }
+    
+    private func bindViewModel() {
+        viewModel.$trips
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] trips in
+                self?.myTrips = trips
+                self?.collectionView.reloadData()
+            }
+            .store(in: &cancellables)
     }
 
     private let collectionView: UICollectionView = {
@@ -46,11 +70,11 @@ final class TripListViewController: UIViewController {
 
             switch sectionType {
             case .templates:
-                let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(0.5), heightDimension: .estimated(150)))
-                item.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 4, bottom: 12, trailing: 4)
+                let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(0.5), heightDimension: .estimated(200)))
+                item.contentInsets = NSDirectionalEdgeInsets(top: 15, leading: 7, bottom: 12, trailing: 7)
 
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(150)), subitems: [item])
-                group.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
+                group.contentInsets = .init(top: 15, leading: 0, bottom: 0, trailing: 0)
 
                 let section = NSCollectionLayoutSection(group: group)
                 section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
@@ -139,10 +163,10 @@ final class TripListViewController: UIViewController {
         present(alert, animated: true)
     }
     
-    //TODO: CoreData
     private func loadMyTrips() {
-//        self.myTrips = TripModel.loadUserTrips()
-//        collectionView.reloadData()
+        Task { 
+            await viewModel.loadTrips()
+        }
     }
 }
 
@@ -188,7 +212,7 @@ extension TripListViewController: UICollectionViewDataSource, UICollectionViewDe
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch Section(rawValue: indexPath.section) {
         case .templates:
-            let template = templates[indexPath.item]
+            _ = templates[indexPath.item]
             break
         case .myTrips:
             let trip = myTrips[indexPath.item]

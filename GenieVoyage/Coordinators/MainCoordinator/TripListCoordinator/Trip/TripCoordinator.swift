@@ -8,32 +8,34 @@
 import Foundation
 import UIKit
 
-class TripCoordinator: Coordinator {
+class TripCoordinator: @preconcurrency Coordinator {
     var navigationController: UINavigationController
     var childCoordinators = [Coordinator]()
     var onFinish: (() -> Void)?
         
     private let trip: TripModel
     private var tripViewController: TripViewController?
+    private let storage: TripStorage
     
-    init(navigationController: UINavigationController, trip: TripModel) {
+    init(navigationController: UINavigationController, trip: TripModel, storage: TripStorage) {
         self.navigationController = navigationController
+        self.storage = storage
         self.trip = trip
     }
     
-    func start() {
-        let viewModel = TripViewModel(trip: trip)
+    @MainActor func start() {
+        let viewModel = TripViewModel(trip: trip, storage: storage)
         let tripVC = TripViewController(viewModel: viewModel)
         tripVC.hidesBottomBarWhenPushed = true
         tripVC.delegate = self
         self.tripViewController = tripVC
         
-        tripVC.onSave = { [weak self] updatedTrip in
-            viewModel.trip = updatedTrip
-            
-            self?.navigationController.popToRootViewController(animated: true)
-            self?.onFinish?()
-        }
+//        tripVC.onSave = { [weak self] updatedTrip in
+//            viewModel.trip = updatedTrip
+//            
+//            self?.navigationController.popToRootViewController(animated: true)
+//            self?.onFinish?()
+//        }
         
         tripVC.onMapTapped = { [weak self] in
             self?.showMap(for: viewModel)
@@ -42,7 +44,7 @@ class TripCoordinator: Coordinator {
     }
     
     private func showMap(for viewModel: TripViewModel) {
-        let mapCoordinator = MapCoordinator(navigationController: navigationController, tripViewModel: viewModel)
+        let mapCoordinator = MapCoordinator(navigationController: navigationController, tripViewModel: viewModel, storage: storage)
         mapCoordinator.push = true
         addChild(mapCoordinator)
         
@@ -59,9 +61,9 @@ class TripCoordinator: Coordinator {
     }
 }
 
-extension TripCoordinator: TripViewControllerDelegate {
+extension TripCoordinator: @preconcurrency TripViewControllerDelegate {
     
-    func didRequestOpenEvent(dayViewModel: DayViewModel, event: EventModel) {
+    @MainActor func didRequestOpenEvent(dayViewModel: DayViewModel, event: EventModel) {
         let eventCoordinator = EventCoordinator(navigationController: navigationController, eventID: event.id, dayViewModel: dayViewModel, category: nil, startMinutes: nil, selectedLocationName: nil, coordinates: nil)
         eventCoordinator.onFinish = { [weak self, weak eventCoordinator] in
             if let coordinator = eventCoordinator {
@@ -72,7 +74,7 @@ extension TripCoordinator: TripViewControllerDelegate {
         eventCoordinator.start()
     }
     
-    func didDropEvent(dayViewModel: DayViewModel, didDropEventWith category: EventCategory, at startMinutes: Int) {
+    @MainActor func didDropEvent(dayViewModel: DayViewModel, didDropEventWith category: EventCategory, at startMinutes: Int) {
         let eventCoordinator = EventCoordinator(navigationController: navigationController, eventID: nil, dayViewModel: dayViewModel, category: category, startMinutes: startMinutes, selectedLocationName: nil, coordinates: nil)
         eventCoordinator.onFinish = { [weak self, weak eventCoordinator] in
             if let coordinator = eventCoordinator {

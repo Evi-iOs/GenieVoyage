@@ -6,27 +6,48 @@
 //
 
 import Foundation
+import Combine
 import UIKit
 
+@MainActor
 class DayViewModel {
     
+    @Published private(set) var events: [EventModel] = []
+    
     var dateDay: Date
-    var events: [EventModel] = []
     let hours = (0...23).map { String(format: "%02d:00", $0) }
+    
+    private let storage: TripStorage
+    private let trip: TripModel
     
     var onUpdate: (() -> Void)?
     
-    init(dateDay: Date) {
+    init(dateDay: Date, storage: TripStorage, trip: TripModel) {
         self.dateDay = dateDay
+        self.storage = storage
+        self.trip = trip
+        
+        Task  {
+            await loadEvents()
+        }
     }
     
-    func addEvent(_ event: EventModel) {
-        if hasEvent(id: event.id) {
-            update(event: event)
-        } else {
-            events.append(event)
+    private func loadEvents() async {
+            let allEvents = await storage.loadEvents(for: trip)
+        events = allEvents.sorted(by: { $0.startMinutes < $1.startMinutes })
+        }
+    
+    func saveEvent(_ event: EventModel) {
+        Task {
+            await storage.saveEvent(event, to: trip)
+            await loadEvents()
             onUpdate?()
         }
+    }
+    
+    func deleteEvent(_ event: EventModel) async {
+        await storage.deleteEvent(event)
+        await loadEvents()
     }
     
     func hasEvent(id: UUID) -> Bool {
@@ -37,47 +58,55 @@ class DayViewModel {
         return events.contains { $0.time == time }
     }
     
-    func event(at time: String) -> EventModel? {
-        return events.first { $0.time == time }
+    func event(withId id: UUID) -> EventModel? {
+        events.first { $0.id == id }
     }
     
-    func update(event: EventModel) {
-        if let index = events.firstIndex(where: { $0.id == event.id }) {
-            events[index] = event
-            onUpdate?()
-        }
+    func event(at time: String) -> EventModel? {
+        return events.first { $0.time == time }
     }
     
     func moveEvent(_ id: UUID, byMinutes delta: Int) {
         guard let index = events.firstIndex(where: { $0.id == id }) else { return }
         events[index].startMinutes += delta
-    }
-
-    func resizeEvent(_ id: UUID, toMinutes newDuration: Int) {
-        guard let index = events.firstIndex(where: { $0.id == id }) else { return }
-        events[index].duration = newDuration
-    }
-    
-    func removeEvent(_ eventId: EventModel) {
-        events.removeAll { $0.id == eventId.id }
+        let updatedEvent = events[index]
+        
+        Task {
+            await storage.saveEvent(updatedEvent, to: trip)
+        }
         onUpdate?()
     }
     
-    func event(withId id: UUID) -> EventModel? {
-        return events.first(where: { $0.id == id })
+    func resizeEvent(_ id: UUID, toMinutes newDuration: Int) {
+        guard let index = events.firstIndex(where: { $0.id == id }) else { return }
+        events[index].duration = newDuration
+        
+        let updatedEvent = events[index]
+        Task {
+            await storage.saveEvent(updatedEvent, to: trip)
+        }
+        onUpdate?()
     }
     
-    func duplicateEvent(_ event: EventModel) {
+    func duplicateEvent(_ event: EventModel, dateEvent: Date) {
         let newId = UUID()
         let newEvent = EventModel(
-            id: newId,
+            id: UUID(),
+            dateEvent: dateEvent,
             category: event.category,
-            icon: event.icon,
             time: event.time,
             startMinutes: event.startMinutes,
-            duration: event.duration
+            duration: event.duration,
+            locationName: event.locationName,
+            coordinate: event.coordinate,
+            notes: event.notes,
+            bookingLink: event.bookingLink,
+            pdfFileURL: event.pdfFileURL
         )
         events.append(newEvent)
+        Task {
+            await storage.saveEvent(newEvent, to: trip)
+        }
         onUpdate?()
     }
     

@@ -184,7 +184,7 @@ class DayCollectionViewCell: UICollectionViewCell {
 
         eventView.onDuplicate = { [weak self] in
             guard let self = self else { return }
-            self.viewModel?.duplicateEvent(event)
+            self.viewModel?.duplicateEvent(event, dateEvent: event.dateEvent)
             self.renderEventsOverlay()
         }
 

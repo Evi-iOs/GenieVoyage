@@ -9,15 +9,13 @@ import Foundation
 import UIKit
 import CoreLocation
 
-struct TripDay {
-    let date: String
-    let itineraryEvents: [EventModel]
-}
-
 struct EventModel: Equatable {
     let id: UUID
+    let dateEvent: Date
     let category: EventCategory
-    let icon: UIImage
+    var icon: UIImage {
+            UIImage(systemName: category.iconSystemName) ?? UIImage()
+        }
     let time: String
     var startMinutes: Int
     var duration: Int

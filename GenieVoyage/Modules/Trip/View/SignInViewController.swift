@@ -41,7 +41,7 @@ class SignInViewController: UIViewController {
         button.backgroundColor = UIColor.black
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 8
-        button.addTarget(self, action: #selector(signInTapped), for: .touchUpInside)
+        button.addTarget(SignInViewController.self, action: #selector(signInTapped), for: .touchUpInside)
         return button
     }()
     
@@ -58,7 +58,7 @@ class SignInViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle("Sign Up", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        button.addTarget(self, action: #selector(signUpTapped), for: .touchUpInside)
+        button.addTarget(SignInViewController.self, action: #selector(signUpTapped), for: .touchUpInside)
         return button
     }()
     
