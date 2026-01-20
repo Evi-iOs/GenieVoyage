@@ -14,7 +14,7 @@ class TripCoordinator: @preconcurrency Coordinator {
     var onFinish: (() -> Void)?
         
     private let trip: TripModel
-    private var tripViewController: TripViewController?
+    private var tripViewModel: TripViewModel!
     private let storage: TripStorage
     
     init(navigationController: UINavigationController, trip: TripModel, storage: TripStorage) {
@@ -25,33 +25,23 @@ class TripCoordinator: @preconcurrency Coordinator {
     
     @MainActor func start() {
         let viewModel = TripViewModel(trip: trip, storage: storage)
+        tripViewModel = viewModel
+        
         let tripVC = TripViewController(viewModel: viewModel)
         tripVC.hidesBottomBarWhenPushed = true
         tripVC.delegate = self
-        self.tripViewController = tripVC
-        
-//        tripVC.onSave = { [weak self] updatedTrip in
-//            viewModel.trip = updatedTrip
-//            
-//            self?.navigationController.popToRootViewController(animated: true)
-//            self?.onFinish?()
-//        }
         
         tripVC.onMapTapped = { [weak self] in
-            self?.showMap(for: viewModel)
+            self?.showMap()
         }
         navigationController.pushViewController(tripVC, animated: true)
     }
     
-    private func showMap(for viewModel: TripViewModel) {
-        let mapCoordinator = MapCoordinator(navigationController: navigationController, tripViewModel: viewModel, storage: storage)
+    private func showMap() {
+        let mapCoordinator = MapCoordinator(navigationController: navigationController, tripViewModel: tripViewModel, storage: storage)
         mapCoordinator.push = true
         addChild(mapCoordinator)
         
-        mapCoordinator.onSave = { [weak self] in
-            guard let self = self else { return }
-            self.tripViewController?.reloadItinerary()
-        }
         mapCoordinator.onFinish = { [weak self, weak mapCoordinator] in
             if let coordinator = mapCoordinator {
                 self?.removeChild(coordinator)
@@ -61,27 +51,54 @@ class TripCoordinator: @preconcurrency Coordinator {
     }
 }
 
-extension TripCoordinator: @preconcurrency TripViewControllerDelegate {
-    
-    @MainActor func didRequestOpenEvent(dayViewModel: DayViewModel, event: EventModel) {
-        let eventCoordinator = EventCoordinator(navigationController: navigationController, eventID: event.id, dayViewModel: dayViewModel, category: nil, startMinutes: nil, selectedLocationName: nil, coordinates: nil)
-        eventCoordinator.onFinish = { [weak self, weak eventCoordinator] in
-            if let coordinator = eventCoordinator {
+extension TripCoordinator: @MainActor TripViewControllerDelegate {
+
+    @MainActor
+    func didRequestOpenEvent(event: EventModel) {
+        let coordinator = EventCoordinator(
+            navigationController: navigationController,
+            tripViewModel: tripViewModel,
+            event: event,
+            startMinutes: nil,
+            selectedLocationName: nil,
+            coordinates: nil,
+            date: event.dateEvent,
+            category: nil
+        )
+
+        addChild(coordinator)
+
+        coordinator.onFinish = { [weak self, weak coordinator] in
+            if let coordinator {
                 self?.removeChild(coordinator)
             }
         }
-        addChild(eventCoordinator)
-        eventCoordinator.start()
+
+        coordinator.start()
     }
-    
-    @MainActor func didDropEvent(dayViewModel: DayViewModel, didDropEventWith category: EventCategory, at startMinutes: Int) {
-        let eventCoordinator = EventCoordinator(navigationController: navigationController, eventID: nil, dayViewModel: dayViewModel, category: category, startMinutes: startMinutes, selectedLocationName: nil, coordinates: nil)
-        eventCoordinator.onFinish = { [weak self, weak eventCoordinator] in
-            if let coordinator = eventCoordinator {
+
+    @MainActor
+    func didDropCreateEvent(event: EventModel?, category: EventCategory, dateEvent: Date, startMinutes: Int) {
+        let coordinator = EventCoordinator(
+            navigationController: navigationController,
+            tripViewModel: tripViewModel,
+            event: event ?? nil,
+            startMinutes: startMinutes,
+            selectedLocationName: nil,
+            coordinates: nil,
+            date: dateEvent,
+            category: category
+        )
+
+        addChild(coordinator)
+
+        coordinator.onFinish = { [weak self, weak coordinator] in
+            if let coordinator {
                 self?.removeChild(coordinator)
             }
         }
-        addChild(eventCoordinator)
-        eventCoordinator.start()
+
+        coordinator.start()
     }
 }
+

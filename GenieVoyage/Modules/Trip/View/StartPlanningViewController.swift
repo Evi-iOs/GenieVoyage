@@ -121,12 +121,15 @@ class StartPlanningViewController: UIViewController {
             showAlert(message: "Enter title Trip")
             return
         }
+        
+        var calendar = Calendar.current
+        calendar.timeZone = .current
 
-        let startDate = startDatePicker.date
-        let endDate = endDatePicker.date
-
+        let startDate = calendar.startOfDay(for: startDatePicker.date)
+        let endDate = calendar.startOfDay(for: endDatePicker.date)
+        
         let updatedTrip: TripModel
-
+        
         if var existingTrip = existingTrip {
             existingTrip.title = title
             existingTrip.startDate = startDate

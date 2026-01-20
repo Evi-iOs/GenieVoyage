@@ -11,7 +11,7 @@ import CoreLocation
 protocol EventEditorConfigurable {
     
     var category: EventCategory { get }
-    var startDate: Date { get set }
+    var startDate: Date { get }
     var endDate: Date { get set }
     var duration: Int { get set }
 

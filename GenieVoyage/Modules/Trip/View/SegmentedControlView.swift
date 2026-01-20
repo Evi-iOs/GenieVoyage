@@ -52,6 +52,17 @@ class SegmentedControlView: UIView, UICollectionViewDelegate, UICollectionViewDa
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
+    
+    func updateItems(_ newItems: [String], selectedIndex: Int = 0) {
+        self.items = newItems
+        self.selectedIndex = selectedIndex
+        collectionView.reloadData()
+
+        guard items.count > 0, selectedIndex < items.count else { return }
+
+        let indexPath = IndexPath(item: selectedIndex, section: 0)
+        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
+    }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return items.count

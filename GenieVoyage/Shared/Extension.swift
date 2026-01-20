@@ -257,3 +257,20 @@ extension Collection {
     }
 }
 
+extension UICollectionView {
+    func currentPageIndex() -> Int? {
+        guard let layout = collectionViewLayout as? UICollectionViewFlowLayout else { return nil }
+        
+        let cellWidthIncludingSpacing = bounds.width * 0.9 + layout.minimumLineSpacing
+        
+        let index = Int(round((contentOffset.x + contentInset.left) / cellWidthIncludingSpacing))
+        
+        return max(0, min(index, numberOfItems(inSection: 0) - 1))
+    }
+}
+
+extension Date {
+    var startOfDay: Date {
+        Calendar.current.startOfDay(for: self)
+    }
+}

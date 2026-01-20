@@ -176,19 +176,22 @@ final class EventEditorViewController: UIViewController {
         endPicker.datePickerMode = .time
         endPicker.preferredDatePickerStyle = .compact
 
+        var calendar = Calendar.current
+        calendar.timeZone = .current
+
         if let minutes = preselectedStartMinutes {
             let hour = minutes / 60
             let minute = minutes % 60
-            var components = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+            var components = calendar.dateComponents([.year, .month, .day], from: Date())
             components.hour = hour
             components.minute = minute
 
-            if let startDate = Calendar.current.date(from: components),
-               let endDate = Calendar.current.date(byAdding: .minute, value: 60, to: startDate) {
-
+            if let startDate = calendar.date(from: components),
+               let endDate = calendar.date(byAdding: .minute, value: 60, to: startDate) {
                 beginPicker.date = startDate
                 endPicker.date = endDate
             }
+            
         } else {
             let now = Date()
             beginPicker.date = now
@@ -303,7 +306,9 @@ final class EventEditorViewController: UIViewController {
             let startOfDay = calendar.startOfDay(for: beginPicker.date)
             let rawMinutes = Int(beginPicker.date.timeIntervalSince(startOfDay) / 60)
             
+            model.dateEvent = startOfDay
             model.startMinutes = rawMinutes
+            model.time = String(rawMinutes/60)
             model.duration = Int(endPicker.date.timeIntervalSince(beginPicker.date) / 60)
             model.locationName = locationTextField.text ?? selectedLocationName
             model.coordinate = selectedCoordinate

@@ -11,51 +11,131 @@ import Combine
 @MainActor
 final class TripViewModel: ObservableObject {
     
+    @Published private(set) var events: [EventModel] = []
     @Published private(set) var days: [DayViewModel] = []
     @Published var selectedDayIndex: Int = 0
+    @Published var isLoading: Bool = false
     
-    private(set) var trip: TripModel
+    let trip: TripModel
     private let storage: TripStorage
-    private var cancellables = Set<AnyCancellable>()
+    private var calendar: Calendar
     
-    init(trip: TripModel, storage: TripStorage) {
+    private var daysCancellables = Set<AnyCancellable>()
+    private var modelCancellables = Set<AnyCancellable>()
+    
+    init(trip: TripModel, storage: TripStorage, calendar: Calendar = .current) {
         self.trip = trip
         self.storage = storage
-        setupData()
-        observeDays()
+        self.calendar = calendar
+        
+        Task {
+            await loadInitialData()
+        }
     }
     
-    private func setupData() {
-        days = generateDatesViewModelsArray(from: trip.startDate, to: trip.endDate)
+    private func loadInitialData() async {
+        isLoading = false
+        
+        let loadedEvents = await storage.loadEvents(for: trip)
+        let generatedDays = generateDayViewModels()
+        
+        events = loadedEvents
+        days = generatedDays
+        
+        distributeEventsToDays()
+        isLoading = true
     }
     
-    private func generateDatesViewModelsArray(from startDate: Date, to endDate: Date) -> [DayViewModel] {
-        var models: [DayViewModel] = []
-        let calendar = Calendar.current
-        var currentDate = calendar.startOfDay(for: startDate)
-        let endDate = calendar.startOfDay(for: endDate)
+    private func generateDayViewModels() -> [DayViewModel] {
+        var result: [DayViewModel] = []
+        
+        calendar.timeZone = .current
+        var currentDate = calendar.startOfDay(for: trip.startDate)
+        let endDate = calendar.startOfDay(for: trip.endDate)
         
         while currentDate <= endDate {
-            models.append(DayViewModel(dateDay: currentDate, storage: storage, trip: trip))
+            result.append(DayViewModel(dateDay: currentDate, calendar: calendar))
             currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
         }
-        return models
+        return result
     }
     
-    private func observeDays() {
-        days.forEach { dayVM in
-            dayVM.$events
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] _ in
-                    self?.objectWillChange.send()
-                }
-                .store(in: &cancellables)
+    private func distributeEventsToDays() {
+        for day in days {
+            day.setEvents(events)
         }
     }
+    
+    // MARK: - Public intents from UI
     
     func addEvent(_ event: EventModel) async {
-        if let dayVM = days.first(where: { Calendar.current.isDate($0.dateDay, inSameDayAs: event.dateEvent) }) {
-            await dayVM.saveEvent(event)
-        }
+        guard !events.contains(where: { $0.id == event.id }) else { return }
+        
+        events.append(event)
+        normalizeEvents()
+        
+        await storage.saveEvent(event, to: trip)
+        distributeEventsToDays()
+    }
+    
+    func updateEvent(_ event: EventModel) async {
+        guard let index = events.firstIndex(where: { $0.id == event.id }) else { return }
+        
+        events[index] = event
+        normalizeEvents()
+        
+        await storage.saveEvent(event, to: trip)
+        distributeEventsToDays()
+    }
+    
+    func deleteEvent(_ event: EventModel) async {
+        events.removeAll { $0.id == event.id }
+        
+        await storage.deleteEvent(event)
+        distributeEventsToDays()
+    }
+    
+    func moveEvent(_ event: EventModel, byMinutes delta: Int) async {
+        guard let index = events.firstIndex(where: { $0.id == event.id }) else { return }
+        
+        events[index].startMinutes += delta
+        normalizeEvents()
+        
+        await storage.saveEvent(events[index], to: trip)
+        distributeEventsToDays()
+    }
+    
+    func resizeEvent(_ event: EventModel, toMinutes duration: Int) async {
+        guard let index = events.firstIndex(where: { $0.id == event.id }) else { return }
+        
+        events[index].duration = duration
+        normalizeEvents()
+        
+        await storage.saveEvent(events[index], to: trip)
+        distributeEventsToDays()
+    }
+    
+    func duplicateEvent(_ event: EventModel, to date: Date) async {
+        let newEvent = EventModel(
+            id: UUID(),
+            dateEvent: date,
+            category: event.category,
+            time: event.time,
+            startMinutes: event.startMinutes,
+            duration: event.duration,
+            locationName: event.locationName,
+            coordinate: event.coordinate,
+            notes: event.notes,
+            bookingLink: event.bookingLink,
+            pdfFileURL: event.pdfFileURL
+        )
+        
+        await addEvent(newEvent)
+    }
+    
+    // MARK: - Helpers
+    
+    private func normalizeEvents() {
+        events.sort { $0.startMinutes < $1.startMinutes }
     }
 }

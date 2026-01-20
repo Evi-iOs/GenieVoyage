@@ -19,24 +19,36 @@ extension TripEntity {
             days: (self.days as? Set<TripDayEntity>)?.map { $0.toModel() } ?? []
         )
     }
-
+    
     func update(from model: TripModel, context: NSManagedObjectContext) {
         self.id = model.id
         self.title = model.title
         self.startDate = model.startDate
         self.endDate = model.endDate
-
+        
+        var existingDaysByDate: [Date: TripDayEntity] = [:]
         if let existingDays = self.days as? Set<TripDayEntity> {
             for day in existingDays {
-                context.delete(day)
+                if let date = day.date {
+                    existingDaysByDate[date] = day
+                }
             }
         }
-
+        
         for dayModel in model.days {
-            let dayEntity = TripDayEntity(context: context)
-            dayEntity.update(from: dayModel, context: context)
-            dayEntity.trip = self
-            self.addToDays(dayEntity)
+            if let existing = existingDaysByDate[dayModel.date] {
+                existing.update(from: dayModel, context: context)
+                existingDaysByDate.removeValue(forKey: dayModel.date)
+            } else {
+                let newDay = TripDayEntity(context: context)
+                newDay.update(from: dayModel, context: context)
+                newDay.trip = self
+                self.addToDays(newDay)
+            }
+        }
+        
+        for unused in existingDaysByDate.values {
+            context.delete(unused)
         }
     }
 }
@@ -48,21 +60,33 @@ extension TripDayEntity {
             itineraryEvents: (self.events as? Set<EventEntity>)?.map { $0.toModel() } ?? []
         )
     }
-
+    
     func update(from model: TripDay, context: NSManagedObjectContext) {
         self.date = model.date
-
+        
+        var existingEventsById: [UUID: EventEntity] = [:]
         if let existingEvents = self.events as? Set<EventEntity> {
             for event in existingEvents {
-                context.delete(event)
+                if let id = event.id {
+                    existingEventsById[id] = event
+                }
             }
         }
-
+        
         for eventModel in model.itineraryEvents {
-            let eventEntity = EventEntity(context: context)
-            eventEntity.update(from: eventModel)
-            eventEntity.day = self
-            self.addToEvents(eventEntity)
+            if let existing = existingEventsById[eventModel.id] {
+                existing.update(from: eventModel)
+                existingEventsById.removeValue(forKey: eventModel.id)
+            } else {
+                let newEvent = EventEntity(context: context)
+                newEvent.update(from: eventModel)
+                newEvent.day = self
+                self.addToEvents(newEvent)
+            }
+        }
+        
+        for unused in existingEventsById.values {
+            context.delete(unused)
         }
     }
 }

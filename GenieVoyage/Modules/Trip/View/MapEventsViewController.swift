@@ -8,20 +8,24 @@
 import UIKit
 import MapKit
 import CoreLocation
+import Combine
 
-class MapEventsViewController: UIViewController {
+final class MapEventsViewController: UIViewController {
     
-    var onAddEventAtCoordinate: ((CLLocationCoordinate2D?, String?, DayViewModel) -> Void)?
+    var onAddEventAtCoordinate: ((CLLocationCoordinate2D?, String?, Date, Int?) -> Void)?
     var onFinish: (() -> Void)?
+    var onSelectEvent: ((EventModel) -> Void)?
+    
+    private var cancellables = Set<AnyCancellable>()
 
-    private let viewModel: TripViewModel?
+    private let viewModel: TripViewModel
     private var selectedDayIndex = 0
     
     private var isRouteVisible = true
     private let locationManager = CLLocationManager()
     private var currentTransportType: MKDirectionsTransportType = .automobile
     
-    init(viewModel: TripViewModel?) {
+    init(viewModel: TripViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -36,6 +40,15 @@ class MapEventsViewController: UIViewController {
         if self.isMovingFromParent {
             onFinish?()
         }
+    }
+    
+    private func bindViewModel() {
+        viewModel.$days
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.updateMapForSelectedDay()
+            }
+            .store(in: &cancellables)
     }
     
     private lazy var dayTabsCollectionView: UICollectionView = {
@@ -69,6 +82,8 @@ class MapEventsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        
+        bindViewModel()
         
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -173,8 +188,8 @@ class MapEventsViewController: UIViewController {
         mapView.removeAnnotations(mapView.annotations)
         mapView.removeOverlays(mapView.overlays)
         
-        let day = viewModel?.days[selectedDayIndex]
-        let annotations = day?.events.map { event -> MKPointAnnotation in
+        let day = viewModel.days[selectedDayIndex]
+        let annotations = day.events.map { event -> MKPointAnnotation in
             let annotation = EventAnnotation(event: event)
             guard let eventCoordinate = event.coordinate else { return annotation }
             annotation.coordinate = eventCoordinate
@@ -183,12 +198,11 @@ class MapEventsViewController: UIViewController {
             return annotation
         }
         
-        if let first = annotations?.first {
+        if let first = annotations.first {
             let region = MKCoordinateRegion(center: first.coordinate, latitudinalMeters: 1200, longitudinalMeters: 1200)
             mapView.setRegion(region, animated: true)
         }
         
-        guard let day = day, let annotations = annotations else { return }
         mapView.showAnnotations(annotations, animated: true)
         
         if isRouteVisible {
@@ -251,12 +265,12 @@ class MapEventsViewController: UIViewController {
 
   extension MapEventsViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
       func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-          return viewModel?.days.count ?? 1
+          return viewModel.days.count
       }
 
       func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
           let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DayTabCell.identifier, for: indexPath) as! DayTabCell
-          cell.configure(with: viewModel?.days[indexPath.item].dateDay.formattedDay() ?? "")
+          cell.configure(with: viewModel.days[indexPath.item].dateDay.formattedDay())
           return cell
       }
 
@@ -296,15 +310,10 @@ extension MapEventsViewController: MKMapViewDelegate {
         return view
     }
     
-    //TODO: To Coordinator
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView,
                  calloutAccessoryControlTapped control: UIControl) {
-        guard let eventAnnotation = view.annotation as? EventAnnotation else { return }
-        let editorVC = EventEditorViewController(viewModel: EventEditorFactory.editViewModel(for: eventAnnotation.event))
-        editorVC.onSave = { [weak self] updatedEvent in
-            // self?.reload(updatedEvent)
-        }
-        navigationController?.pushViewController(editorVC, animated: true)
+        guard let annotation = view.annotation as? EventAnnotation else { return }
+        onSelectEvent?(annotation.event)
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
@@ -336,14 +345,17 @@ extension MapEventsViewController: MKMapViewDelegate {
     }
     
     @objc private func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
-        guard gestureRecognizer.state == .began, let day = viewModel?.days[selectedDayIndex] else { return }
+        guard gestureRecognizer.state == .began else { return }
 
         let touchPoint = gestureRecognizer.location(in: mapView)
         let coordinate = mapView.convert(touchPoint, toCoordinateFrom: mapView)
         
+        let day = viewModel.days[selectedDayIndex]
+        let date = day.dateDay
+        
         self.getPlaceName(from: coordinate) { [weak self] placeName in
             guard let self = self else { return }
-            self.onAddEventAtCoordinate?(coordinate, placeName, day)
+            self.onAddEventAtCoordinate?(coordinate, placeName, date, nil)
         }
     }
 

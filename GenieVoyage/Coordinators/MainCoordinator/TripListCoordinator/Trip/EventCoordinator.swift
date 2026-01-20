@@ -16,49 +16,44 @@ final class EventCoordinator: @preconcurrency Coordinator {
     var onFinish: (() -> Void)?
     var onSave: (() -> Void)?
     
-    private let dayViewModel: DayViewModel
-    private let eventID: UUID?
-    private let category: EventCategory?
+    private let tripViewModel: TripViewModel
+    private let event: EventModel?
     private let startMinutes: Int?
     private let selectedLocationName: String?
     private let coordinates: CLLocationCoordinate2D?
+    private let date: Date
+    private let category: EventCategory?
     
-    init(navigationController: UINavigationController, eventID: UUID?, dayViewModel: DayViewModel, category: EventCategory?, startMinutes: Int?, selectedLocationName: String?, coordinates: CLLocationCoordinate2D?) {
+    init(navigationController: UINavigationController, tripViewModel: TripViewModel, event: EventModel?, startMinutes: Int?, selectedLocationName: String?, coordinates: CLLocationCoordinate2D?, date: Date, category: EventCategory?) {
         self.navigationController = navigationController
-        self.eventID = eventID
-        self.dayViewModel = dayViewModel
-        self.category = category
+        self.tripViewModel = tripViewModel
+        self.event = event
         self.startMinutes = startMinutes
         self.selectedLocationName = selectedLocationName
+        self.date = date
         self.coordinates = coordinates
+        self.category = category
     }
     
     @MainActor func start() {
-        let viewModel: EventEditorConfigurable
-        var existingEvent: EventModel?
+        let editorViewModel: EventEditorConfigurable
+        let existingEvent = event
         
-        if let id = eventID, let event = dayViewModel.event(withId: id) {
-            existingEvent = event
-            viewModel = EventEditorFactory.editViewModel(for: event)
+        if let event {
+            editorViewModel = EventEditorFactory.editViewModel(for: event)
         }
-        else if let category = category {
-            viewModel = EventEditorFactory.newViewModel(for: category)
-        }
-        else {
-            assertionFailure("Invalid coordinator state: either eventID or category must be set")
-            return
+        else  {
+            editorViewModel = EventEditorFactory.newViewModel(for: category ?? .point, startDate: date)
         }
         
-        let editorVC = EventEditorViewController(viewModel: viewModel)
+        let editorVC = EventEditorViewController(viewModel: editorViewModel)
         editorVC.preselectedStartMinutes = startMinutes
         editorVC.selectedLocationName = selectedLocationName
         editorVC.selectedCoordinate = coordinates
         editorVC.selectedPDFURL = existingEvent?.pdfFileURL
         
         editorVC.onClose = { [weak self] in
-            self?.navigationController.dismiss(animated: true) {
-                self?.onFinish?()
-            }
+            self?.dismiss()
         }
         
         editorVC.onSave = { [weak self] newEvent in
@@ -71,18 +66,20 @@ final class EventCoordinator: @preconcurrency Coordinator {
                     updatedEvent.startMinutes = startMinutes
                 }
                 
+                updatedEvent.dateEvent = self.date
+                
                 if let name = self.selectedLocationName,
                    let coordinate = self.coordinates {
                     updatedEvent.locationName = name
                     updatedEvent.coordinate = coordinate
                 }
                 
-                await self.dayViewModel.saveEvent(updatedEvent)
-                
-                self.onSave?()
-                self.navigationController.dismiss(animated: true) {
-                    self.onFinish?()
+                if self.event == nil {
+                    await self.tripViewModel.addEvent(updatedEvent)
+                } else {
+                    await self.tripViewModel.updateEvent(updatedEvent)
                 }
+                self.dismiss()
             }
         }
         
@@ -90,13 +87,12 @@ final class EventCoordinator: @preconcurrency Coordinator {
             guard let self = self, let eventToDelete = deletedEvent else { return }
             
             Task { @MainActor in
-                await self.dayViewModel.deleteEvent(eventToDelete)
+                await self.tripViewModel.deleteEvent(eventToDelete)
                 self.navigationController.dismiss(animated: true) {
                     self.onFinish?()
                 }
             }
         }
-        
         presentModal(viewController: editorVC)
     }
     
@@ -108,5 +104,11 @@ final class EventCoordinator: @preconcurrency Coordinator {
             sheet.prefersGrabberVisible = true
         }
         navigationController.present(viewController, animated: true)
+    }
+    
+    private func dismiss() {
+        navigationController.dismiss(animated: true) {
+            self.onFinish?()
+        }
     }
 }

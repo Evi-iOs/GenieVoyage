@@ -9,7 +9,7 @@ import Foundation
 
 protocol TripViewControllerDelegate:  AnyObject {
     
-    func didRequestOpenEvent(dayViewModel: DayViewModel, event: EventModel)
+    func didRequestOpenEvent(event: EventModel)
     
-    func didDropEvent(dayViewModel: DayViewModel, didDropEventWith category: EventCategory, at startMinutes: Int)
+    func didDropCreateEvent(event: EventModel?, category: EventCategory, dateEvent: Date, startMinutes: Int)
 }

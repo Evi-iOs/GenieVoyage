@@ -13,15 +13,16 @@ final class TransportEditorViewModel: EventEditorConfigurable {
     var existingEvent: EventModel?
     
     var category: EventCategory = .transport
-    var startDate = Date()
+    let startDate: Date
     var endDate = Date().addingTimeInterval(3600)
     
     var locationName: String?
     var coordinate: CLLocationCoordinate2D?
     var duration: Int = 0
     
-    init(existingEvent: EventModel? = nil) {
+    init(existingEvent: EventModel? = nil, startDate: Date) {
         self.existingEvent = existingEvent
+        self.startDate = startDate
     }
     
     func buildEvent() -> EventModel? {

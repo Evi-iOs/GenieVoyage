@@ -11,12 +11,12 @@ import CoreLocation
 
 struct EventModel: Equatable {
     let id: UUID
-    let dateEvent: Date
+    var dateEvent: Date
     let category: EventCategory
     var icon: UIImage {
             UIImage(systemName: category.iconSystemName) ?? UIImage()
         }
-    let time: String
+    var time: String
     var startMinutes: Int
     var duration: Int
     var locationName: String?

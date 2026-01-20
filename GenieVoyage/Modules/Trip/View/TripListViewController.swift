@@ -129,6 +129,9 @@ final class TripListViewController: UIViewController {
             }
         } else {
             myTrips.append(trip)
+            Task {
+                await self.viewModel.addTrip(trip)
+            }
         }
         collectionView.reloadData()
     }

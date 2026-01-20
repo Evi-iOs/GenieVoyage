@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class DayCollectionViewCell: UICollectionViewCell {
 
@@ -13,31 +14,29 @@ class DayCollectionViewCell: UICollectionViewCell {
     
     static let reuseIdentifier = "ItineraryItemCell"
     
-    private var itineraryItems: [EventModel] = []
     private var highlightedIndexPath: IndexPath?
+    private var cancellables = Set<AnyCancellable>()
     
     private var lastOffsetY: CGFloat = 0
         
     var viewModel: DayViewModel? {
         didSet {
-            guard oldValue !== viewModel else { return }
-
-            DispatchQueue.main.async {[weak self] in
-                guard let self = self else { return }
-                self.scrollToStartHour()
-            }
+            cancellables.removeAll()
             
-            viewModel?.onUpdate = { [weak self] in
-                guard let self = self else { return }
-                self.itineraryCollectionView.reloadData()
-                DispatchQueue.main.async {
-                    self.itineraryCollectionView.layoutIfNeeded()
-                    
-                    self.eventContainerView.frame = CGRect(x: 0, y: 0, width: self.itineraryCollectionView.bounds.width, height: self.itineraryCollectionView.contentSize.height)
-                    
-                    self.renderEventsOverlay()
+            guard let viewModel else { return }
+            
+            scrollToStartHour()
+            
+            viewModel.$events
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] _ in
+                    guard let self = self else { return }
+                    self.itineraryCollectionView.reloadData()
+                    DispatchQueue.main.async {
+                        self.renderEventsOverlay()
+                    }
                 }
-            }
+                .store(in: &cancellables)
         }
     }
     
@@ -54,6 +53,11 @@ class DayCollectionViewCell: UICollectionViewCell {
         view.isUserInteractionEnabled = true
         return view
     }()
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cancellables.removeAll()
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -108,22 +112,33 @@ class DayCollectionViewCell: UICollectionViewCell {
     }
     
     func renderEventsOverlay() {
+        layoutIfNeeded()
+        itineraryCollectionView.layoutIfNeeded()
+        
+        eventContainerView.frame = CGRect(
+            x: 0,
+            y: 0,
+            width: itineraryCollectionView.bounds.width,
+            height: itineraryCollectionView.contentSize.height
+        )
+        
         eventContainerView.subviews.forEach { $0.removeFromSuperview() }
         guard let viewModel = viewModel else { return }
+        
         for event in viewModel.events {
             let eventView = createEventView(for: event)
             eventContainerView.addSubview(eventView)
+            eventView.attachConstraints(
+                to: eventContainerView,
+                top: CGFloat(event.startMinutes) * minuteHeight,
+                height: CGFloat(event.duration) * minuteHeight
+            )
         }
     }
     
     func createEventView(for event: EventModel) -> EventView {
         let eventView = EventView(event: event)
         
-        let yPosition = CGFloat(event.startMinutes) * minuteHeight
-        let height = CGFloat(event.duration) * minuteHeight
-        
-        eventContainerView.addSubview(eventView)
-        eventView.attachConstraints(to: eventContainerView, top: yPosition, height: height)
         
         eventView.onMove = { [weak eventView] deltaY in
             guard let eventView = eventView else { return }
@@ -133,7 +148,7 @@ class DayCollectionViewCell: UICollectionViewCell {
         }
         
         eventView.onMoveEnd = { [weak self, weak eventView] in
-            guard let self = self, let eventView = eventView, let viewModel = viewModel, let top = eventView.topConstraint else { return }
+            guard let self = self, let eventView = eventView, let top = eventView.topConstraint else { return }
             
             let newY = top.constant
             let newStartMinutes = Int(round(newY / minuteHeight))
@@ -143,9 +158,7 @@ class DayCollectionViewCell: UICollectionViewCell {
                 eventView.setLayout(top: CGFloat(event.startMinutes) * minuteHeight, height: CGFloat(event.duration) * minuteHeight, animated: true)
                 return
             }
-            
-            viewModel.moveEvent(event.id, byMinutes: deltaMinutes)
-            self.renderEventsOverlay()
+            dayCellDelegate?.dayCell(didMove: event, byMinutes: deltaMinutes)
         }
         
         eventView.onResize = { [weak eventView] deltaY in
@@ -157,7 +170,7 @@ class DayCollectionViewCell: UICollectionViewCell {
         }
         
         eventView.onResizeEnd = { [weak self, weak eventView] in
-            guard let self = self, let eventView = eventView, let viewModel = viewModel else { return }
+            guard let self = self, let eventView = eventView else { return }
             
             guard let height = eventView.heightConstraint else { return }
             let newDuration = Int(round(height.constant / minuteHeight))
@@ -167,8 +180,7 @@ class DayCollectionViewCell: UICollectionViewCell {
                 return
             }
             
-            viewModel.resizeEvent(event.id, toMinutes: newDuration)
-            self.renderEventsOverlay()
+            self.dayCellDelegate?.dayCell(didResize: event, toMinutes: newDuration)
         }
         
         eventView.onTap = { [weak self] in
@@ -178,16 +190,13 @@ class DayCollectionViewCell: UICollectionViewCell {
         
         eventView.onDelete = { [weak self] in
             guard let self = self else { return }
-            self.dayCellDelegate?.dayCellDidDeleteEvent(self, event: event)
-            self.renderEventsOverlay()
+            self.dayCellDelegate?.dayCell(self, didDelete: event)
         }
 
         eventView.onDuplicate = { [weak self] in
             guard let self = self else { return }
-            self.viewModel?.duplicateEvent(event, dateEvent: event.dateEvent)
-            self.renderEventsOverlay()
+            self.dayCellDelegate?.dayCell(self, didDuplicate: event)
         }
-
         return eventView
     }
     
@@ -206,7 +215,6 @@ class DayCollectionViewCell: UICollectionViewCell {
         
         dayCellDelegate?.dayCell(self, didRequestAddEventAt: startMinutes)
     }
-
 }
 
 extension DayCollectionViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -238,22 +246,14 @@ extension DayCollectionViewCell: UIDropInteractionDelegate {
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
         
         clearHighlight()
-        
+
         let dropPoint = session.location(in: itineraryCollectionView)
         guard let indexPath = itineraryCollectionView.indexPathForItem(at: dropPoint) else { return }
         
         let timeSlot = viewModel?.hours[indexPath.item] ?? ""
         
-        if viewModel?.hasEvent(at: timeSlot) == true {
-            if let cell = itineraryCollectionView.cellForItem(at: indexPath) {
-                viewModel?.shake(cell: cell)
-            }
-            viewModel?.showOccupiedSlotAlert()
-            return
-        }
-        
-        if let event = session.items.first?.localObject as? EventModel {
-            dayCellDelegate?.dayCell(self, didDropEventWith: event.category, at: timeSlot)
+        if let event = session.items.first?.localObject as? EventModel, let viewModel = viewModel {
+            dayCellDelegate?.dayCell(didDropEventWith: event.category, dateEvent: viewModel.dateDay, at: timeSlot)
         }
     }
     

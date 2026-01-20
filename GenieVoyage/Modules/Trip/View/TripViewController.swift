@@ -54,10 +54,6 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         segmentedControl.delegate = self
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
         
-        //        viewModel.onUpdate = { [weak self] in
-        //            self?.daysCollectionView.reloadData()
-        //        }
-        
         viewModel.$days
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
@@ -258,9 +254,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     }
     
     // MARK: - SegmentControl
-    private lazy var segmentedControl = SegmentedControlView(items: viewModel.days.map({ dayViewModel in
-        dayViewModel.dateDay.formattedDateWeekDay()
-    }))
+    private lazy var segmentedControl = SegmentedControlView(items: [])
     
     // MARK: - Collection View
     
@@ -305,13 +299,6 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
             showAlert(message: "Enter title Trip")
             return
         }
-        
-//        viewModel.trip.id = UUID()
-//        viewModel.trip.title = title
-//        viewModel.trip.description = description
-//        viewModel.trip.startDate = startDatePicker.date
-//        viewModel.trip.endDate = endDatePicker.date
-        
         onSave?(viewModel.trip)
     }
     
@@ -351,22 +338,17 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         present(alert, animated: true)
     }
     
-    // MARK: - Binding
     private func bindViewModel() {
-//        viewModel.onDayChanged = { [weak self] in
-//            self?.daysCollectionView.reloadData()
-//        }
-        viewModel.$days
+        viewModel.$isLoading
+            .filter { $0 }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.reloadItinerary()
-            }
-            .store(in: &cancellables)
-        
-        viewModel.$selectedDayIndex
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                //self?.updateSelectedDay()
+                guard let self = self else { return }
+                
+                let titles = self.viewModel.days.map { $0.dateDay.formattedDateWeekDay() }
+                self.segmentedControl.updateItems(titles, selectedIndex: self.viewModel.selectedDayIndex)
+                
+                self.daysCollectionView.reloadData()
             }
             .store(in: &cancellables)
     }
@@ -423,12 +405,23 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let pageIndex = Int(scrollView.contentOffset.x / view.frame.width)
-        segmentedControl.selectSegment(at: pageIndex)
+        if let index = daysCollectionView.currentPageIndex() {
+            segmentedControl.selectSegment(at: index)
+        }
+    }
+    
+    func scrollViewDidEndScrollingAnimation (_ scrollView: UIScrollView) {
+        if let index = daysCollectionView.currentPageIndex() {
+            segmentedControl.selectSegment(at: index)
+        }
     }
     
     func didSelectSegment(at index: Int) {
         let indexPath = IndexPath(item: index, section: 0)
+        guard indexPath.item < daysCollectionView.numberOfItems(inSection: 0) else {
+            print("⚠️ Attempted to scroll to \(indexPath.item), but only \(daysCollectionView.numberOfItems(inSection: 0)) items exist.")
+            return
+        }
         daysCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
     }
 }
@@ -443,10 +436,8 @@ extension TripViewController: UICollectionViewDataSource, UICollectionViewDelega
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DayCell", for: indexPath) as? DayCollectionViewCell else {
             return UICollectionViewCell()
         }
-        let dayVM = viewModel.days[indexPath.item]
-        cell.viewModel = dayVM
+        cell.viewModel = viewModel.days[indexPath.item]
         cell.dayCellDelegate = self
-        cell.renderEventsOverlay()
         return cell
     }
     
@@ -462,10 +453,20 @@ extension TripViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let layout = daysCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        let cellWidth = daysCollectionView.frame.width * 0.9 + layout.minimumLineSpacing
+        let cellWidthIncludingSpacing = daysCollectionView.frame.width * 0.9 + layout.minimumLineSpacing
         
-        let estimatedIndex = round((targetContentOffset.pointee.x + daysCollectionView.contentInset.left) / cellWidth)
-        targetContentOffset.pointee = CGPoint(x: estimatedIndex * cellWidth - daysCollectionView.contentInset.left, y: 0)
+        var index = round((targetContentOffset.pointee.x + scrollView.contentInset.left) / cellWidthIncludingSpacing)
+        
+        if velocity.x > 0 {
+            index = floor((scrollView.contentOffset.x + scrollView.bounds.width / 2) / cellWidthIncludingSpacing) + 1
+        } else if velocity.x < 0 {
+            index = ceil((scrollView.contentOffset.x + scrollView.bounds.width / 2) / cellWidthIncludingSpacing) - 1
+        }
+        
+        index = max(0, min(index, CGFloat(viewModel.days.count - 1)))
+        
+        let newOffset = CGPoint(x: index * cellWidthIncludingSpacing - scrollView.contentInset.left, y: 0)
+        targetContentOffset.pointee = newOffset
     }
     
     func textViewDidChange(_ textView: UITextView) {
@@ -506,38 +507,57 @@ extension TripViewController: UIDragInteractionDelegate {
 }
 
 extension TripViewController: DayCellDelegate {
-    
-    func dayCell(_ cell: DayCollectionViewCell, didRequestOpenEvent event: EventModel) {
-        guard let dayViewModel = cell.viewModel else { return }
-        delegate?.didRequestOpenEvent(dayViewModel: dayViewModel, event: event)
-    }
-    
-    func dayCell(_ cell: DayCollectionViewCell, didDropEventWith category: EventCategory, at time: String) {
-        guard let dayViewModel = cell.viewModel else { return }
+    func dayCell(didDropEventWith category: EventCategory, dateEvent: Date, at time: String) {
         let date = Date()
-        
-        delegate?.didDropEvent(dayViewModel: dayViewModel, didDropEventWith: category, at: date.getStartMinutes(time: time) ?? 0)
+        delegate?.didDropCreateEvent(event: nil, category: category, dateEvent: dateEvent, startMinutes: date.getStartMinutes(time: time) ?? 0)
     }
     
+    func dayCell(didMove event: EventModel, byMinutes delta: Int) {
+        Task {
+            await viewModel.moveEvent(event, byMinutes: delta)
+        }
+    }
+
+    func dayCell(didResize event: EventModel, toMinutes duration: Int) {
+        Task {
+            await viewModel.resizeEvent(event, toMinutes: duration)
+        }
+    }
+
+    func dayCell(_ cell: DayCollectionViewCell, didDuplicate event: EventModel) {
+        Task {
+            await viewModel.duplicateEvent(event, to: event.dateEvent)
+        }
+    }
+    
+    func dayCell(_ cell: DayCollectionViewCell, didDelete event: EventModel) {
+        Task {
+            await viewModel.deleteEvent(event)
+        }
+    }
+
     func dayCell(_ cell: DayCollectionViewCell, didRequestAddEventAt minutes: Int) {
-        guard let dayViewModel = cell.viewModel else { return }
-        delegate?.didDropEvent(dayViewModel: dayViewModel, didDropEventWith: .point, at: minutes)
+        let day = viewModel.days[viewModel.selectedDayIndex]
+
+        let newEvent = EventModel(
+            id: UUID(),
+            dateEvent: day.dateDay,
+            category: .point,
+            time: "",
+            startMinutes: minutes,
+            duration: 60,
+            locationName: nil,
+            coordinate: nil
+        )
+        
+        delegate?.didDropCreateEvent(event: newEvent, category: newEvent.category, dateEvent: day.dateDay, startMinutes: minutes)
     }
-    
-    func dayCellDidDeleteEvent(_ cell: DayCollectionViewCell, event: EventModel) {
-        guard let dayViewModel = cell.viewModel else { return }
-        self.presentDeletionConfirmation {
-            Task {
-                await dayViewModel.deleteEvent(event)
-            }
-        }
+
+    func dayCell(_ cell: DayCollectionViewCell, didRequestOpenEvent event: EventModel) {
+        delegate?.didRequestOpenEvent(event: event)
     }
-    
+
     func dayCellDidScroll(upward: Bool) {
-        if upward {
-            showFloatingMapButton()
-        } else {
-            hideFloatingMapButton()
-        }
+        upward ? showFloatingMapButton() : hideFloatingMapButton()
     }
 }
