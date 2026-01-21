@@ -18,15 +18,15 @@ class DayCollectionViewCell: UICollectionViewCell {
     private var cancellables = Set<AnyCancellable>()
     
     private var lastOffsetY: CGFloat = 0
+    private var didScrollToStartHour = false
         
     var viewModel: DayViewModel? {
         didSet {
+            didScrollToStartHour = false
             cancellables.removeAll()
             
             guard let viewModel else { return }
-            
-            scrollToStartHour()
-            
+                        
             viewModel.$events
                 .receive(on: DispatchQueue.main)
                 .sink { [weak self] _ in
@@ -35,6 +35,9 @@ class DayCollectionViewCell: UICollectionViewCell {
                     DispatchQueue.main.async {
                         self.renderEventsOverlay()
                     }
+                    self.itineraryCollectionView.performBatchUpdates(nil) { _ in
+                                self.scrollToStartHour()
+                            }
                 }
                 .store(in: &cancellables)
         }
@@ -57,6 +60,7 @@ class DayCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         cancellables.removeAll()
+        didScrollToStartHour = false
     }
     
     override init(frame: CGRect) {
@@ -98,10 +102,15 @@ class DayCollectionViewCell: UICollectionViewCell {
     }
     
     private func scrollToStartHour() {
-        guard let hours = viewModel?.hours, let index = hours.firstIndex(of: "08:00") else { return }
-        
-        let indexPath = IndexPath(item: index, section: 0)
-        itineraryCollectionView.scrollToItem(at: indexPath, at: .top, animated: false)
+        guard !didScrollToStartHour else { return }
+            guard let hours = viewModel?.hours,
+                  let index = hours.firstIndex(of: "08:00"),
+                  itineraryCollectionView.numberOfItems(inSection: 0) > index
+            else { return }
+
+            didScrollToStartHour = true
+            let indexPath = IndexPath(item: index, section: 0)
+            itineraryCollectionView.scrollToItem(at: indexPath, at: .top, animated: false)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
