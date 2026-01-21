@@ -537,8 +537,7 @@ extension TripViewController: DayCellDelegate {
     }
 
     func dayCell(_ cell: DayCollectionViewCell, didRequestAddEventAt minutes: Int) {
-        let day = viewModel.days[viewModel.selectedDayIndex]
-        delegate?.didDropCreateEvent(event: nil, category: .point, dateEvent: day.dateDay, startMinutes: minutes)
+        delegate?.didDropCreateEvent(event: nil, category: .point, dateEvent: cell.viewModel?.dateDay ?? Date(), startMinutes: minutes)
     }
 
     func dayCell(_ cell: DayCollectionViewCell, didRequestOpenEvent event: EventModel) {

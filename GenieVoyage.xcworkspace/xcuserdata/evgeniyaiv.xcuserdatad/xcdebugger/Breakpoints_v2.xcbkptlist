@@ -209,6 +209,36 @@
             endingLineNumber = "78"
             landmarkName = "start()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "0E3AB98E-15ED-4FCE-A394-5DC0CC5B462E - fdacaf911f379297"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #1 () async -&gt; () in closure #2 (GenieVoyage.EventModel) -&gt; () in GenieVoyage.EventCoordinator.start() -&gt; ()"
+                  moduleName = "GenieVoyage.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/evgeniyaiv/Documents/APP/GenieVoyage/GenieVoyage/Coordinators/MainCoordinator/TripListCoordinator/Trip/EventCoordinator.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "78"
+                  endingLineNumber = "78">
+               </Location>
+               <Location
+                  uuid = "0E3AB98E-15ED-4FCE-A394-5DC0CC5B462E - dc86abde230c72d6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(2) await resume partial function for closure #1 () async -&gt; () in closure #2 (GenieVoyage.EventModel) -&gt; () in GenieVoyage.EventCoordinator.start() -&gt; ()"
+                  moduleName = "GenieVoyage.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/evgeniyaiv/Documents/APP/GenieVoyage/GenieVoyage/Coordinators/MainCoordinator/TripListCoordinator/Trip/EventCoordinator.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "78"
+                  endingLineNumber = "78">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -225,6 +255,36 @@
             endingLineNumber = "80"
             landmarkName = "start()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "2D56686E-A430-46C2-8A73-696F83C2E7B7 - fdacaf911f379229"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #1 () async -&gt; () in closure #2 (GenieVoyage.EventModel) -&gt; () in GenieVoyage.EventCoordinator.start() -&gt; ()"
+                  moduleName = "GenieVoyage.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/evgeniyaiv/Documents/APP/GenieVoyage/GenieVoyage/Coordinators/MainCoordinator/TripListCoordinator/Trip/EventCoordinator.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "80"
+                  endingLineNumber = "80">
+               </Location>
+               <Location
+                  uuid = "2D56686E-A430-46C2-8A73-696F83C2E7B7 - a148c0cd5d62b66a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(4) await resume partial function for closure #1 () async -&gt; () in closure #2 (GenieVoyage.EventModel) -&gt; () in GenieVoyage.EventCoordinator.start() -&gt; ()"
+                  moduleName = "GenieVoyage.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/evgeniyaiv/Documents/APP/GenieVoyage/GenieVoyage/Coordinators/MainCoordinator/TripListCoordinator/Trip/EventCoordinator.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "80"
+                  endingLineNumber = "80">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -305,6 +365,50 @@
             endingLineNumber = "256"
             landmarkName = "dropInteraction(_:performDrop:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "ED7974D8-5135-4976-A607-7D0023E9FEB9 - e8c69d5bdfed8308"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GenieVoyage.DayCollectionViewCell.dropInteraction(_: __C.UIDropInteraction, performDrop: __C.UIDropSession) -&gt; ()"
+                  moduleName = "GenieVoyage.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/evgeniyaiv/Documents/APP/GenieVoyage/GenieVoyage/Modules/Trip/View/DayCollectionViewCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "255"
+                  endingLineNumber = "255">
+               </Location>
+               <Location
+                  uuid = "ED7974D8-5135-4976-A607-7D0023E9FEB9 - e8c69d5bdfed8308"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GenieVoyage.DayCollectionViewCell.dropInteraction(_: __C.UIDropInteraction, performDrop: __C.UIDropSession) -&gt; ()"
+                  moduleName = "GenieVoyage.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/evgeniyaiv/Documents/APP/GenieVoyage/GenieVoyage/Modules/Trip/View/DayCollectionViewCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "255"
+                  endingLineNumber = "255">
+               </Location>
+               <Location
+                  uuid = "ED7974D8-5135-4976-A607-7D0023E9FEB9 - e8c69d5bdfed8329"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GenieVoyage.DayCollectionViewCell.dropInteraction(_: __C.UIDropInteraction, performDrop: __C.UIDropSession) -&gt; ()"
+                  moduleName = "GenieVoyage.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/evgeniyaiv/Documents/APP/GenieVoyage/GenieVoyage/Modules/Trip/View/DayCollectionViewCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "256"
+                  endingLineNumber = "256">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -337,6 +441,36 @@
             endingLineNumber = "132"
             landmarkName = "saveButtonTapped()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "9370E426-208F-47FD-AE9A-345447662937 - a730d8fccaabbd91"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GenieVoyage.StartPlanningViewController.saveButtonTapped() -&gt; ()"
+                  moduleName = "GenieVoyage.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/evgeniyaiv/Documents/APP/GenieVoyage/GenieVoyage/Modules/Trip/View/StartPlanningViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "133"
+                  endingLineNumber = "133">
+               </Location>
+               <Location
+                  uuid = "9370E426-208F-47FD-AE9A-345447662937 - a730d8fccaabbd91"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GenieVoyage.StartPlanningViewController.saveButtonTapped() -&gt; ()"
+                  moduleName = "GenieVoyage.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/evgeniyaiv/Documents/APP/GenieVoyage/GenieVoyage/Modules/Trip/View/StartPlanningViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "133"
+                  endingLineNumber = "133">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -518,22 +652,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "79C32507-08F7-4067-97A3-7C4212D25E4A"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "GenieVoyage/Modules/Trip/View/TripViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "541"
-            endingLineNumber = "541"
-            landmarkName = "dayCell(_:didRequestAddEventAt:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "71FBC5DD-5096-47BB-B952-80720B58F1C1"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -641,6 +759,36 @@
             endingLineNumber = "77"
             landmarkName = "addEvent(_:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "53CCAE72-D973-4742-B9EF-74FC7CC67C50 - c0ddf1e2bb268a46"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for GenieVoyage.TripViewModel.addEvent(GenieVoyage.EventModel) async -&gt; ()"
+                  moduleName = "GenieVoyage.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/evgeniyaiv/Documents/APP/GenieVoyage/GenieVoyage/Modules/Trip/ViewModel/TripViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "77"
+                  endingLineNumber = "77">
+               </Location>
+               <Location
+                  uuid = "53CCAE72-D973-4742-B9EF-74FC7CC67C50 - 135af365141f036"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(2) await resume partial function for GenieVoyage.TripViewModel.addEvent(GenieVoyage.EventModel) async -&gt; ()"
+                  moduleName = "GenieVoyage.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/evgeniyaiv/Documents/APP/GenieVoyage/GenieVoyage/Modules/Trip/ViewModel/TripViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "77"
+                  endingLineNumber = "77">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -721,6 +869,36 @@
             endingLineNumber = "255"
             landmarkName = "dropInteraction(_:performDrop:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "B83199B2-A090-46D5-921F-D3B395AD1197 - e8c69d5bdfed8308"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GenieVoyage.DayCollectionViewCell.dropInteraction(_: __C.UIDropInteraction, performDrop: __C.UIDropSession) -&gt; ()"
+                  moduleName = "GenieVoyage.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/evgeniyaiv/Documents/APP/GenieVoyage/GenieVoyage/Modules/Trip/View/DayCollectionViewCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "255"
+                  endingLineNumber = "255">
+               </Location>
+               <Location
+                  uuid = "B83199B2-A090-46D5-921F-D3B395AD1197 - e8c69d5bdfed8308"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GenieVoyage.DayCollectionViewCell.dropInteraction(_: __C.UIDropInteraction, performDrop: __C.UIDropSession) -&gt; ()"
+                  moduleName = "GenieVoyage.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/evgeniyaiv/Documents/APP/GenieVoyage/GenieVoyage/Modules/Trip/View/DayCollectionViewCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "255"
+                  endingLineNumber = "255">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
