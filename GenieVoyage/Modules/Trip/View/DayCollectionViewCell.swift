@@ -31,7 +31,9 @@ class DayCollectionViewCell: UICollectionViewCell {
                 .receive(on: DispatchQueue.main)
                 .sink { [weak self] _ in
                     guard let self = self else { return }
+                    self.didScrollToStartHour = false
                     self.itineraryCollectionView.reloadData()
+                    
                     DispatchQueue.main.async {
                         self.renderEventsOverlay()
                     }
