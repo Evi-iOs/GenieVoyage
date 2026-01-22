@@ -17,13 +17,18 @@ final class MapEventsViewController: UIViewController {
     var onSelectEvent: ((EventModel) -> Void)?
     
     private var cancellables = Set<AnyCancellable>()
+    private var dayCancellable: AnyCancellable?
 
     private let viewModel: TripViewModel
     private var selectedDayIndex = 0
+    private var didSetInitialRegion = false
     
     private var isRouteVisible = true
     private let locationManager = CLLocationManager()
     private var currentTransportType: MKDirectionsTransportType = .automobile
+    private var activeDirections: [MKDirections] = []
+    private var lastRoutedEventIDs: [UUID] = []
+    private var routesAreDrawn = false
     
     init(viewModel: TripViewModel) {
         self.viewModel = viewModel
@@ -42,11 +47,28 @@ final class MapEventsViewController: UIViewController {
         }
     }
     
+    private func bindSelectedDay() {
+        dayCancellable?.cancel()
+        
+        let day = viewModel.days[selectedDayIndex]
+        dayCancellable = day.$events
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+
+                self.updateMapForSelectedDay()
+            }
+    }
+
     private func bindViewModel() {
         viewModel.$days
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.updateMapForSelectedDay()
+                guard let self = self else { return }
+                
+                self.lastRoutedEventIDs = []
+                self.routesAreDrawn = false
+                self.updateMapForSelectedDay()
             }
             .store(in: &cancellables)
     }
@@ -69,6 +91,8 @@ final class MapEventsViewController: UIViewController {
         let control = TransportSegmentedControl()
         control.onSelect = { [weak self] selectedType in
             self?.currentTransportType = selectedType
+            self?.lastRoutedEventIDs = []
+            self?.routesAreDrawn = false
             self?.updateMapForSelectedDay()
         }
         return control
@@ -84,6 +108,7 @@ final class MapEventsViewController: UIViewController {
         view.backgroundColor = .systemBackground
         
         bindViewModel()
+        bindSelectedDay()
         
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -189,21 +214,26 @@ final class MapEventsViewController: UIViewController {
         mapView.removeOverlays(mapView.overlays)
         
         let day = viewModel.days[selectedDayIndex]
-        let annotations = day.events.map { event -> MKPointAnnotation in
+        let annotations = day.events.compactMap { event -> MKPointAnnotation? in
+            guard let coordinate = event.coordinate else { return nil }
             let annotation = EventAnnotation(event: event)
-            guard let eventCoordinate = event.coordinate else { return annotation }
-            annotation.coordinate = eventCoordinate
+            annotation.coordinate = coordinate
             annotation.title = event.locationName ?? event.category.displayName
             annotation.subtitle = "🕒 \(event.startTimeEvent) • \(event.duration) min"
             return annotation
         }
         
-        if let first = annotations.first {
-            let region = MKCoordinateRegion(center: first.coordinate, latitudinalMeters: 1200, longitudinalMeters: 1200)
-            mapView.setRegion(region, animated: true)
-        }
+        mapView.addAnnotations(annotations)
         
-        mapView.showAnnotations(annotations, animated: true)
+        if !didSetInitialRegion, let first = annotations.first {
+            didSetInitialRegion = true
+            let region = MKCoordinateRegion(
+                center: first.coordinate,
+                latitudinalMeters: 1200,
+                longitudinalMeters: 1200
+            )
+            mapView.setRegion(region, animated: false)
+        }
         
         if isRouteVisible {
             drawRoutesBetweenEvents(for: day.events)
@@ -211,6 +241,16 @@ final class MapEventsViewController: UIViewController {
     }
     
     private func drawRoutesBetweenEvents(for events: [EventModel]) {
+        guard !routesAreDrawn else { return }
+        
+        let ids = events.map { $0.id }
+        guard ids != lastRoutedEventIDs else { return }
+        
+        routesAreDrawn = true
+        lastRoutedEventIDs = ids
+
+        activeDirections.forEach { $0.cancel() }
+        activeDirections.removeAll()
         mapView.removeOverlays(mapView.overlays)
         
         let sortedEvents = events.sorted { $0.startTimeEvent < $1.startTimeEvent }
@@ -225,6 +265,7 @@ final class MapEventsViewController: UIViewController {
             request.transportType = .automobile
             
             let directions = MKDirections(request: request)
+            activeDirections.append(directions)
             directions.calculate { [weak self] response, error in
                 guard let route = response?.routes.first else { return }
                 self?.mapView.addOverlay(route.polyline)
@@ -234,8 +275,15 @@ final class MapEventsViewController: UIViewController {
     
     @objc private func toggleRouteVisibility() {
         isRouteVisible.toggle()
-        roadButton.backgroundColor = isRouteVisible ? .gray : .black
-        updateMapForSelectedDay()
+        roadButton.backgroundColor = isRouteVisible ? .black : .gray
+        
+        if isRouteVisible {
+            routesAreDrawn = false
+            updateMapForSelectedDay()
+        } else {
+            routesAreDrawn = false
+            mapView.removeOverlays(mapView.overlays)
+        }
     }
     
     @objc private func centerToUserLocation() {
@@ -277,6 +325,9 @@ final class MapEventsViewController: UIViewController {
       func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
           selectedDayIndex = indexPath.item
           collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+          didSetInitialRegion = true
+          lastRoutedEventIDs = []
+          routesAreDrawn = false
           updateMapForSelectedDay()
       }
 
