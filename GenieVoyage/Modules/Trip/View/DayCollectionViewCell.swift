@@ -196,17 +196,17 @@ class DayCollectionViewCell: UICollectionViewCell {
         
         eventView.onTap = { [weak self] in
             guard let self = self else { return }
-            self.dayCellDelegate?.dayCell(self, didRequestOpenEvent: event)
+            self.dayCellDelegate?.dayCell(didRequestOpenEvent: event)
         }
         
         eventView.onDelete = { [weak self] in
             guard let self = self else { return }
-            self.dayCellDelegate?.dayCell(self, didDelete: event)
+            self.dayCellDelegate?.dayCell(didDelete: event)
         }
 
         eventView.onDuplicate = { [weak self] in
             guard let self = self else { return }
-            self.dayCellDelegate?.dayCell(self, didDuplicate: event)
+            self.dayCellDelegate?.dayCell(didDuplicate: event)
         }
         return eventView
     }

@@ -524,13 +524,13 @@ extension TripViewController: DayCellDelegate {
         }
     }
 
-    func dayCell(_ cell: DayCollectionViewCell, didDuplicate event: EventModel) {
+    func dayCell(didDuplicate event: EventModel) {
         Task {
             await viewModel.duplicateEvent(event, to: event.dateEvent)
         }
     }
     
-    func dayCell(_ cell: DayCollectionViewCell, didDelete event: EventModel) {
+    func dayCell(didDelete event: EventModel) {
         Task {
             await viewModel.deleteEvent(event)
         }
@@ -540,7 +540,7 @@ extension TripViewController: DayCellDelegate {
         delegate?.didDropCreateEvent(event: nil, category: .point, dateEvent: cell.viewModel?.dateDay ?? Date(), startMinutes: minutes)
     }
 
-    func dayCell(_ cell: DayCollectionViewCell, didRequestOpenEvent event: EventModel) {
+    func dayCell(didRequestOpenEvent event: EventModel) {
         delegate?.didRequestOpenEvent(event: event)
     }
 
