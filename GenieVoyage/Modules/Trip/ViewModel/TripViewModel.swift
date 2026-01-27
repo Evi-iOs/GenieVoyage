@@ -99,9 +99,10 @@ final class TripViewModel: ObservableObject {
         guard let index = events.firstIndex(where: { $0.id == event.id }) else { return }
         
         events[index].startMinutes += delta
-        normalizeEvents()
         
         await storage.saveEvent(events[index], to: trip)
+        
+        normalizeEvents()
         distributeEventsToDays()
     }
     
@@ -109,9 +110,10 @@ final class TripViewModel: ObservableObject {
         guard let index = events.firstIndex(where: { $0.id == event.id }) else { return }
         
         events[index].duration = duration
-        normalizeEvents()
         
         await storage.saveEvent(events[index], to: trip)
+        normalizeEvents()
+
         distributeEventsToDays()
     }
     
