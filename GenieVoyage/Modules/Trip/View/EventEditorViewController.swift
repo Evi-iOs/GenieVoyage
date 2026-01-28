@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import QuickLook
 
-final class EventEditorViewController: UIViewController {
+final class EventEditorViewController: UIViewController, UITextViewDelegate {
 
     var preselectedStartMinutes: Int?
     var selectedLocationName: String?
@@ -28,6 +28,8 @@ final class EventEditorViewController: UIViewController {
     private let bookingLinkField = UITextField()
     private let uploadPDFButton = UIButton(type: .custom)
     private let pdfThumbnailView = UIImageView()
+    
+    private let placeholderText = "Enter notes..."
     
     private let detailsTitleLabel: UILabel = {
         let label = UILabel()
@@ -123,11 +125,19 @@ final class EventEditorViewController: UIViewController {
     }
     
     private func setupExtraFields() {
-        notesTextView.font = UIFont.systemFont(ofSize: 15)
+        notesTextView.delegate = self
+        notesTextView.font = UIFont.systemFont(ofSize: 17)
         notesTextView.layer.borderColor = UIColor.lightGray.cgColor
         notesTextView.layer.borderWidth = 1
         notesTextView.layer.cornerRadius = 8
-        notesTextView.text = "Enter notes..."
+        
+        if let text = viewModel.existingEvent?.notes, !text.isEmpty {
+            notesTextView.text = text
+            notesTextView.textColor = .label
+        } else {
+            notesTextView.text = placeholderText
+            notesTextView.textColor = .lightGray
+        }
 
         bookingLinkField.placeholder = "Booking link (optional)"
         bookingLinkField.borderStyle = .roundedRect
@@ -147,6 +157,20 @@ final class EventEditorViewController: UIViewController {
             stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             notesTextView.heightAnchor.constraint(equalToConstant: 50),
         ])
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if notesTextView.textColor == .lightGray {
+            notesTextView.text = ""
+            notesTextView.textColor = .label
+        }
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if notesTextView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            notesTextView.text = placeholderText
+            notesTextView.textColor = .lightGray
+        }
     }
 
     private func setupTimePickersPDFButton() {
@@ -313,15 +337,24 @@ final class EventEditorViewController: UIViewController {
             model.locationName = locationTextField.text ?? selectedLocationName
             model.coordinate = selectedCoordinate
             
-            model.notes = notesTextView.text
-            if let linkText = bookingLinkField.text, let url = URL(string: linkText), UIApplication.shared.canOpenURL(url) {
-                model.bookingLink = url
-            }
+            model.notes = checkNotesTextView()
+            model.bookingLink = bookingLinkField.validURL
             model.pdfFileURL = selectedPDFURL ?? viewModel.existingEvent?.pdfFileURL
 
             onSave?(model)
         }
         dismiss(animated: true)
+    }
+    
+    private func checkNotesTextView() -> String? {
+        let textToSave: String?
+        
+        if notesTextView.textColor == .lightGray {
+            textToSave = nil
+        } else {
+            textToSave = notesTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+        return textToSave
     }
 
     @objc private func closeTapped() {

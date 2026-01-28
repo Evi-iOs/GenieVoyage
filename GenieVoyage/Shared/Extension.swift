@@ -192,6 +192,15 @@ extension UITextField {
             ]
         )
     }
+    
+    var validURL: URL? {
+        guard let text = text?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !text.isEmpty,
+              let url = URL(string: text),
+              UIApplication.shared.canOpenURL(url)
+        else { return nil }
+        return url
+    }
 }
 
 import UIKit
