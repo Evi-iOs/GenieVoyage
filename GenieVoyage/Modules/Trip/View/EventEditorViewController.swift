@@ -24,12 +24,15 @@ final class EventEditorViewController: UIViewController, UITextViewDelegate {
     private let closeButton = UIButton(type: .system)
     private let deleteEventButton = UIButton(type: .system)
     
-    private let notesTextView = UITextView()
-    private let bookingLinkField = UITextField()
     private let uploadPDFButton = UIButton(type: .custom)
     private let pdfThumbnailView = UIImageView()
     
+    private let notesTextView = UITextView()
     private let placeholderText = "Enter notes..."
+    
+    private let bookingLinkField = UITextField()
+    private let bookingLinkLabel = UILabel()
+    private var currentBookingURL: URL?
     
     private let detailsTitleLabel: UILabel = {
         let label = UILabel()
@@ -70,6 +73,12 @@ final class EventEditorViewController: UIViewController, UITextViewDelegate {
         setupSearchField()
         setupSearch()
         completeIfEditing()
+        
+        if let url = viewModel.existingEvent?.bookingLink {
+               showBookingLink(url)
+           } else {
+               showBookingInput()
+           }
         setupExtraFields()
     }
 
@@ -139,12 +148,24 @@ final class EventEditorViewController: UIViewController, UITextViewDelegate {
             notesTextView.textColor = .lightGray
         }
 
-        bookingLinkField.placeholder = "Booking link (optional)"
+        bookingLinkField.placeholder = "Add booking link"
+        bookingLinkField.autocorrectionType = .no
+        bookingLinkField.clearButtonMode = .whileEditing
         bookingLinkField.borderStyle = .roundedRect
         bookingLinkField.keyboardType = .URL
         bookingLinkField.autocapitalizationType = .none
+        bookingLinkField.addTarget(self, action: #selector(bookingEditingDidEnd), for: .editingDidEnd)
 
-        let stack = UIStackView(arrangedSubviews: [notesTextView, bookingLinkField])
+        bookingLinkLabel.textColor = .systemBlue
+        bookingLinkLabel.numberOfLines = 1
+        bookingLinkLabel.isUserInteractionEnabled = true
+        bookingLinkLabel.lineBreakMode = .byTruncatingMiddle
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(editBookingLink))
+        bookingLinkLabel.addGestureRecognizer(longPress)
+        let tapLink = UITapGestureRecognizer(target: self, action: #selector(openBookingLink))
+        bookingLinkLabel.addGestureRecognizer(tapLink)
+        
+        let stack = UIStackView(arrangedSubviews: [notesTextView, bookingLinkField, bookingLinkLabel])
         stack.axis = .vertical
         stack.spacing = 12
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -157,6 +178,40 @@ final class EventEditorViewController: UIViewController, UITextViewDelegate {
             stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             notesTextView.heightAnchor.constraint(equalToConstant: 50),
         ])
+    }
+    
+    @objc private func openBookingLink() {
+        guard let bookingURL = viewModel.existingEvent?.bookingLink else { return }
+        UIApplication.shared.open(bookingURL)
+    }
+    
+    private func showBookingInput() {
+        bookingLinkField.isHidden = false
+        bookingLinkLabel.isHidden = true
+        bookingLinkField.becomeFirstResponder()
+    }
+
+    private func showBookingLink(_ url: URL) {
+        currentBookingURL = url
+        bookingLinkField.isHidden = true
+        bookingLinkLabel.isHidden = false
+        
+        bookingLinkLabel.attributedText = NSAttributedString(
+            string: url.host ?? url.absoluteString,
+            attributes: [.foregroundColor: UIColor.systemBlue, .underlineStyle: NSUnderlineStyle.single.rawValue]
+        )
+    }
+    
+    @objc private func bookingEditingDidEnd() {
+        guard let _ = bookingLinkField.validURL, let text = bookingLinkField.text, let url = URL(string: text)
+        else { return }
+        
+        showBookingLink(url)
+    }
+    
+    @objc private func editBookingLink() {
+        bookingLinkField.text = currentBookingURL?.absoluteString
+        showBookingInput()
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -324,6 +379,7 @@ final class EventEditorViewController: UIViewController, UITextViewDelegate {
     // MARK: - Actions
 
     @objc private func saveTapped() {
+        view.endEditing(true)
         guard validateTimes() else { return }
         if var model = viewModel.buildEvent() {
             let calendar = Calendar.current
@@ -338,7 +394,7 @@ final class EventEditorViewController: UIViewController, UITextViewDelegate {
             model.coordinate = selectedCoordinate
             
             model.notes = checkNotesTextView()
-            model.bookingLink = bookingLinkField.validURL
+            model.bookingLink = currentBookingURL
             model.pdfFileURL = selectedPDFURL ?? viewModel.existingEvent?.pdfFileURL
 
             onSave?(model)
