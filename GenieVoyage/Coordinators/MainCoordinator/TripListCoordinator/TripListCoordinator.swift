@@ -54,6 +54,10 @@ class TripListCoordinator: Coordinator {
         let tripCoordinator = TripCoordinator(navigationController: navigationController, trip: trip, storage: storage, imageStorage: imageStorage)
         tripCoordinator.onSave = { [weak self] in
             self?.tripListVC?.reloadTrips()
+            
+            guard var stack = self?.navigationController.viewControllers else { return }
+            stack.removeAll { $0 is StartPlanningViewController }
+            self?.navigationController.setViewControllers(stack, animated: false)
         }
         tripCoordinator.onFinish = { [weak self] in
             self?.childCoordinators.removeAll()

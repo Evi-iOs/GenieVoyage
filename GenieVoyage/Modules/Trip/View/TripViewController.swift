@@ -124,7 +124,6 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         
         addCoverButton.addTarget(self, action: #selector(addCoverTapped), for: .touchUpInside)
         addCoverButton.translatesAutoresizingMaskIntoConstraints = false
-        addCoverButton.setImage(UIImage(named: "addPhoto"), for: .normal)
         addCoverButton.tintColor = .white
         addCoverButton.isUserInteractionEnabled = true
         addCoverButton.isHidden = false
@@ -174,7 +173,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         if let image = viewModel.loadCoverImage() {
             coverImageView.image = image
         } else {
-            coverImageView.image = UIImage(named: "coverPlaceholder")
+            addCoverButton.setImage(UIImage(named: "addPhoto"), for: .normal)
         }
     }
     
