@@ -11,11 +11,13 @@ import Foundation
 final class TripListViewModel: ObservableObject {
     
     private let storage: TripStorage
+    private let imageStorage: ImageStorageProtocol
     
     @Published private(set) var trips: [TripModel] = []
 
-    init(storage: TripStorage) {
+    init(storage: TripStorage, imageStorage: ImageStorageProtocol) {
         self.storage = storage
+        self.imageStorage = imageStorage
     }
         
     func loadTrips() async {
@@ -28,6 +30,9 @@ final class TripListViewModel: ObservableObject {
     }
     
     func removeTrip(_ trip: TripModel) async {
+        if let url = trip.coverImage {
+            imageStorage.deleteCover(at: url)
+        }
         await storage.deleteTrip(trip)
         await loadTrips()
     }

@@ -16,9 +16,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let window = UIWindow(windowScene: windowScene)
-        let storage = CoreDataTripStorage()
         
-        let appCoordinator = AppCoordinator(window: window, storage: storage)
+        let appCoordinator = AppCoordinator(window: window)
         self.appCoordinator = appCoordinator
         self.window = window
         

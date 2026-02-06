@@ -12,20 +12,24 @@ class TripCoordinator: @preconcurrency Coordinator {
     var navigationController: UINavigationController
     var childCoordinators = [Coordinator]()
     var onFinish: (() -> Void)?
+    var onSave: (() -> Void)?
         
     private let trip: TripModel
     private var tripViewModel: TripViewModel!
     private let storage: TripStorage
+    private let imageStorage: ImageStorageProtocol
     
-    init(navigationController: UINavigationController, trip: TripModel, storage: TripStorage) {
+    init(navigationController: UINavigationController, trip: TripModel, storage: TripStorage, imageStorage: ImageStorageProtocol) {
         self.navigationController = navigationController
         self.storage = storage
+        self.imageStorage = imageStorage
         self.trip = trip
     }
     
     @MainActor func start() {
-        let viewModel = TripViewModel(trip: trip, storage: storage)
+        let viewModel = TripViewModel(trip: trip, storage: storage, imageStorage: imageStorage)
         tripViewModel = viewModel
+        
         
         let tripVC = TripViewController(viewModel: viewModel)
         tripVC.hidesBottomBarWhenPushed = true
@@ -33,6 +37,11 @@ class TripCoordinator: @preconcurrency Coordinator {
         
         tripVC.onMapTapped = { [weak self] in
             self?.showMap()
+        }
+        tripVC.onSave = { [weak self] in
+            if let self = self {
+                self.onSave?()
+            }
         }
         navigationController.pushViewController(tripVC, animated: true)
     }

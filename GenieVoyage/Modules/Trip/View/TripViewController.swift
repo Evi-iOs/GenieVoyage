@@ -11,7 +11,7 @@ import Combine
 
 class TripViewController: UIViewController, UIImagePickerControllerDelegate, SegmentedControlDelegate, UINavigationControllerDelegate, UITextViewDelegate {
     
-    var onSave: ((TripModel) -> Void)?
+    var onSave: (() -> Void)?
     var onMapTapped: (() -> Void)?
     var onClose: (() -> Void)?
     
@@ -31,6 +31,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     
     private let coverImageView = UIImageView()
     private let addCoverButton = UIButton(type: .system)
+    private var selectedCoverImage: UIImage?
     
     private let saveButton = UIButton(type: .system)
     
@@ -167,13 +168,13 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     
     private func configureUI() {
         titleText.text = viewModel.trip.title
-        let dateFormater = DateFormatter()
-        dateFormater.dateFormat = "dd/MM/yyyy"
-        if let startDate = dateFormater.date(from: viewModel.trip.startDate.description) {
-            startDatePicker.date = startDate
-        }
-        if let endDate = dateFormater.date(from: viewModel.trip.endDate.description) {
-            endDatePicker.date = endDate
+        startDatePicker.date = viewModel.trip.startDate
+        endDatePicker.date = viewModel.trip.endDate
+        
+        if let image = viewModel.loadCoverImage() {
+            coverImageView.image = image
+        } else {
+            coverImageView.image = UIImage(named: "coverPlaceholder")
         }
     }
     
@@ -299,7 +300,13 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
             showAlert(message: "Enter title Trip")
             return
         }
-        onSave?(viewModel.trip)
+        guard let selectedCoverImage = self.selectedCoverImage else { return }
+        
+        Task { [weak self] in
+            guard let self = self else { return }
+            await self.viewModel.saveTrip(coverImage: selectedCoverImage)
+            self.onSave?()
+        }
     }
     
     @objc private func addCoverTapped() {
@@ -396,6 +403,7 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         if let selectedImage = info[.originalImage] as? UIImage {
             coverImageView.image = selectedImage
             addCoverButton.imageView?.isHidden = true
+            selectedCoverImage = selectedImage
         }
         dismiss(animated: true, completion: nil)
     }

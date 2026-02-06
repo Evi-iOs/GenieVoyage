@@ -141,7 +141,8 @@ class StartPlanningViewController: UIViewController {
                 title: title,
                 startDate: startDate,
                 endDate: endDate,
-                days: [TripDay]()
+                coverImage: nil,
+                days: [TripDay](),
             )
             existingTrip = updatedTrip
         }

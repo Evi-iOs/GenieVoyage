@@ -11,9 +11,11 @@ import UIKit
 final class CoreDataTripStorage: TripStorage {
    
     private let context: NSManagedObjectContext
+    private let imageStorage: ImageStorageProtocol
     
-    init(context: NSManagedObjectContext = CoreDataManager.shared.context) {
+    init(context: NSManagedObjectContext = CoreDataManager.shared.context, imageStorage: ImageStorageProtocol) {
         self.context = context
+        self.imageStorage = imageStorage
     }
     
     // MARK: - Trips
@@ -40,11 +42,13 @@ final class CoreDataTripStorage: TripStorage {
     
     func loadTrips() async -> [TripModel] {
         let context = self.context
+        let coversDirectory = self.imageStorage.coversDirectory
+
         return await context.perform {
             let fetchRequest: NSFetchRequest<TripEntity> = TripEntity.fetchRequest()
             do {
                 let entities = try context.fetch(fetchRequest)
-                return entities.compactMap { $0.toModel() }
+                return entities.compactMap { $0.toModel(coversDirectory: coversDirectory) }
             } catch {
                 print("❌ Failed to load trips: \(error)")
                 return []

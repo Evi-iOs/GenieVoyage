@@ -137,6 +137,7 @@ final class TripListViewController: UIViewController {
     }
     
     func reloadTrips() {
+        loadMyTrips()
         collectionView.reloadData()
     }
     

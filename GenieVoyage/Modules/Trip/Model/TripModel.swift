@@ -14,7 +14,7 @@ struct TripModel {
     var description: String?
     var startDate: Date
     var endDate: Date
-    var coverImage: URL? 
+    var coverImage: URL?
     var days: [TripDay]
 }
 

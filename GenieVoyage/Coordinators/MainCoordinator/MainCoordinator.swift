@@ -15,11 +15,13 @@ final class MainCoordinator: Coordinator, TabBarControlling {
     private var tabBarController = UITabBarController()
     private let window: UIWindow
     private let storage: TripStorage
+    private let imageStorage: ImageStorageProtocol
     
-    init(window: UIWindow, storage: TripStorage) {
+    init(window: UIWindow, storage: TripStorage, imageStorage: ImageStorageProtocol) {
         self.window = window
         self.navigationController = UINavigationController()
         self.storage = storage
+        self.imageStorage = imageStorage
     }
     
     func start() {
@@ -31,7 +33,7 @@ final class MainCoordinator: Coordinator, TabBarControlling {
         let mapNavigation = UINavigationController()
         let profileNavigation = UINavigationController()
         
-        let tripListCoordinator = TripListCoordinator(navigationController: tripNavigation, storage: storage)
+        let tripListCoordinator = TripListCoordinator(navigationController: tripNavigation, storage: storage, imageStorage: imageStorage)
 //        let mapCoordinator = MapCoordinator(navigationController: mapNavigation, tripViewModel: nil, storage: storage)
         let settingsCoordinator = SettingsCoordinator(navigationController: profileNavigation)
         

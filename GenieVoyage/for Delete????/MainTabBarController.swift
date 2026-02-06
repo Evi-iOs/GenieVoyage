@@ -21,8 +21,10 @@ class MainTabBarController: UITabBarController {
         tabBar.tintColor = .black
         tabBar.unselectedItemTintColor = .lightGray
         
-        let storage = CoreDataTripStorage()
-        let tripListViewModel = TripListViewModel(storage: storage)
+        let storage = CoreDataTripStorage(imageStorage: ImageStorage.shared)
+        let imageStorage = ImageStorage.shared
+
+        let tripListViewModel = TripListViewModel(storage: storage, imageStorage: imageStorage)
         let allTripsVC = TripListViewController(viewModel: tripListViewModel)
         allTripsVC.tabBarItem = createTabBarItem(image: "homeSmall", selectedImage: "homeSmall", tag: 0)
         allTripsVC.tabBarItem.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: 300)

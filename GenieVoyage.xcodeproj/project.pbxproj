@@ -49,6 +49,7 @@
 		D0A39AA72DFCBDD1007F3F9A /* SettingsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A39AA62DFCBDD1007F3F9A /* SettingsCoordinator.swift */; };
 		D0A39AA92DFCBE37007F3F9A /* MapCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A39AA82DFCBE37007F3F9A /* MapCoordinator.swift */; };
 		D0A39AAB2E035FD2007F3F9A /* TabBarControlling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A39AAA2E035FD2007F3F9A /* TabBarControlling.swift */; };
+		D0B0E1B72F32131A000A390B /* ImageStorageProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B0E1B62F32131A000A390B /* ImageStorageProtocol.swift */; };
 		D0B5ADD32E1C6542009A74A5 /* TransportSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5ADD22E1C6542009A74A5 /* TransportSegmentControl.swift */; };
 		D0B5ADD52E20669C009A74A5 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5ADD42E20669C009A74A5 /* ProfileViewController.swift */; };
 		D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */; };
@@ -161,6 +162,7 @@
 		D0A39AA62DFCBDD1007F3F9A /* SettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
 		D0A39AA82DFCBE37007F3F9A /* MapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCoordinator.swift; sourceTree = "<group>"; };
 		D0A39AAA2E035FD2007F3F9A /* TabBarControlling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarControlling.swift; sourceTree = "<group>"; };
+		D0B0E1B62F32131A000A390B /* ImageStorageProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStorageProtocol.swift; sourceTree = "<group>"; };
 		D0B5ADD22E1C6542009A74A5 /* TransportSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportSegmentControl.swift; sourceTree = "<group>"; };
 		D0B5ADD42E20669C009A74A5 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		D0D192CE2A6FFF9A000853B8 /* GenieVoyage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GenieVoyage.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -256,6 +258,7 @@
 				D023B30A2E3FFD38009B382C /* TripStorage.swift */,
 				D023B30C2E3FFD63009B382C /* CoreDataTripStorage.swift */,
 				D0EBF10C2E5121E2002C76CD /* Mapping.swift */,
+				D0B0E1B62F32131A000A390B /* ImageStorageProtocol.swift */,
 			);
 			path = "CoreData ";
 			sourceTree = "<group>";
@@ -727,6 +730,7 @@
 				D06C7F2A2DE24BA600402EA0 /* EventView.swift in Sources */,
 				D06C7F262DBCF32D00402EA0 /* PointViewController.swift in Sources */,
 				D03D086B2D08C14F009F8E63 /* MapLocationViewController.swift in Sources */,
+				D0B0E1B72F32131A000A390B /* ImageStorageProtocol.swift in Sources */,
 				D023B3092E3FD422009B382C /* CoreDataManager.swift in Sources */,
 				D06C7F222DBC19CC00402EA0 /* CustomTabBar.swift in Sources */,
 				D0FC227C2DF764EA0074C9AF /* ProtocolCoordinator.swift in Sources */,

@@ -10,14 +10,16 @@ import CoreData
 import CoreLocation
 
 extension TripEntity {
-    func toModel() -> TripModel {
-        TripModel(
+    func toModel(coversDirectory: URL) -> TripModel {
+        let trip = TripModel(
             id: self.id ?? UUID(),
             title: self.title ?? "",
             startDate: self.startDate ?? Date(),
             endDate: self.endDate ?? Date(),
+            coverImage: self.coverImage.map { coversDirectory.appendingPathComponent($0)},
             days: (self.days as? Set<TripDayEntity>)?.map { $0.toModel() } ?? []
         )
+        return trip
     }
     
     func update(from model: TripModel, context: NSManagedObjectContext) {
@@ -25,7 +27,10 @@ extension TripEntity {
         self.title = model.title
         self.startDate = model.startDate
         self.endDate = model.endDate
-        
+        if let newCover = model.coverImage?.lastPathComponent {
+            self.coverImage = newCover
+        }
+
         var existingDaysByDate: [Date: TripDayEntity] = [:]
         if let existingDays = self.days as? Set<TripDayEntity> {
             for day in existingDays {

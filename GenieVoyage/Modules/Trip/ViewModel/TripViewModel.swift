@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import UIKit
 
 @MainActor
 final class TripViewModel: ObservableObject {
@@ -15,24 +16,43 @@ final class TripViewModel: ObservableObject {
     @Published private(set) var days: [DayViewModel] = []
     @Published var selectedDayIndex: Int = 0
     @Published var isLoading: Bool = false
-    
-    let trip: TripModel
+        
+    var trip: TripModel
     private let storage: TripStorage
+    private let imageStorage: ImageStorageProtocol
     private var calendar: Calendar
     
     private var daysCancellables = Set<AnyCancellable>()
     private var modelCancellables = Set<AnyCancellable>()
     
-    init(trip: TripModel, storage: TripStorage, calendar: Calendar = .current) {
+    init(trip: TripModel, storage: TripStorage, imageStorage: ImageStorageProtocol, calendar: Calendar = .current) {
         self.trip = trip
         self.storage = storage
         self.calendar = calendar
+        self.imageStorage = imageStorage
         
         Task {
             await loadInitialData()
         }
     }
     
+    func saveTrip(coverImage: UIImage?) async {
+        if let image = coverImage {
+            do {
+                let url = try imageStorage.saveCover(image, tripID: trip.id)
+                trip.coverImage = url
+            } catch {
+                print("❌ image save error:", error)
+            }
+        }
+        await storage.saveTrip(trip)
+    }
+    
+    func loadCoverImage() -> UIImage? {
+        guard let url = trip.coverImage else { return nil }
+        return imageStorage.loadImage(from: url)
+    }
+
     private func loadInitialData() async {
         isLoading = false
         

@@ -14,16 +14,18 @@ class TripListCoordinator: Coordinator {
         
     private var tripListVC: TripListViewController?
     private let storage: TripStorage
+    private let imageStorage: ImageStorageProtocol
     private var tripListViewModel: TripListViewModel?
     
-    init(navigationController: UINavigationController, storage: TripStorage) {
+    init(navigationController: UINavigationController, storage: TripStorage, imageStorage: ImageStorageProtocol) {
         self.navigationController = navigationController
+        self.imageStorage = imageStorage
         self.storage = storage
     }
 
     func start() {
         Task { @MainActor in
-            tripListViewModel = TripListViewModel(storage: storage)
+            tripListViewModel = TripListViewModel(storage: storage, imageStorage: imageStorage)
             guard let tripListViewModel else { return }
             let tripListVC = TripListViewController(viewModel: tripListViewModel)
             self.tripListVC = tripListVC
@@ -49,7 +51,10 @@ class TripListCoordinator: Coordinator {
     }
 
     private func showTripDetail(for trip: TripModel) {
-        let tripCoordinator = TripCoordinator(navigationController: navigationController, trip: trip, storage: storage)
+        let tripCoordinator = TripCoordinator(navigationController: navigationController, trip: trip, storage: storage, imageStorage: imageStorage)
+        tripCoordinator.onSave = { [weak self] in
+            self?.tripListVC?.reloadTrips()
+        }
         tripCoordinator.onFinish = { [weak self] in
             self?.childCoordinators.removeAll()
             self?.tripListVC?.reloadTrips()
