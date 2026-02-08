@@ -42,6 +42,8 @@
 		D0A39AAB2E035FD2007F3F9A /* TabBarControlling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A39AAA2E035FD2007F3F9A /* TabBarControlling.swift */; };
 		D0B0E1B72F32131A000A390B /* ImageStorageProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B0E1B62F32131A000A390B /* ImageStorageProtocol.swift */; };
 		D0B0E1B92F37E984000A390B /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B0E1B82F37E984000A390B /* OnboardingViewController.swift */; };
+		D0B0E1BB2F38E899000A390B /* OnboardingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B0E1BA2F38E899000A390B /* OnboardingCoordinator.swift */; };
+		D0B0E1BD2F38F102000A390B /* AuthCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B0E1BC2F38F102000A390B /* AuthCoordinator.swift */; };
 		D0B5ADD32E1C6542009A74A5 /* TransportSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5ADD22E1C6542009A74A5 /* TransportSegmentControl.swift */; };
 		D0B5ADD52E20669C009A74A5 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5ADD42E20669C009A74A5 /* ProfileViewController.swift */; };
 		D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */; };
@@ -145,6 +147,8 @@
 		D0A39AAA2E035FD2007F3F9A /* TabBarControlling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarControlling.swift; sourceTree = "<group>"; };
 		D0B0E1B62F32131A000A390B /* ImageStorageProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStorageProtocol.swift; sourceTree = "<group>"; };
 		D0B0E1B82F37E984000A390B /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		D0B0E1BA2F38E899000A390B /* OnboardingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinator.swift; sourceTree = "<group>"; };
+		D0B0E1BC2F38F102000A390B /* AuthCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCoordinator.swift; sourceTree = "<group>"; };
 		D0B5ADD22E1C6542009A74A5 /* TransportSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportSegmentControl.swift; sourceTree = "<group>"; };
 		D0B5ADD42E20669C009A74A5 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		D0D192CE2A6FFF9A000853B8 /* GenieVoyage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GenieVoyage.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -246,25 +250,25 @@
 		D06C7F162DB26B8700402EA0 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				D0B0E1B82F37E984000A390B /* OnboardingViewController.swift */,
+				D06C7F1F2DBAC3CD00402EA0 /* SignInViewController.swift */,
+				D07B67892D2C6D8000842293 /* StartPlanningViewController.swift */,
+				D06C7F382DE7ABC300402EA0 /* EventEditorViewController.swift */,
 				D0FC227F2DF7662A0074C9AF /* TripListViewController.swift */,
+				D043B43C2CFF6DDE00151ED0 /* TripViewController.swift */,
+				D0FC22692DEA406A0074C9AF /* MapEventsViewController.swift */,
+				D0B5ADD22E1C6542009A74A5 /* TransportSegmentControl.swift */,
 				D023B2F32E3584FB009B382C /* TemplateCell.swift */,
 				D023B2F52E358530009B382C /* MyTripCell.swift */,
 				D026365D2D84AE0D0070D28C /* SegmentCell.swift */,
 				D023B2F72E35858C009B382C /* HeaderView.swift */,
 				D023B2F92E3585BF009B382C /* TripTemplate.swift */,
-				D043B43C2CFF6DDE00151ED0 /* TripViewController.swift */,
-				D0FC22692DEA406A0074C9AF /* MapEventsViewController.swift */,
-				D06C7F382DE7ABC300402EA0 /* EventEditorViewController.swift */,
-				D07B67892D2C6D8000842293 /* StartPlanningViewController.swift */,
 				D0FC226B2DF2EFC40074C9AF /* DayTabCell.swift */,
 				D04945B22D3A451B00232F26 /* EventCollectionViewCell.swift */,
 				D05D92E52D4B8CB10022C734 /* DayCollectionViewCell.swift */,
 				D06C7F292DE24BA600402EA0 /* EventView.swift */,
 				D0FC225E2DE7AF6F0074C9AF /* PointEventEditorView.swift */,
 				D026365B2D84ADBB0070D28C /* SegmentedControlView.swift */,
-				D0B5ADD22E1C6542009A74A5 /* TransportSegmentControl.swift */,
-				D06C7F1F2DBAC3CD00402EA0 /* SignInViewController.swift */,
-				D0B0E1B82F37E984000A390B /* OnboardingViewController.swift */,
 				D0B5ADD42E20669C009A74A5 /* ProfileViewController.swift */,
 			);
 			path = View;
@@ -420,6 +424,8 @@
 			isa = PBXGroup;
 			children = (
 				D0FC227B2DF764EA0074C9AF /* ProtocolCoordinator.swift */,
+				D0B0E1BA2F38E899000A390B /* OnboardingCoordinator.swift */,
+				D0B0E1BC2F38F102000A390B /* AuthCoordinator.swift */,
 				D0FC22792DF764AC0074C9AF /* MainCoordinator.swift */,
 				D0A39AA62DFCBDD1007F3F9A /* SettingsCoordinator.swift */,
 				D0A39AA82DFCBE37007F3F9A /* MapCoordinator.swift */,
@@ -674,6 +680,7 @@
 				D023B30D2E3FFD63009B382C /* CoreDataTripStorage.swift in Sources */,
 				D06C7F1B2DB26C2600402EA0 /* DayCellDelegate.swift in Sources */,
 				D023B2F42E3584FB009B382C /* TemplateCell.swift in Sources */,
+				D0B0E1BB2F38E899000A390B /* OnboardingCoordinator.swift in Sources */,
 				D0B5ADD52E20669C009A74A5 /* ProfileViewController.swift in Sources */,
 				D0B5ADD32E1C6542009A74A5 /* TransportSegmentControl.swift in Sources */,
 				D04945B32D3A451B00232F26 /* EventCollectionViewCell.swift in Sources */,
@@ -700,6 +707,7 @@
 				D0FC22672DE8AC720074C9AF /* FoodEditorViewModel.swift in Sources */,
 				D0FC225F2DE7AF6F0074C9AF /* PointEventEditorView.swift in Sources */,
 				D0B0E1B92F37E984000A390B /* OnboardingViewController.swift in Sources */,
+				D0B0E1BD2F38F102000A390B /* AuthCoordinator.swift in Sources */,
 				D023B2F82E35858C009B382C /* HeaderView.swift in Sources */,
 				D023B30B2E3FFD38009B382C /* TripStorage.swift in Sources */,
 				D0365DF12CFA6BEA00D711A9 /* TripModel.swift in Sources */,

@@ -9,6 +9,8 @@ import UIKit
 
 class SignInViewController: UIViewController {
     
+    var onLoginSuccess: (() -> Void)?
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "GenieVoyage"
@@ -41,7 +43,6 @@ class SignInViewController: UIViewController {
         button.backgroundColor = UIColor.black
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 8
-        button.addTarget(SignInViewController.self, action: #selector(signInTapped), for: .touchUpInside)
         return button
     }()
     
@@ -58,7 +59,6 @@ class SignInViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle("Sign Up", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        button.addTarget(SignInViewController.self, action: #selector(signUpTapped), for: .touchUpInside)
         return button
     }()
     
@@ -66,6 +66,9 @@ class SignInViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         setupLayout()
+        
+        signInButton.addTarget(self, action: #selector(signInTapped), for: .touchUpInside)
+        signUpButton.addTarget(self, action: #selector(signUpTapped), for: .touchUpInside)
     }
     
     private func setupLayout() {
@@ -91,11 +94,13 @@ class SignInViewController: UIViewController {
         ])
     }
     
-    @objc private func signInTapped() {
+    @objc private func signInTapped(_ sender: UIButton) {
         print("Sign In tapped with email: \(emailTextField.text ?? "")")
+        
+        onLoginSuccess?()
     }
     
-    @objc private func signUpTapped() {
+    @objc private func signUpTapped(_ sender: UIButton) {
         print("Sign Up tapped")
     }
 }
