@@ -21,11 +21,6 @@
 		D026365C2D84ADBB0070D28C /* SegmentedControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D026365B2D84ADBB0070D28C /* SegmentedControlView.swift */; };
 		D026365E2D84AE0D0070D28C /* SegmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D026365D2D84AE0D0070D28C /* SegmentCell.swift */; };
 		D0365DF12CFA6BEA00D711A9 /* TripModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0365DF02CFA6BE700D711A9 /* TripModel.swift */; };
-		D0365DF92CFDC76F00D711A9 /* CalculateDistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0365DF82CFDC76F00D711A9 /* CalculateDistance.swift */; };
-		D03D08652D0730CE009F8E63 /* PlanDayDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03D08642D0730CE009F8E63 /* PlanDayDetailViewController.swift */; };
-		D03D08672D074316009F8E63 /* ItineraryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03D08662D074316009F8E63 /* ItineraryCell.swift */; };
-		D03D08692D08544D009F8E63 /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03D08682D08544D009F8E63 /* EventViewController.swift */; };
-		D03D086B2D08C14F009F8E63 /* MapLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03D086A2D08C14F009F8E63 /* MapLocationViewController.swift */; };
 		D043B43D2CFF6DDE00151ED0 /* TripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D043B43C2CFF6DDE00151ED0 /* TripViewController.swift */; };
 		D04945B32D3A451B00232F26 /* EventCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04945B22D3A451B00232F26 /* EventCollectionViewCell.swift */; };
 		D04945B52D3A46FA00232F26 /* EventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04945B42D3A46FA00232F26 /* EventModel.swift */; };
@@ -34,11 +29,7 @@
 		D0605DF82D3FF24C00465BD2 /* Pods_GenieVoyage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 071C3747FA4F0ADB75D5CC99 /* Pods_GenieVoyage.framework */; };
 		D0605DF92D3FF24C00465BD2 /* Pods_GenieVoyage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 071C3747FA4F0ADB75D5CC99 /* Pods_GenieVoyage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D06C7F1B2DB26C2600402EA0 /* DayCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F1A2DB26C1B00402EA0 /* DayCellDelegate.swift */; };
-		D06C7F1E2DBAC2E500402EA0 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F1D2DBAC2D700402EA0 /* MainTabBarController.swift */; };
 		D06C7F202DBAC3CD00402EA0 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F1F2DBAC3CD00402EA0 /* SignInViewController.swift */; };
-		D06C7F222DBC19CC00402EA0 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F212DBC19CC00402EA0 /* CustomTabBar.swift */; };
-		D06C7F242DBC1E4100402EA0 /* CheckListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F232DBC1E4100402EA0 /* CheckListViewController.swift */; };
-		D06C7F262DBCF32D00402EA0 /* PointViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F252DBCF32D00402EA0 /* PointViewController.swift */; };
 		D06C7F2A2DE24BA600402EA0 /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F292DE24BA600402EA0 /* EventView.swift */; };
 		D06C7F2C2DE6197600402EA0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F2B2DE6197600402EA0 /* Constants.swift */; };
 		D06C7F322DE7A9C000402EA0 /* EventEditorConfigurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F312DE7A9C000402EA0 /* EventEditorConfigurable.swift */; };
@@ -50,11 +41,11 @@
 		D0A39AA92DFCBE37007F3F9A /* MapCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A39AA82DFCBE37007F3F9A /* MapCoordinator.swift */; };
 		D0A39AAB2E035FD2007F3F9A /* TabBarControlling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A39AAA2E035FD2007F3F9A /* TabBarControlling.swift */; };
 		D0B0E1B72F32131A000A390B /* ImageStorageProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B0E1B62F32131A000A390B /* ImageStorageProtocol.swift */; };
+		D0B0E1B92F37E984000A390B /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B0E1B82F37E984000A390B /* OnboardingViewController.swift */; };
 		D0B5ADD32E1C6542009A74A5 /* TransportSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5ADD22E1C6542009A74A5 /* TransportSegmentControl.swift */; };
 		D0B5ADD52E20669C009A74A5 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5ADD42E20669C009A74A5 /* ProfileViewController.swift */; };
 		D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */; };
 		D0D192D42A6FFF9A000853B8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D32A6FFF9A000853B8 /* SceneDelegate.swift */; };
-		D0D192D62A6FFF9A000853B8 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D52A6FFF9A000853B8 /* CalendarViewController.swift */; };
 		D0D192DC2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D0D192DA2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld */; };
 		D0D192DE2A6FFF9B000853B8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0D192DD2A6FFF9B000853B8 /* Assets.xcassets */; };
 		D0D192E12A6FFF9B000853B8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0D192DF2A6FFF9B000853B8 /* LaunchScreen.storyboard */; };
@@ -62,7 +53,6 @@
 		D0D192F62A6FFF9B000853B8 /* GenieVoyageUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192F52A6FFF9B000853B8 /* GenieVoyageUITests.swift */; };
 		D0D192F82A6FFF9B000853B8 /* GenieVoyageUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192F72A6FFF9B000853B8 /* GenieVoyageUITestsLaunchTests.swift */; };
 		D0D193062A705F28000853B8 /* CalendarKit in Frameworks */ = {isa = PBXBuildFile; productRef = D0D193052A705F28000853B8 /* CalendarKit */; };
-		D0D193082A71AC36000853B8 /* EKWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D193072A71AC36000853B8 /* EKWrapper.swift */; };
 		D0D9590F2D9FC36A00B4B327 /* DayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D9590E2D9FC36A00B4B327 /* DayViewModel.swift */; };
 		D0EBF10D2E5121E2002C76CD /* Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EBF10C2E5121E2002C76CD /* Mapping.swift */; };
 		D0EBF10F2E585ADC002C76CD /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EBF10E2E585ADC002C76CD /* AppCoordinator.swift */; };
@@ -136,22 +126,13 @@
 		D026365B2D84ADBB0070D28C /* SegmentedControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedControlView.swift; sourceTree = "<group>"; };
 		D026365D2D84AE0D0070D28C /* SegmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentCell.swift; sourceTree = "<group>"; };
 		D0365DF02CFA6BE700D711A9 /* TripModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripModel.swift; sourceTree = "<group>"; };
-		D0365DF82CFDC76F00D711A9 /* CalculateDistance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateDistance.swift; sourceTree = "<group>"; };
-		D03D08642D0730CE009F8E63 /* PlanDayDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanDayDetailViewController.swift; sourceTree = "<group>"; };
-		D03D08662D074316009F8E63 /* ItineraryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryCell.swift; sourceTree = "<group>"; };
-		D03D08682D08544D009F8E63 /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
-		D03D086A2D08C14F009F8E63 /* MapLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLocationViewController.swift; sourceTree = "<group>"; };
 		D043B43C2CFF6DDE00151ED0 /* TripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripViewController.swift; sourceTree = "<group>"; };
 		D04945B22D3A451B00232F26 /* EventCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionViewCell.swift; sourceTree = "<group>"; };
 		D04945B42D3A46FA00232F26 /* EventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventModel.swift; sourceTree = "<group>"; };
 		D04945B82D3EB26900232F26 /* TripViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripViewModel.swift; sourceTree = "<group>"; };
 		D05D92E52D4B8CB10022C734 /* DayCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCollectionViewCell.swift; sourceTree = "<group>"; };
 		D06C7F1A2DB26C1B00402EA0 /* DayCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCellDelegate.swift; sourceTree = "<group>"; };
-		D06C7F1D2DBAC2D700402EA0 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		D06C7F1F2DBAC3CD00402EA0 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
-		D06C7F212DBC19CC00402EA0 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
-		D06C7F232DBC1E4100402EA0 /* CheckListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListViewController.swift; sourceTree = "<group>"; };
-		D06C7F252DBCF32D00402EA0 /* PointViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointViewController.swift; sourceTree = "<group>"; };
 		D06C7F292DE24BA600402EA0 /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
 		D06C7F2B2DE6197600402EA0 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		D06C7F312DE7A9C000402EA0 /* EventEditorConfigurable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEditorConfigurable.swift; sourceTree = "<group>"; };
@@ -163,12 +144,12 @@
 		D0A39AA82DFCBE37007F3F9A /* MapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCoordinator.swift; sourceTree = "<group>"; };
 		D0A39AAA2E035FD2007F3F9A /* TabBarControlling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarControlling.swift; sourceTree = "<group>"; };
 		D0B0E1B62F32131A000A390B /* ImageStorageProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStorageProtocol.swift; sourceTree = "<group>"; };
+		D0B0E1B82F37E984000A390B /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		D0B5ADD22E1C6542009A74A5 /* TransportSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportSegmentControl.swift; sourceTree = "<group>"; };
 		D0B5ADD42E20669C009A74A5 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		D0D192CE2A6FFF9A000853B8 /* GenieVoyage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GenieVoyage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D0D192D32A6FFF9A000853B8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		D0D192D52A6FFF9A000853B8 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		D0D192DB2A6FFF9A000853B8 /* GenieVoyage.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GenieVoyage.xcdatamodel; sourceTree = "<group>"; };
 		D0D192DD2A6FFF9B000853B8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D0D192E02A6FFF9B000853B8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -178,7 +159,6 @@
 		D0D192F12A6FFF9B000853B8 /* GenieVoyageUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GenieVoyageUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0D192F52A6FFF9B000853B8 /* GenieVoyageUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenieVoyageUITests.swift; sourceTree = "<group>"; };
 		D0D192F72A6FFF9B000853B8 /* GenieVoyageUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenieVoyageUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		D0D193072A71AC36000853B8 /* EKWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EKWrapper.swift; sourceTree = "<group>"; };
 		D0D9590E2D9FC36A00B4B327 /* DayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayViewModel.swift; sourceTree = "<group>"; };
 		D0EBF10C2E5121E2002C76CD /* Mapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mapping.swift; sourceTree = "<group>"; };
 		D0EBF10E2E585ADC002C76CD /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
@@ -269,6 +249,7 @@
 				D0FC227F2DF7662A0074C9AF /* TripListViewController.swift */,
 				D023B2F32E3584FB009B382C /* TemplateCell.swift */,
 				D023B2F52E358530009B382C /* MyTripCell.swift */,
+				D026365D2D84AE0D0070D28C /* SegmentCell.swift */,
 				D023B2F72E35858C009B382C /* HeaderView.swift */,
 				D023B2F92E3585BF009B382C /* TripTemplate.swift */,
 				D043B43C2CFF6DDE00151ED0 /* TripViewController.swift */,
@@ -283,6 +264,7 @@
 				D026365B2D84ADBB0070D28C /* SegmentedControlView.swift */,
 				D0B5ADD22E1C6542009A74A5 /* TransportSegmentControl.swift */,
 				D06C7F1F2DBAC3CD00402EA0 /* SignInViewController.swift */,
+				D0B0E1B82F37E984000A390B /* OnboardingViewController.swift */,
 				D0B5ADD42E20669C009A74A5 /* ProfileViewController.swift */,
 			);
 			path = View;
@@ -375,7 +357,6 @@
 				D0FC22702DF75FF60074C9AF /* Modules */,
 				D06C7F1C2DB26C8A00402EA0 /* Shared */,
 				D0FC22762DF762F70074C9AF /* Resources */,
-				D0FC22682DE908AF0074C9AF /* for Delete???? */,
 				D0D192DF2A6FFF9B000853B8 /* LaunchScreen.storyboard */,
 				D0D192E22A6FFF9B000853B8 /* Info.plist */,
 				D0D192DA2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld */,
@@ -398,25 +379,6 @@
 				D0D192F72A6FFF9B000853B8 /* GenieVoyageUITestsLaunchTests.swift */,
 			);
 			path = GenieVoyageUITests;
-			sourceTree = "<group>";
-		};
-		D0FC22682DE908AF0074C9AF /* for Delete???? */ = {
-			isa = PBXGroup;
-			children = (
-				D06C7F1D2DBAC2D700402EA0 /* MainTabBarController.swift */,
-				D0D193072A71AC36000853B8 /* EKWrapper.swift */,
-				D06C7F252DBCF32D00402EA0 /* PointViewController.swift */,
-				D06C7F232DBC1E4100402EA0 /* CheckListViewController.swift */,
-				D06C7F212DBC19CC00402EA0 /* CustomTabBar.swift */,
-				D03D086A2D08C14F009F8E63 /* MapLocationViewController.swift */,
-				D026365D2D84AE0D0070D28C /* SegmentCell.swift */,
-				D03D08642D0730CE009F8E63 /* PlanDayDetailViewController.swift */,
-				D0D192D52A6FFF9A000853B8 /* CalendarViewController.swift */,
-				D03D08682D08544D009F8E63 /* EventViewController.swift */,
-				D03D08662D074316009F8E63 /* ItineraryCell.swift */,
-				D0365DF82CFDC76F00D711A9 /* CalculateDistance.swift */,
-			);
-			path = "for Delete????";
 			sourceTree = "<group>";
 		};
 		D0FC22702DF75FF60074C9AF /* Modules */ = {
@@ -694,10 +656,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D023B2F62E358530009B382C /* MyTripCell.swift in Sources */,
-				D0D192D62A6FFF9A000853B8 /* CalendarViewController.swift in Sources */,
 				D0FC22882DFA13BD0074C9AF /* TripViewControllerDelegate.swift in Sources */,
 				D0FC22612DE8ABD90074C9AF /* HotelEditorViewModel.swift in Sources */,
-				D0365DF92CFDC76F00D711A9 /* CalculateDistance.swift in Sources */,
 				D04945B52D3A46FA00232F26 /* EventModel.swift in Sources */,
 				D0EBF10F2E585ADC002C76CD /* AppCoordinator.swift in Sources */,
 				D07B678A2D2C6D8000842293 /* StartPlanningViewController.swift in Sources */,
@@ -713,7 +673,6 @@
 				D0FC22822DF77A300074C9AF /* EventCoordinator.swift in Sources */,
 				D023B30D2E3FFD63009B382C /* CoreDataTripStorage.swift in Sources */,
 				D06C7F1B2DB26C2600402EA0 /* DayCellDelegate.swift in Sources */,
-				D03D08692D08544D009F8E63 /* EventViewController.swift in Sources */,
 				D023B2F42E3584FB009B382C /* TemplateCell.swift in Sources */,
 				D0B5ADD52E20669C009A74A5 /* ProfileViewController.swift in Sources */,
 				D0B5ADD32E1C6542009A74A5 /* TransportSegmentControl.swift in Sources */,
@@ -728,15 +687,10 @@
 				D023B2FA2E3585BF009B382C /* TripTemplate.swift in Sources */,
 				D026365E2D84AE0D0070D28C /* SegmentCell.swift in Sources */,
 				D06C7F2A2DE24BA600402EA0 /* EventView.swift in Sources */,
-				D06C7F262DBCF32D00402EA0 /* PointViewController.swift in Sources */,
-				D03D086B2D08C14F009F8E63 /* MapLocationViewController.swift in Sources */,
 				D0B0E1B72F32131A000A390B /* ImageStorageProtocol.swift in Sources */,
 				D023B3092E3FD422009B382C /* CoreDataManager.swift in Sources */,
-				D06C7F222DBC19CC00402EA0 /* CustomTabBar.swift in Sources */,
 				D0FC227C2DF764EA0074C9AF /* ProtocolCoordinator.swift in Sources */,
 				D043B43D2CFF6DDE00151ED0 /* TripViewController.swift in Sources */,
-				D03D08652D0730CE009F8E63 /* PlanDayDetailViewController.swift in Sources */,
-				D06C7F242DBC1E4100402EA0 /* CheckListViewController.swift in Sources */,
 				D0FC226C2DF2EFC40074C9AF /* DayTabCell.swift in Sources */,
 				D0D192DC2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld in Sources */,
 				D0FC227E2DF765850074C9AF /* TripListCoordinator.swift in Sources */,
@@ -745,9 +699,7 @@
 				D0A39AAB2E035FD2007F3F9A /* TabBarControlling.swift in Sources */,
 				D0FC22672DE8AC720074C9AF /* FoodEditorViewModel.swift in Sources */,
 				D0FC225F2DE7AF6F0074C9AF /* PointEventEditorView.swift in Sources */,
-				D03D08672D074316009F8E63 /* ItineraryCell.swift in Sources */,
-				D06C7F1E2DBAC2E500402EA0 /* MainTabBarController.swift in Sources */,
-				D0D193082A71AC36000853B8 /* EKWrapper.swift in Sources */,
+				D0B0E1B92F37E984000A390B /* OnboardingViewController.swift in Sources */,
 				D023B2F82E35858C009B382C /* HeaderView.swift in Sources */,
 				D023B30B2E3FFD38009B382C /* TripStorage.swift in Sources */,
 				D0365DF12CFA6BEA00D711A9 /* TripModel.swift in Sources */,

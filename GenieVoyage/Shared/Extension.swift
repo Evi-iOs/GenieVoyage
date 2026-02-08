@@ -171,18 +171,6 @@ extension UIImage {
     }
 }
     
-extension DestinationCategory {
-    func icon() -> UIImage? {
-        switch self {
-        case .food: return UIImage(systemName: "fork.knife")
-        case .attraction: return UIImage(systemName: "star")
-        case .hotel: return UIImage(systemName: "bed.double")
-        case .transport: return UIImage(systemName: "car")
-        case .shopping: return UIImage(systemName: "bag")
-        }
-    }
-}
-
 extension UITextField {
     func setPlaceholder(text: String, color: UIColor) {
         self.attributedPlaceholder = NSAttributedString(
