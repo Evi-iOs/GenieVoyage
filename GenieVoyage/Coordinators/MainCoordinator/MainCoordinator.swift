@@ -9,58 +9,68 @@ import Foundation
 import UIKit
 
 final class MainCoordinator: Coordinator, TabBarControlling {
+
     var navigationController: UINavigationController
     var childCoordinators = [Coordinator]()
-    
-    private var tabBarController = UITabBarController()
+
+    private var tabBarController = CustomTabBarController()
+
     private let window: UIWindow
     private let storage: TripStorage
     private let imageStorage: ImageStorageProtocol
-    
+
     init(window: UIWindow, storage: TripStorage, imageStorage: ImageStorageProtocol) {
         self.window = window
         self.navigationController = UINavigationController()
         self.storage = storage
         self.imageStorage = imageStorage
     }
-    
+
     func start() {
-        tabBarController.tabBar.tintColor = .black
-        tabBarController.tabBar.unselectedItemTintColor = .black
-        tabBarController.selectedIndex = 0
+        let tripNavigation     = UINavigationController()
+        let savedNavigation    = UINavigationController()
+        let mapNavigation      = UINavigationController()
+        let profileNavigation  = UINavigationController()
         
-        let tripNavigation = UINavigationController()
-        let mapNavigation = UINavigationController()
-        let profileNavigation = UINavigationController()
-        
-        let tripListCoordinator = TripListCoordinator(navigationController: tripNavigation, storage: storage, imageStorage: imageStorage)
-//        let mapCoordinator = MapCoordinator(navigationController: mapNavigation, tripViewModel: nil, storage: storage)
+        let tripListCoordinator = TripListCoordinator(
+            navigationController: tripNavigation,
+            storage: storage,
+            imageStorage: imageStorage
+        )
         let settingsCoordinator = SettingsCoordinator(navigationController: profileNavigation)
-        
+
         addChild(tripListCoordinator)
         addChild(settingsCoordinator)
-        addChild(settingsCoordinator)
-        
-        tabBarController.viewControllers = [tripNavigation, mapNavigation, profileNavigation]
-        
+
+        tabBarController.viewControllers = [
+            tripNavigation,
+            savedNavigation,
+            mapNavigation,
+            profileNavigation
+        ]
+
+        // FAB action
+        tabBarController.onFABTap = { [weak self] in
+            self?.showCreateTrip()
+        }
+
+        navigationController.setNavigationBarHidden(true, animated: false)
         navigationController.viewControllers = [tabBarController]
-        
+
         tripListCoordinator.start()
         settingsCoordinator.start()
-        settingsCoordinator.start()
-        
+
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
     }
-    
+
     func setTabBar(hidden: Bool, animated: Bool) {
-        let tabBar = tabBarController.tabBar
-        let height = tabBar.frame.size.height
-        let offsetY = hidden ? height : -height
-        
-        UIView.animate(withDuration: animated ? 0.3 : 0.0) {
-            tabBar.frame = tabBar.frame.offsetBy(dx: 0, dy: offsetY)
-            tabBar.alpha = hidden ? 0 : 1
-        }
+        tabBarController.setCustomTabBar(hidden: hidden, animated: animated)
+    }
+
+    private func showCreateTrip() {
+        // push / present экрана создания поездки
     }
 }
+
+
