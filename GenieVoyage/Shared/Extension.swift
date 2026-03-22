@@ -195,25 +195,15 @@ import UIKit
 
 extension UIColor {
     convenience init(hex: String) {
-        var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-
-        if hexSanitized.hasPrefix("#") {
-            hexSanitized.removeFirst()
-        }
-
-        guard hexSanitized.count == 6 else {
-            self.init(white: 0.5, alpha: 1.0) 
-            return
-        }
-
-        var rgbValue: UInt64 = 0
-        Scanner(string: hexSanitized).scanHexInt64(&rgbValue)
-
-        let red = CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0
-        let green = CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0
-        let blue = CGFloat(rgbValue & 0x0000FF) / 255.0
-
-        self.init(red: red, green: green, blue: blue, alpha: 1.0)
+        let hex = hex.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "#", with: "")
+        var value: UInt64 = 0
+        Scanner(string: hex).scanHexInt64(&value)
+        self.init(
+            red:   CGFloat((value >> 16) & 0xFF) / 255,
+            green: CGFloat((value >> 8)  & 0xFF) / 255,
+            blue:  CGFloat( value        & 0xFF) / 255,
+            alpha: 1
+        )
     }
 }
 
@@ -269,5 +259,16 @@ extension UICollectionView {
 extension Date {
     var startOfDay: Date {
         Calendar.current.startOfDay(for: self)
+    }
+}
+
+extension UILabel {
+    func letterSpacing(_ spacing: CGFloat) {
+        guard let text = self.text else { return }
+        let attributed = NSAttributedString(
+            string: text,
+            attributes: [.kern: spacing]
+        )
+        self.attributedText = attributed
     }
 }

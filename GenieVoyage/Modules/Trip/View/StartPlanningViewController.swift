@@ -14,6 +14,7 @@ class StartPlanningViewController: UIViewController {
     var onClose: (() -> Void)?
     
     var existingTrip: TripModel?
+    var template: TripTemplate?
     
     private var searchCompleter = MKLocalSearchCompleter()
     private var suggestions: [MKLocalSearchCompletion] = []
@@ -43,6 +44,11 @@ class StartPlanningViewController: UIViewController {
             titleTextField.text = trip.title
             startDatePicker.date = trip.startDate
             endDatePicker.date = trip.endDate
+        }
+        if let template = template {
+            titleTextField.text = template.title
+            suggestionsTableView.isHidden = true
+            titleTextField.isEnabled = false
         }
     }
     
@@ -121,6 +127,12 @@ class StartPlanningViewController: UIViewController {
             showAlert(message: "Enter title Trip")
             return
         }
+        let days: [TripDay]
+        if let template = template {
+            days = template.days
+        } else {
+            days = []
+        }
         
         var calendar = Calendar.current
         calendar.timeZone = .current
@@ -142,7 +154,7 @@ class StartPlanningViewController: UIViewController {
                 startDate: startDate,
                 endDate: endDate,
                 coverImage: nil,
-                days: [TripDay](),
+                days: days,
             )
             existingTrip = updatedTrip
         }

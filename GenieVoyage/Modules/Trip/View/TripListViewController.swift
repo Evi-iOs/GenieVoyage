@@ -19,7 +19,7 @@ final class TripListViewController: UIViewController {
     }
 
     private let viewModel: TripListViewModel
-    private var templates: [TripTemplate] = TripTemplate.sampleTemplates()
+    private var templates: [TripTemplate] = TripTemplate.defaultTemplates
     private var myTrips: [TripModel] = []
     
     private var cancellables = Set<AnyCancellable>()

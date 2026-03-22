@@ -25,8 +25,6 @@ final class AppCoordinator {
     func start() {
         if !hasSeenOnboarding {
             showOnboarding()
-        } else if !isLoggedIn {
-            showAuth()
         } else {
             showMain()
         }
@@ -49,25 +47,27 @@ final class AppCoordinator {
         coordinator.start()
     }
     
-    private func showAuth() {
-        let coordinator = AuthCoordinator(window: window)
-        
-        coordinator.onFinish = { [weak self] in
-            guard let self else { return }
-            UserDefaults.standard.set(true, forKey: Keys.isLoggedIn)
-            self.start()
-        }
-        childCoordinator = coordinator
-        coordinator.start()
-    }
-    
     private var hasSeenOnboarding: Bool {
         UserDefaults.standard.bool(forKey: Keys.hasSeenOnboarding)
     }
     
-    private var isLoggedIn: Bool {
-        UserDefaults.standard.bool(forKey: Keys.isLoggedIn)
-    }
+    //NEXT Version
+//    private func showAuth() {
+//        let coordinator = AuthCoordinator(window: window)
+//        
+//        coordinator.onFinish = { [weak self] in
+//            guard let self else { return }
+//            UserDefaults.standard.set(true, forKey: Keys.isLoggedIn)
+//            self.start()
+//        }
+//        childCoordinator = coordinator
+//        coordinator.start()
+//    }
+//    
+//    private var isLoggedIn: Bool {
+//        UserDefaults.standard.bool(forKey: Keys.isLoggedIn)
+//    }
+    
 }
 
 private enum Keys {

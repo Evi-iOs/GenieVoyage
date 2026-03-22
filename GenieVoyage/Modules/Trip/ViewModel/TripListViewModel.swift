@@ -36,4 +36,8 @@ final class TripListViewModel: ObservableObject {
         await storage.deleteTrip(trip)
         await loadTrips()
     }
+    
+    func hasTrips() -> Bool {
+        return !trips.isEmpty
+    }
 }

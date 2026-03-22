@@ -285,8 +285,8 @@
             filePath = "GenieVoyage/Modules/Trip/View/StartPlanningViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "148"
-            endingLineNumber = "148"
+            startingLineNumber = "160"
+            endingLineNumber = "160"
             landmarkName = "saveButtonTapped()"
             landmarkType = "7">
          </BreakpointContent>
@@ -301,8 +301,8 @@
             filePath = "GenieVoyage/Modules/Trip/View/StartPlanningViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "132"
-            endingLineNumber = "132"
+            startingLineNumber = "144"
+            endingLineNumber = "144"
             landmarkName = "saveButtonTapped()"
             landmarkType = "7">
          </BreakpointContent>
@@ -381,8 +381,8 @@
             filePath = "GenieVoyage/Coordinators/MainCoordinator/TripListCoordinator/Trip/TripCoordinator.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "91"
-            endingLineNumber = "91"
+            startingLineNumber = "92"
+            endingLineNumber = "92"
             landmarkName = "didDropCreateEvent(event:category:dateEvent:startMinutes:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -587,13 +587,13 @@
             filePath = "GenieVoyage/Modules/Trip/View/TripViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "531"
-            endingLineNumber = "531"
+            startingLineNumber = "530"
+            endingLineNumber = "530"
             landmarkName = "dayCell(didResize:toMinutes:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "5C16D106-633D-4C51-B6D0-02B9E105A5D4 - 7541946250d85e5e"
+                  uuid = "5C16D106-633D-4C51-B6D0-02B9E105A5D4 - 7541946250d85e39"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -603,11 +603,11 @@
                   urlString = "file:///Users/evgeniyaiv/Documents/APP/GenieVoyage/GenieVoyage/Modules/Trip/View/TripViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "531"
-                  endingLineNumber = "531">
+                  startingLineNumber = "530"
+                  endingLineNumber = "530">
                </Location>
                <Location
-                  uuid = "5C16D106-633D-4C51-B6D0-02B9E105A5D4 - de56e97ff461f345"
+                  uuid = "5C16D106-633D-4C51-B6D0-02B9E105A5D4 - de56e97ff461f322"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -617,8 +617,8 @@
                   urlString = "file:///Users/evgeniyaiv/Documents/APP/GenieVoyage/GenieVoyage/Modules/Trip/View/TripViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "531"
-                  endingLineNumber = "531">
+                  startingLineNumber = "530"
+                  endingLineNumber = "530">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -671,7 +671,7 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "EE6817D7-57BF-40BC-B981-B530D0999339 - 4c31d5f2a17c4c44"
+                  uuid = "EE6817D7-57BF-40BC-B981-B530D0999339 - 4c31d5f2a17c4b19"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -681,11 +681,11 @@
                   urlString = "file:///Users/evgeniyaiv/Documents/APP/GenieVoyage/GenieVoyage/Modules/Trip/ViewModel/TripViewModel.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "132"
-                  endingLineNumber = "132">
+                  startingLineNumber = "127"
+                  endingLineNumber = "127">
                </Location>
                <Location
-                  uuid = "EE6817D7-57BF-40BC-B981-B530D0999339 - d3743574265f324a"
+                  uuid = "EE6817D7-57BF-40BC-B981-B530D0999339 - d3743574265f3517"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -695,8 +695,8 @@
                   urlString = "file:///Users/evgeniyaiv/Documents/APP/GenieVoyage/GenieVoyage/Modules/Trip/ViewModel/TripViewModel.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "132"
-                  endingLineNumber = "132">
+                  startingLineNumber = "127"
+                  endingLineNumber = "127">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -878,22 +878,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E5F3D416-1B08-499E-834F-9198881DA8CF"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "GenieVoyage/Modules/Trip/View/TripViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "174"
-            endingLineNumber = "174"
-            landmarkName = "configureUI()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "E6C4BD20-2E04-4D46-9034-E36608D5047F"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -933,8 +917,8 @@
             filePath = "GenieVoyage/Modules/Trip/View/StartPlanningViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "140"
-            endingLineNumber = "140"
+            startingLineNumber = "152"
+            endingLineNumber = "152"
             landmarkName = "saveButtonTapped()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1000,6 +984,22 @@
             startingLineNumber = "52"
             endingLineNumber = "52"
             landmarkName = "bindViewModel()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3287EE74-C457-4C6B-86F0-5327488F439E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "GenieVoyage/Modules/Trip/View/StartPlanningViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "40"
+            endingLineNumber = "40"
+            landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

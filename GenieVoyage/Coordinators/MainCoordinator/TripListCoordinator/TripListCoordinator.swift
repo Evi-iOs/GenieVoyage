@@ -25,7 +25,34 @@ class TripListCoordinator: Coordinator {
 
     func start() {
         Task { @MainActor in
-            tripListViewModel = TripListViewModel(storage: storage, imageStorage: imageStorage)
+            self.tripListViewModel = TripListViewModel(storage: storage, imageStorage: imageStorage)
+
+            if tripListViewModel?.hasTrips() == true {
+                showTripList()
+            } else {
+                showTemplates()
+            }
+        }
+    }
+    
+    func showTemplates() {
+        let vc = TemplateListViewController(templates: TripTemplate.defaultTemplates)
+        
+        vc.onTemplateSelected = { [weak self] template in
+            //self?.startPlanning(template: template)
+            self?.showPreviewTemplate(template: template)
+        }
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    private func showPreviewTemplate(template: TripTemplate) {
+        let vc = PreviewTemplateViewController(template: template)
+        vc.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    private func showTripList() {
+        Task { @MainActor in
             guard let tripListViewModel else { return }
             let tripListVC = TripListViewController(viewModel: tripListViewModel)
             self.tripListVC = tripListVC
@@ -44,7 +71,7 @@ class TripListCoordinator: Coordinator {
                 self?.showTripDetail(for: trip)
             }
             tripListVC.startPlanningSelected = { [weak self] in
-                self?.startPlanning()
+                self?.startPlanning(template: nil)
             }
             navigationController.setViewControllers([tripListVC], animated: false)
         }
@@ -69,7 +96,7 @@ class TripListCoordinator: Coordinator {
          }
     }
     
-    private func startPlanning() {
+    private func startPlanning(template: TripTemplate?) {
         if navigationController.viewControllers.contains(where: { $0 is StartPlanningViewController }) {
             return
         }
@@ -77,6 +104,8 @@ class TripListCoordinator: Coordinator {
             fatalError("tripListViewModel should not be nil")
         }
         let startPlanningVC = StartPlanningViewController(tripListViewModel: tripListViewModel)
+        startPlanningVC.template = template
+        
         startPlanningVC.hidesBottomBarWhenPushed = true
         startPlanningVC.onSave = { [weak self] newTrip in
             self?.tripListVC?.addNewTrip(trip: newTrip)

@@ -8,64 +8,108 @@
 import UIKit
 
 final class TemplateCell: UICollectionViewCell {
+
+    private let cardView = UIView()
     private let imageView = UIImageView()
+
+    private let gradientLayer = CAGradientLayer()
+
     private let titleLabel = UILabel()
-    private let useButton = UIButton(type: .system)
+    private let subtitleLabel = UILabel()
+
+    private let heartButton = UIButton(type: .system)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setup()
+        configureUI()
     }
 
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError()
     }
 
-    func configure(with template: TripTemplate) {
-        titleLabel.text = template.title
-        imageView.image = UIImage(named: template.imageName)
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        gradientLayer.frame = imageView.bounds
     }
+    
+    private func configureUI() {
+        contentView.addSubview(cardView)
 
-    private func setup() {
-        contentView.backgroundColor = .secondarySystemGroupedBackground
-        contentView.layer.cornerRadius = 12
-        contentView.layer.masksToBounds = true
-        contentView.layer.borderWidth = 1
-        contentView.layer.borderColor = UIColor.lightGray.cgColor
-        contentView.layer.cornerRadius = 12
-        contentView.layer.masksToBounds = true
+        cardView.layer.cornerRadius = 20
+        cardView.backgroundColor = .systemBackground
+
+        cardView.layer.shadowColor = UIColor.black.cgColor
+        cardView.layer.shadowOpacity = 0.08
+        cardView.layer.shadowRadius = 10
+        cardView.layer.shadowOffset = CGSize(width: 0, height: 6)
 
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 20
 
-        titleLabel.font = .boldSystemFont(ofSize: 18)
-        titleLabel.numberOfLines = 2
+        cardView.addSubview(imageView)
 
-        useButton.setTitle("Use", for: .normal)
-        useButton.tintColor = .systemBlue
+        gradientLayer.colors = [
+            UIColor.clear.cgColor,
+            UIColor.black.withAlphaComponent(0.7).cgColor
+        ]
+        gradientLayer.locations = [0.5, 1.0]
 
+        imageView.layer.addSublayer(gradientLayer)
+
+        titleLabel.font = .boldSystemFont(ofSize: 20)
+        titleLabel.textColor = .white
+
+        subtitleLabel.font = .systemFont(ofSize: 14)
+        subtitleLabel.textColor = UIColor.white.withAlphaComponent(0.85)
+
+        let textStack = UIStackView(arrangedSubviews: [titleLabel, subtitleLabel])
+        textStack.axis = .vertical
+        textStack.spacing = 4
+
+        imageView.addSubview(textStack)
+
+        heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
+        heartButton.tintColor = .black
+        heartButton.backgroundColor = .white
+        heartButton.layer.cornerRadius = 18
+
+        cardView.addSubview(heartButton)
+
+        cardView.translatesAutoresizingMaskIntoConstraints = false
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        useButton.translatesAutoresizingMaskIntoConstraints = false
-
-        contentView.addSubview(imageView)
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(useButton)
+        textStack.translatesAutoresizingMaskIntoConstraints = false
+        heartButton.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            imageView.heightAnchor.constraint(equalToConstant: 50),
-            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
+            cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
-            useButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
-            useButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
-            useButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12)
+            imageView.topAnchor.constraint(equalTo: cardView.topAnchor),
+            imageView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor),
+            imageView.bottomAnchor.constraint(equalTo: cardView.bottomAnchor),
+
+            textStack.leadingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: 16),
+            textStack.trailingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: -16),
+            textStack.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -16),
+
+            heartButton.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 12),
+            heartButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12),
+            heartButton.widthAnchor.constraint(equalToConstant: 36),
+            heartButton.heightAnchor.constraint(equalToConstant: 36)
         ])
     }
-}
+    
+    func configure(with template: TripTemplate) {
 
+        imageView.image = UIImage(named: template.imageName)
+
+        titleLabel.text = template.title
+        subtitleLabel.text = template.subtitle
+    }
+}

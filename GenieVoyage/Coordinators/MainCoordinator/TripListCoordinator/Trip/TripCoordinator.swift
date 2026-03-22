@@ -41,6 +41,7 @@ class TripCoordinator: @preconcurrency Coordinator {
         tripVC.onSave = { [weak self] in
             if let self = self {
                 self.onSave?()
+                self.onFinish?()
             }
         }
         navigationController.pushViewController(tripVC, animated: true)

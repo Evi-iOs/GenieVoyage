@@ -59,7 +59,7 @@ final class CustomTabBarView: UIView {
 
     private lazy var fabButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.backgroundColor = AppTheme.Colors.primary
+        button.backgroundColor = AppTheme.Colors.primaryDarkBlue
         button.layer.cornerRadius = AppTheme.TabBarLayout.fabSize / 2
         button.tintColor = .white
         let cfg = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)
@@ -130,7 +130,7 @@ final class CustomTabBarView: UIView {
             let cfg = UIImage.SymbolConfiguration(pointSize: AppTheme.TabBarLayout.iconSize, weight: .medium)
             let iv = UIImageView(image: UIImage(systemName: item.icon, withConfiguration: cfg))
             iv.contentMode = .scaleAspectFit
-            iv.tintColor = AppTheme.Colors.primary
+            iv.tintColor = AppTheme.Colors.primaryDarkBlue
             iv.translatesAutoresizingMaskIntoConstraints = false
 
             let label = UILabel()
