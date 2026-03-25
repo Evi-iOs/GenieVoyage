@@ -549,6 +549,7 @@ class StartPlanningViewController: UIViewController {
             await self.tripListViewModel.addTrip(updatedTrip)
             self.onSave?(updatedTrip)
         }
+        dismiss(animated: true)
     }
 
     @objc private func textFieldDidChange() {
