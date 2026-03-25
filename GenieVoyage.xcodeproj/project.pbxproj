@@ -916,6 +916,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GenieVoyage/Info.plist;
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "The app needs access to the calendar to display events";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Used to show your current location on the map when creating a trip.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We use your photo library to add photos to your trip.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -947,6 +949,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GenieVoyage/Info.plist;
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "The app needs access to the calendar to display events";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Used to show your current location on the map when creating a trip.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We use your photo library to add photos to your trip.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
