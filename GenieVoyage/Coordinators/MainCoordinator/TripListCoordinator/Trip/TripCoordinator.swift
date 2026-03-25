@@ -32,7 +32,6 @@ class TripCoordinator: @preconcurrency Coordinator {
         
         
         let tripVC = TripViewController(viewModel: viewModel)
-        tripVC.hidesBottomBarWhenPushed = true
         tripVC.delegate = self
         
         tripVC.onMapTapped = { [weak self] in
@@ -44,6 +43,7 @@ class TripCoordinator: @preconcurrency Coordinator {
                 self.onFinish?()
             }
         }
+        tripVC.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(tripVC, animated: true)
     }
     

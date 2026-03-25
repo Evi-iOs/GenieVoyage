@@ -9,8 +9,9 @@ import Foundation
 import UIKit
 
 final class MainCoordinator: Coordinator, TabBarControlling {
-
-    var navigationController: UINavigationController
+    
+    var navigationController: UINavigationController = UINavigationController()
+    
     var childCoordinators = [Coordinator]()
 
     private var tabBarController = CustomTabBarController()
@@ -21,46 +22,35 @@ final class MainCoordinator: Coordinator, TabBarControlling {
 
     init(window: UIWindow, storage: TripStorage, imageStorage: ImageStorageProtocol) {
         self.window = window
-        self.navigationController = UINavigationController()
         self.storage = storage
         self.imageStorage = imageStorage
     }
 
     func start() {
-        let tripNavigation     = UINavigationController()
-        let savedNavigation    = UINavigationController()
-        let mapNavigation      = UINavigationController()
-        let profileNavigation  = UINavigationController()
+        let templatesNavigation = UINavigationController()
+        let tripNavigation = UINavigationController()
+        let profileNavigation = UINavigationController()
         
-        let tripListCoordinator = TripListCoordinator(
-            navigationController: tripNavigation,
-            storage: storage,
-            imageStorage: imageStorage
-        )
+        let templatesCoordinator = TemplatesCoordinator(navigationController: templatesNavigation)
+        let tripListCoordinator = TripListCoordinator(navigationController: tripNavigation, storage: storage, imageStorage: imageStorage)
         let settingsCoordinator = SettingsCoordinator(navigationController: profileNavigation)
 
+        addChild(templatesCoordinator)
         addChild(tripListCoordinator)
         addChild(settingsCoordinator)
 
-        tabBarController.viewControllers = [
-            tripNavigation,
-            savedNavigation,
-            mapNavigation,
-            profileNavigation
-        ]
+        tabBarController.viewControllers = [templatesNavigation, tripNavigation, profileNavigation]
 
         // FAB action
         tabBarController.onFABTap = {
             tripListCoordinator.startPlanning(template: nil)
         }
 
-        navigationController.setNavigationBarHidden(true, animated: false)
-        navigationController.viewControllers = [tabBarController]
-
+        templatesCoordinator.start()
         tripListCoordinator.start()
         settingsCoordinator.start()
 
-        window.rootViewController = navigationController
+        window.rootViewController = tabBarController
         window.makeKeyAndVisible()
     }
 

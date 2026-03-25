@@ -56,8 +56,6 @@ final class MapCoordinator: Coordinator {
             self?.onFinish?()
         }
 
-        configureTabBar(for: mapVC)
-
         if push {
             navigationController.pushViewController(mapVC, animated: true)
         } else {
@@ -94,20 +92,5 @@ final class MapCoordinator: Coordinator {
         }
 
         coordinator.start()
-    }
-
-    // MARK: - UI
-
-    private func configureTabBar(for mapVC: UIViewController) {
-        let image = UIImage.resizedSystemImage(named: "map", scale: 1.7)
-        let selectedImage = UIImage.resizedSystemImage(named: "map.fill", scale: 1.7)
-
-        mapVC.tabBarItem = UITabBarItem(
-            title: "Map",
-            image: image,
-            selectedImage: selectedImage
-        )
-
-        mapVC.tabBarItem.imageInsets = UIEdgeInsets(top: 1, left: 0, bottom: -1, right: 0)
     }
 }

@@ -264,10 +264,30 @@ final class CustomTabBarController: UITabBarController {
         hideNativeTabBar()
         embedCustomBar()
         bindCustomBar()
+        
+        (viewControllers ?? []).compactMap { $0 as? UINavigationController }.forEach {
+            $0.delegate = self
+        }
+    }
+    
+    override var viewControllers: [UIViewController]? {
+        didSet {
+            (viewControllers ?? []).compactMap { $0 as? UINavigationController }.forEach {
+                $0.delegate = self
+            }
+        }
+    }
+    
+    override var tabBar: UITabBar {
+        let bar = super.tabBar
+        bar.isHidden = true
+        bar.frame = .zero
+        return bar
     }
     
     private func hideNativeTabBar() {
         tabBar.isHidden = true
+        tabBar.frame = .zero
         additionalSafeAreaInsets.bottom = customBarHeight
     }
     
@@ -308,5 +328,16 @@ final class CustomTabBarController: UITabBarController {
             self.customBar.alpha = hidden ? 0 : 1
             self.view.layoutIfNeeded()
         }
+    }
+}
+
+extension CustomTabBarController: UINavigationControllerDelegate {
+    func navigationController(_ navigationController: UINavigationController,
+                              willShow viewController: UIViewController,
+                              animated: Bool) {
+        let hide = viewController.hidesBottomBarWhenPushed
+        setCustomTabBar(hidden: hide, animated: animated)
+        
+        additionalSafeAreaInsets.bottom = hide ? 0 : customBarHeight
     }
 }

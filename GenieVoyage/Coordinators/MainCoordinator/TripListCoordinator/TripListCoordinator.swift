@@ -26,29 +26,8 @@ class TripListCoordinator: Coordinator {
     func start() {
         Task { @MainActor in
             self.tripListViewModel = TripListViewModel(storage: storage, imageStorage: imageStorage)
-
-            if tripListViewModel?.hasTrips() == true {
-                showTripList()
-            } else {
-                showTemplates()
-            }
+            showTripList()
         }
-    }
-    
-    func showTemplates() {
-        let vc = TemplateListViewController(templates: TripTemplate.defaultTemplates)
-        
-        vc.onTemplateSelected = { [weak self] template in
-            //self?.startPlanning(template: template)
-            self?.showPreviewTemplate(template: template)
-        }
-        navigationController.pushViewController(vc, animated: true)
-    }
-    
-    private func showPreviewTemplate(template: TripTemplate) {
-        let vc = PreviewTemplateViewController(template: template)
-        vc.hidesBottomBarWhenPushed = true
-        navigationController.pushViewController(vc, animated: true)
     }
     
     private func showTripList() {
@@ -57,21 +36,8 @@ class TripListCoordinator: Coordinator {
             let tripListVC = TripListViewController(viewModel: tripListViewModel)
             self.tripListVC = tripListVC
             
-            let image = UIImage.resizedSystemImage(named: "list.bullet.circle", scale: 1.7)
-            let selectedImage = UIImage.resizedSystemImage(named: "list.bullet.circle.fill", scale: 1.7)
-            
-            tripListVC.tabBarItem = UITabBarItem(
-                title: "Trips",
-                image: image,
-                selectedImage: selectedImage
-            )
-            tripListVC.tabBarItem.imageInsets = UIEdgeInsets(top: 1, left: 0, bottom: -1, right: 0)
-            
             tripListVC.onTripSelected = { [weak self] trip in
                 self?.showTripDetail(for: trip)
-            }
-            tripListVC.startPlanningSelected = { [weak self] in
-                self?.startPlanning(template: nil)
             }
             navigationController.setViewControllers([tripListVC], animated: false)
         }

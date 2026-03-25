@@ -33,6 +33,7 @@
 		D068FE302F6BFCBB00B7C9B7 /* CustomTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D068FE2F2F6BFCBB00B7C9B7 /* CustomTabBarView.swift */; };
 		D068FE322F6BFFCB00B7C9B7 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D068FE312F6BFFCB00B7C9B7 /* AppTheme.swift */; };
 		D068FE342F6C618700B7C9B7 /* TourCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D068FE332F6C618700B7C9B7 /* TourCardView.swift */; };
+		D068FE362F74738800B7C9B7 /* TemplatesCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D068FE352F74738800B7C9B7 /* TemplatesCoordinator.swift */; };
 		D06C7F1B2DB26C2600402EA0 /* DayCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F1A2DB26C1B00402EA0 /* DayCellDelegate.swift */; };
 		D06C7F202DBAC3CD00402EA0 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F1F2DBAC3CD00402EA0 /* SignInViewController.swift */; };
 		D06C7F2A2DE24BA600402EA0 /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F292DE24BA600402EA0 /* EventView.swift */; };
@@ -144,6 +145,7 @@
 		D068FE2F2F6BFCBB00B7C9B7 /* CustomTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarView.swift; sourceTree = "<group>"; };
 		D068FE312F6BFFCB00B7C9B7 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		D068FE332F6C618700B7C9B7 /* TourCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourCardView.swift; sourceTree = "<group>"; };
+		D068FE352F74738800B7C9B7 /* TemplatesCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplatesCoordinator.swift; sourceTree = "<group>"; };
 		D06C7F1A2DB26C1B00402EA0 /* DayCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCellDelegate.swift; sourceTree = "<group>"; };
 		D06C7F1F2DBAC3CD00402EA0 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		D06C7F292DE24BA600402EA0 /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
@@ -447,6 +449,7 @@
 				D0FC22792DF764AC0074C9AF /* MainCoordinator.swift */,
 				D068FE2F2F6BFCBB00B7C9B7 /* CustomTabBarView.swift */,
 				D0A39AA62DFCBDD1007F3F9A /* SettingsCoordinator.swift */,
+				D068FE352F74738800B7C9B7 /* TemplatesCoordinator.swift */,
 				D0A39AA82DFCBE37007F3F9A /* MapCoordinator.swift */,
 				D0FC22732DF760A10074C9AF /* TripListCoordinator */,
 			);
@@ -718,6 +721,7 @@
 				D023B3092E3FD422009B382C /* CoreDataManager.swift in Sources */,
 				D0FC227C2DF764EA0074C9AF /* ProtocolCoordinator.swift in Sources */,
 				D043B43D2CFF6DDE00151ED0 /* TripViewController.swift in Sources */,
+				D068FE362F74738800B7C9B7 /* TemplatesCoordinator.swift in Sources */,
 				D0FC226C2DF2EFC40074C9AF /* DayTabCell.swift in Sources */,
 				D0D192DC2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld in Sources */,
 				D0FC227E2DF765850074C9AF /* TripListCoordinator.swift in Sources */,
