@@ -50,8 +50,8 @@ final class MainCoordinator: Coordinator, TabBarControlling {
         ]
 
         // FAB action
-        tabBarController.onFABTap = { [weak self] in
-            self?.showCreateTrip()
+        tabBarController.onFABTap = {
+            tripListCoordinator.startPlanning(template: nil)
         }
 
         navigationController.setNavigationBarHidden(true, animated: false)
@@ -66,10 +66,6 @@ final class MainCoordinator: Coordinator, TabBarControlling {
 
     func setTabBar(hidden: Bool, animated: Bool) {
         tabBarController.setCustomTabBar(hidden: hidden, animated: animated)
-    }
-
-    private func showCreateTrip() {
-        // push / present экрана создания поездки
     }
 }
 

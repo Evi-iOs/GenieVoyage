@@ -61,7 +61,6 @@
 		D0D192EC2A6FFF9B000853B8 /* GenieVoyageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192EB2A6FFF9B000853B8 /* GenieVoyageTests.swift */; };
 		D0D192F62A6FFF9B000853B8 /* GenieVoyageUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192F52A6FFF9B000853B8 /* GenieVoyageUITests.swift */; };
 		D0D192F82A6FFF9B000853B8 /* GenieVoyageUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192F72A6FFF9B000853B8 /* GenieVoyageUITestsLaunchTests.swift */; };
-		D0D193062A705F28000853B8 /* CalendarKit in Frameworks */ = {isa = PBXBuildFile; productRef = D0D193052A705F28000853B8 /* CalendarKit */; };
 		D0D9590F2D9FC36A00B4B327 /* DayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D9590E2D9FC36A00B4B327 /* DayViewModel.swift */; };
 		D0EBF10D2E5121E2002C76CD /* Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EBF10C2E5121E2002C76CD /* Mapping.swift */; };
 		D0EBF10F2E585ADC002C76CD /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EBF10E2E585ADC002C76CD /* AppCoordinator.swift */; };
@@ -203,7 +202,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0605DF82D3FF24C00465BD2 /* Pods_GenieVoyage.framework in Frameworks */,
-				D0D193062A705F28000853B8 /* CalendarKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -492,7 +490,6 @@
 			);
 			name = GenieVoyage;
 			packageProductDependencies = (
-				D0D193052A705F28000853B8 /* CalendarKit */,
 			);
 			productName = GenieVoyage;
 			productReference = D0D192CE2A6FFF9A000853B8 /* GenieVoyage.app */;
@@ -569,7 +566,6 @@
 			);
 			mainGroup = D0D192C52A6FFF9A000853B8;
 			packageReferences = (
-				D0D193042A705F28000853B8 /* XCRemoteSwiftPackageReference "CalendarKit" */,
 			);
 			productRefGroup = D0D192CF2A6FFF9A000853B8 /* Products */;
 			projectDirPath = "";
@@ -1082,25 +1078,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		D0D193042A705F28000853B8 /* XCRemoteSwiftPackageReference "CalendarKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/richardtop/CalendarKit.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		D0D193052A705F28000853B8 /* CalendarKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D0D193042A705F28000853B8 /* XCRemoteSwiftPackageReference "CalendarKit" */;
-			productName = CalendarKit;
-		};
-/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		D0D192DA2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld */ = {

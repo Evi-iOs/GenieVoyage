@@ -96,7 +96,7 @@ class TripListCoordinator: Coordinator {
          }
     }
     
-    private func startPlanning(template: TripTemplate?) {
+    func startPlanning(template: TripTemplate?) {
         if navigationController.viewControllers.contains(where: { $0 is StartPlanningViewController }) {
             return
         }
@@ -111,10 +111,12 @@ class TripListCoordinator: Coordinator {
             self?.tripListVC?.addNewTrip(trip: newTrip)
             self?.showTripDetail(for: newTrip)
         }
-        startPlanningVC.onClose = { [weak self] in
-            self?.navigationController.popViewController(animated: true)
+        startPlanningVC.onClose = { 
+            startPlanningVC.dismiss(animated: true)
         }
-        self.navigationController.pushViewController(startPlanningVC, animated: true)
+        
+        self.navigationController.present(startPlanningVC, animated: true)
+        
         self.navigationController.view.setNeedsLayout()
         self.navigationController.view.layoutIfNeeded()
     }
