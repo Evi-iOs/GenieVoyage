@@ -7,16 +7,6 @@
 
 import UIKit
 
-struct TourItem {
-    let id: Int
-    let title: String
-    let location: String
-    let price: String
-    let rating: Double
-    let imageName: String
-    var isFavorite: Bool
-}
-
 class TemplateListViewController: UIViewController {
     
     var onTemplateSelected: ((TripTemplate) -> Void)?
@@ -31,15 +21,6 @@ class TemplateListViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    private var tours: [TourItem] = [
-        TourItem(id: 1, title: "Maldives Blue Escape", location: "Male, Maldives",
-                 price: "$1,299", rating: 4.9, imageName: "maldives", isFavorite: true),
-        TourItem(id: 2, title: "Swiss Alps Adventure", location: "Zermatt, Switzerland",
-                 price: "$2,450", rating: 4.8, imageName: "swiss_alps", isFavorite: false),
-        TourItem(id: 3, title: "Icelandic Highlands Explorer", location: "Reykjavik, Iceland",
-                 price: "$2,490", rating: 4.9, imageName: "iceland", isFavorite: false)
-    ]
     
     private let categories = [
         ("beach",   "Beach",    "beach.umbrella"),
@@ -270,7 +251,7 @@ class TemplateListViewController: UIViewController {
     }
     
     private func buildTourCards() {
-        for (index, tour) in tours.enumerated() {
+        for (index, tour) in templates.enumerated() {
             let card = TourCardView(tour: tour)
             card.tag = index
             let tap = UITapGestureRecognizer(target: self, action: #selector(tourTapped(_:)))
@@ -283,10 +264,10 @@ class TemplateListViewController: UIViewController {
     // MARK: - Actions
     
     @objc private func tourTapped(_ gesture: UITapGestureRecognizer) {
-        //            guard let index = gesture.view?.tag, index < tours.count else { return }
-        //            let tour = tours[index]
-        //            let detailVC = TourDetailsViewController(tour: tour)
-        //            navigationController?.pushViewController(detailVC, animated: true)
+        guard let index = gesture.view?.tag, index < templates.count else { return }
+        let tour = templates[index]
+        
+        onTemplateSelected?(tour)
     }
 }
 

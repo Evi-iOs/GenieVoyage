@@ -26,7 +26,7 @@ class TemplatesCoordinator: Coordinator {
     }
     
     private func showPreviewTemplate(template: TripTemplate) {
-        let vc = PreviewTemplateViewController(template: template)
+        let vc = PreviewTemplateViewController(trip: template)
         vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }

@@ -9,23 +9,33 @@ import Foundation
 import CoreLocation
 
 struct TripStep {
+    let icon: String
+    let time: String
     let title: String
     let subtitle: String
-    let imageName: String
+    let imageName: String?
+    let hasImage: Bool
 }
 
 struct TripTemplate {
     let id: UUID
     let title: String
     let subtitle: String
+    let locationName: String
     let imageName: String
     let days: [TripDay]
     let steps: [TripStep]
+    let rating: Double
+    var isFavorite: Bool
+    
+    var durationLabel: String { "\(days.count) Days" }
+    var levelLabel: String    { "Advanced" }
     
     static let defaultTemplates: [TripTemplate] = [TripTemplate(
         id: UUID(),
         title: "Three Days of Paris: Three Faces of the City",
         subtitle: "Experience Paris through its history, art, and grandeur",
+        locationName: "Paris",
         imageName: "paris",
         days: [
             // Day 1: Historical Paris
@@ -213,12 +223,12 @@ struct TripTemplate {
             )
         ],
         steps: [
-            TripStep(title: "Day 1: Historical Paris", subtitle: "Explore the birth of the city", imageName: "paris"),
-            TripStep(title: "Day 2: Bohemian Paris", subtitle: "Follow the paths of artists and dreamers", imageName: "paris"),
-            TripStep(title: "Day 3: Grand Paris", subtitle: "Experience the monumental and cultural heart of the city", imageName: "paris")
-        ]
+            TripStep(icon: "airplane.departure", time: "09:00", title: "Day 1: Historical Paris", subtitle: "Explore the birth of the city", imageName: "paris", hasImage: true),
+            TripStep(icon: "airplane.departure", time: "09:00", title: "Day 2: Bohemian Paris", subtitle: "Follow the paths of artists and dreamers", imageName: "paris", hasImage: true),
+            TripStep(icon: "airplane.departure", time: "09:00", title: "Day 3: Grand Paris", subtitle: "Experience the monumental and cultural heart of the city", imageName: "paris", hasImage: true)
+        ],
+        rating: 4.7,
+        isFavorite: false
     )
     ]
 }
-
-

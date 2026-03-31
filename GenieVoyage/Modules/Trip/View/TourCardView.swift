@@ -65,7 +65,7 @@ class TourCardView: UIView {
         return l
     }()
     
-    private let priceLabel: UILabel = {
+    private let numberOfDaysLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 18, weight: .bold)
         l.textColor = .label
@@ -80,7 +80,7 @@ class TourCardView: UIView {
         return iv
     }()
 
-    init(tour: TourItem) {
+    init(tour: TripTemplate) {
         super.init(frame: .zero)
         backgroundColor = .systemBackground
         layer.cornerRadius = 16
@@ -104,9 +104,9 @@ class TourCardView: UIView {
             for: .normal)
 
         titleLabel.text = tour.title
-        locationLabel.text = tour.location
+        locationLabel.text = tour.locationName
         ratingLabel.text = "\(tour.rating)"
-        priceLabel.text = tour.price
+        numberOfDaysLabel.text = tour.days.count.description
 
         // Layout
         addSubview(imageView)
@@ -123,7 +123,7 @@ class TourCardView: UIView {
         let topRow = UIStackView(arrangedSubviews: [titleStack, ratingStack])
         topRow.distribution = .equalSpacing
         topRow.alignment = .top
-        let bottomRow = UIStackView(arrangedSubviews: [fromLabel, priceLabel])
+        let bottomRow = UIStackView(arrangedSubviews: [fromLabel, numberOfDaysLabel])
         bottomRow.axis = .horizontal
         bottomRow.spacing = 2
         let infoStack = UIStackView(arrangedSubviews: [topRow, bottomRow])
@@ -150,13 +150,13 @@ class TourCardView: UIView {
         ])
     }
 
-    private func generatePlaceholderColor(for id: Int) -> UIColor {
+    private func generatePlaceholderColor(for id: UUID) -> UIColor {
         let colors: [UIColor] = [
             UIColor(red: 0.4, green: 0.7, blue: 0.85, alpha: 1),
             UIColor(red: 0.5, green: 0.55, blue: 0.65, alpha: 1),
             UIColor(red: 0.35, green: 0.55, blue: 0.7, alpha: 1)
         ]
-        return colors[(id - 1) % colors.count]
+        return colors[(id.description.count - 1) % colors.count]
     }
 
     private func addLabel(to view: UIView, text: String) {

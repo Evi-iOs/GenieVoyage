@@ -34,6 +34,7 @@
 		D068FE322F6BFFCB00B7C9B7 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D068FE312F6BFFCB00B7C9B7 /* AppTheme.swift */; };
 		D068FE342F6C618700B7C9B7 /* TourCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D068FE332F6C618700B7C9B7 /* TourCardView.swift */; };
 		D068FE362F74738800B7C9B7 /* TemplatesCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D068FE352F74738800B7C9B7 /* TemplatesCoordinator.swift */; };
+		D068FE382F7AD5C900B7C9B7 /* MapPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D068FE372F7AD5C900B7C9B7 /* MapPlaceholderView.swift */; };
 		D06C7F1B2DB26C2600402EA0 /* DayCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F1A2DB26C1B00402EA0 /* DayCellDelegate.swift */; };
 		D06C7F202DBAC3CD00402EA0 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F1F2DBAC3CD00402EA0 /* SignInViewController.swift */; };
 		D06C7F2A2DE24BA600402EA0 /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F292DE24BA600402EA0 /* EventView.swift */; };
@@ -146,6 +147,7 @@
 		D068FE312F6BFFCB00B7C9B7 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		D068FE332F6C618700B7C9B7 /* TourCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourCardView.swift; sourceTree = "<group>"; };
 		D068FE352F74738800B7C9B7 /* TemplatesCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplatesCoordinator.swift; sourceTree = "<group>"; };
+		D068FE372F7AD5C900B7C9B7 /* MapPlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPlaceholderView.swift; sourceTree = "<group>"; };
 		D06C7F1A2DB26C1B00402EA0 /* DayCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCellDelegate.swift; sourceTree = "<group>"; };
 		D06C7F1F2DBAC3CD00402EA0 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		D06C7F292DE24BA600402EA0 /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 				D023B2F32E3584FB009B382C /* TemplateCell.swift */,
 				D0A53A082F3D04EE00CA7D85 /* PreviewTemplateViewController.swift */,
 				D06C7F382DE7ABC300402EA0 /* EventEditorViewController.swift */,
+				D068FE372F7AD5C900B7C9B7 /* MapPlaceholderView.swift */,
 				D0FC227F2DF7662A0074C9AF /* TripListViewController.swift */,
 				D043B43C2CFF6DDE00151ED0 /* TripViewController.swift */,
 				D0FC22692DEA406A0074C9AF /* MapEventsViewController.swift */,
@@ -737,6 +740,7 @@
 				D0B0E1BD2F38F102000A390B /* AuthCoordinator.swift in Sources */,
 				D023B2F82E35858C009B382C /* HeaderView.swift in Sources */,
 				D023B30B2E3FFD38009B382C /* TripStorage.swift in Sources */,
+				D068FE382F7AD5C900B7C9B7 /* MapPlaceholderView.swift in Sources */,
 				D0365DF12CFA6BEA00D711A9 /* TripModel.swift in Sources */,
 				D0FC22782DF7641B0074C9AF /* TripCoordinator.swift in Sources */,
 				D04945B92D3EB26900232F26 /* TripViewModel.swift in Sources */,
