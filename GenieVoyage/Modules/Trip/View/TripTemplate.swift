@@ -224,8 +224,8 @@ struct TripTemplate {
         ],
         steps: [
             TripStep(icon: "airplane.departure", time: "09:00", title: "Day 1: Historical Paris", subtitle: "Explore the birth of the city", imageName: "paris", hasImage: true),
-            TripStep(icon: "airplane.departure", time: "09:00", title: "Day 2: Bohemian Paris", subtitle: "Follow the paths of artists and dreamers", imageName: "paris", hasImage: true),
-            TripStep(icon: "airplane.departure", time: "09:00", title: "Day 3: Grand Paris", subtitle: "Experience the monumental and cultural heart of the city", imageName: "paris", hasImage: true)
+            TripStep(icon: "airplane.departure", time: "09:00", title: "Day 2: Bohemian Paris", subtitle: "Follow the paths of artists and dreamers", imageName: nil, hasImage: false),
+            TripStep(icon: "airplane.departure", time: "09:00", title: "Day 3: Grand Paris", subtitle: "Experience the monumental and cultural heart of the city", imageName: nil, hasImage: false)
         ],
         rating: 4.7,
         isFavorite: false

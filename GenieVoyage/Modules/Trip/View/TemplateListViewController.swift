@@ -88,6 +88,7 @@ class TemplateListViewController: UIViewController {
         v.layer.cornerRadius = 14
         return v
     }()
+    
     private let searchIconView: UIImageView = {
         let iv = UIImageView(image: UIImage(systemName: "magnifyingglass"))
         iv.tintColor = AppTheme.Colors.textGray
@@ -96,6 +97,7 @@ class TemplateListViewController: UIViewController {
         iv.heightAnchor.constraint(equalToConstant: 18).isActive = true
         return iv
     }()
+    
     private let searchTextField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Search destinations..."
@@ -104,6 +106,7 @@ class TemplateListViewController: UIViewController {
         tf.backgroundColor = .clear
         return tf
     }()
+    
     private let filterButton: UIButton = {
         let b = UIButton(type: .system)
         let img = UIImage(systemName: "slider.horizontal.3", withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .medium))

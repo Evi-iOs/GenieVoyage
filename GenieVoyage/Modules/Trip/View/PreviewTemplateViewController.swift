@@ -100,7 +100,7 @@ final class PreviewTemplateViewController: UIViewController {
         return v
     }()
 
-    private lazy var backBtn = makeCircleButton("chevron.left")
+    private lazy var backButton = makeCircleButton("chevron.left")
     private lazy var favButton = makeCircleButton(trip.isFavorite ? "heart.fill" : "heart", tint: trip.isFavorite ? UIColor(hex: "EF4444") : UIColor(hex: "0F172A"))
 
     private let card: UIView = {
@@ -258,8 +258,8 @@ final class PreviewTemplateViewController: UIViewController {
 
         // Days header
         let tripDaysLbl = makeSectionLabel("Trip Days")
-        let selectLbl   = makeTagLabel("SELECT DAY")
-        let daysHdr     = hStack(tripDaysLbl, selectLbl)
+        let selectLbl = makeTagLabel("SELECT DAY")
+        let daysHdr = hStack(tripDaysLbl, selectLbl)
         daysHdr.translatesAutoresizingMaskIntoConstraints = false
         card.addSubview(daysHdr)
         NSLayoutConstraint.activate([
@@ -329,22 +329,22 @@ final class PreviewTemplateViewController: UIViewController {
         ])
 
         view.addSubview(navContainer)
-        [backBtn, favButton].forEach { navContainer.addSubview($0) }
+        [backButton, favButton].forEach { navContainer.addSubview($0) }
         NSLayoutConstraint.activate([
             navContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             navContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             navContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             navContainer.heightAnchor.constraint(equalToConstant: 50),
-            backBtn.leadingAnchor.constraint(equalTo: navContainer.leadingAnchor, constant: 16),
-            backBtn.centerYAnchor.constraint(equalTo: navContainer.centerYAnchor),
-            backBtn.widthAnchor.constraint(equalToConstant: 36),
-            backBtn.heightAnchor.constraint(equalToConstant: 36),
+            backButton.leadingAnchor.constraint(equalTo: navContainer.leadingAnchor, constant: 16),
+            backButton.centerYAnchor.constraint(equalTo: navContainer.centerYAnchor),
+            backButton.widthAnchor.constraint(equalToConstant: 42),
+            backButton.heightAnchor.constraint(equalToConstant: 42),
             favButton.trailingAnchor.constraint(equalTo: navContainer.trailingAnchor, constant: -16),
             favButton.centerYAnchor.constraint(equalTo: navContainer.centerYAnchor),
-            favButton.widthAnchor.constraint(equalToConstant: 36),
-            favButton.heightAnchor.constraint(equalToConstant: 36)
+            favButton.widthAnchor.constraint(equalToConstant: 42),
+            favButton.heightAnchor.constraint(equalToConstant: 42)
         ])
-        backBtn.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
+        backButton.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
         favButton.addTarget(self, action: #selector(favTapped), for: .touchUpInside)
     }
 
@@ -383,7 +383,7 @@ final class PreviewTemplateViewController: UIViewController {
             UIView.animate(withDuration: 0.15) { self.favButton.transform = .identity }
         }
         favButton.setImage(UIImage(systemName: "heart.fill",
-            withConfiguration: UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold)), for: .normal)
+            withConfiguration: UIImage.SymbolConfiguration(pointSize: 25, weight: .semibold)), for: .normal)
         favButton.tintColor = UIColor(hex: "EF4444")
     }
 
@@ -405,10 +405,10 @@ final class PreviewTemplateViewController: UIViewController {
 
     private func makeCircleButton(_ icon: String, tint: UIColor = UIColor(hex: "0F172A")) -> UIButton {
         let b = UIButton(type: .custom)
-        let cfg = UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold)
+        let cfg = UIImage.SymbolConfiguration(pointSize: 20, weight: .semibold)
         b.setImage(UIImage(systemName: icon, withConfiguration: cfg), for: .normal)
         b.tintColor = tint; b.backgroundColor = .white
-        b.layer.cornerRadius = 18
+        b.layer.cornerRadius = 21
         b.layer.shadowColor = UIColor.black.cgColor; b.layer.shadowOpacity = 0.10
         b.layer.shadowOffset = CGSize(width: 0, height: 3); b.layer.shadowRadius = 8
         b.translatesAutoresizingMaskIntoConstraints = false
