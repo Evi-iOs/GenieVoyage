@@ -18,7 +18,7 @@ final class CustomTabBarView: UIView {
 
     private let items: [TabBarItem] = [
         TabBarItem(icon: "safari", title: "EXPLORE", tag: 0),
-        TabBarItem(icon: "heart", title: "SAVED", tag: 1),
+        TabBarItem(icon: "heart", title: "MY TRIPS", tag: 1),
         TabBarItem(icon: "", title: "", tag: -1),  // FAB placeholder
         TabBarItem(icon: "ticket", title: "TICKETS", tag: 3),
         TabBarItem(icon: "person", title: "PROFILE", tag: 4)
@@ -62,7 +62,7 @@ final class CustomTabBarView: UIView {
         button.backgroundColor = AppTheme.Colors.primaryDarkBlue
         button.layer.cornerRadius = AppTheme.TabBarLayout.fabSize / 2
         button.tintColor = .white
-        let cfg = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)
+        let cfg = UIImage.SymbolConfiguration(pointSize: 24, weight: .bold)
         button.setImage(UIImage(systemName: "plus", withConfiguration: cfg), for: .normal)
         // Shadow
         AppTheme.Shadow.apply(button.layer, style: .accent)
