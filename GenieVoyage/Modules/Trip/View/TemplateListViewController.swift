@@ -11,29 +11,17 @@ class TemplateListViewController: UIViewController {
     
     var onTemplateSelected: ((TripTemplate) -> Void)?
     
-    private var templates: [TripTemplate]
+    private let viewModel: TemplateListViewModel
     
-    init(templates: [TripTemplate] = TripTemplate.allTemplates) {
-        self.templates = templates
+    init(viewModel: TemplateListViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    private let categories = [
-        ("beach",   "Beach",    "beach.umbrella"),
-        ("mountain","Mountain", "mountain.2"),
-        ("city",    "City",     "building.2"),
-        ("forest",  "Forest",   "leaf"),
-        ("desert",  "Desert",   "sun.max")
-    ]
-    
-    private var selectedCategoryIndex = 0
-    
-    // MARK: - UI Elements
-    
+        
     private let scrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.showsVerticalScrollIndicator = false
@@ -47,7 +35,6 @@ class TemplateListViewController: UIViewController {
         return v
     }()
     
-    // Header
     private let headerView = UIView()
     private let exploreLabel: UILabel = {
         let l = UILabel()
@@ -81,7 +68,6 @@ class TemplateListViewController: UIViewController {
         return iv
     }()
     
-    // Search
     private let searchContainerView: UIView = {
         let v = UIView()
         v.backgroundColor = AppTheme.Colors.backgroundGray
@@ -104,6 +90,8 @@ class TemplateListViewController: UIViewController {
         tf.font = .systemFont(ofSize: 18)
         tf.borderStyle = .none
         tf.backgroundColor = .clear
+        tf.returnKeyType = .search
+        tf.clearButtonMode = .whileEditing
         return tf
     }()
     
@@ -115,14 +103,12 @@ class TemplateListViewController: UIViewController {
         return b
     }()
     
-    // Category collection
     private lazy var categoryCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: 62, height: 80)
         layout.minimumInteritemSpacing = 14
         layout.minimumLineSpacing = 14
-        layout.sectionInset = .zero
         layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.showsHorizontalScrollIndicator = false
@@ -134,7 +120,6 @@ class TemplateListViewController: UIViewController {
         return cv
     }()
     
-    // Featured Tours
     private let featuredLabel: UILabel = {
         let l = UILabel()
         l.text = "Featured Tours"
@@ -159,22 +144,41 @@ class TemplateListViewController: UIViewController {
         return sv
     }()
     
+    private let noResultsLabel: UILabel = {
+        let l = UILabel()
+        l.text = "No tours found"
+        l.font = .systemFont(ofSize: 16, weight: .medium)
+        l.textColor = AppTheme.Colors.textGray
+        l.textAlignment = .center
+        l.isHidden = true
+        l.translatesAutoresizingMaskIntoConstraints = false
+        return l
+    }()
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         navigationController?.setNavigationBarHidden(true, animated: false)
+        searchTextField.delegate = self
+        searchTextField.addTarget(self, action: #selector(searchChanged), for: .editingChanged)
+        bindViewModel()
         setupLayout()
-        buildTourCards()
+        renderTourCards()
         categoryCollectionView.selectItem(at: IndexPath(item: 0, section: 0), animated: false, scrollPosition: .left)
         viewAllButton.addTarget(self, action: #selector(viewAllTapped), for: .touchUpInside)
+    }
+    
+    private func bindViewModel() {
+        viewModel.onTemplatesUpdated = { [weak self] in
+            self?.renderTourCards()
+        }
     }
     
     // MARK: - Layout
     
     private func setupLayout() {
-        // Scroll
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         NSLayoutConstraint.activate([
@@ -189,7 +193,6 @@ class TemplateListViewController: UIViewController {
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
         
-        // Header
         let headerStack = UIStackView(arrangedSubviews: [notificationButton, avatarImageView])
         headerStack.spacing = 12
         headerStack.alignment = .center
@@ -203,7 +206,6 @@ class TemplateListViewController: UIViewController {
         topBarStack.distribution = .equalSpacing
         topBarStack.translatesAutoresizingMaskIntoConstraints = false
         
-        // Search
         let searchStack = UIStackView(arrangedSubviews: [searchIconView, searchTextField, filterButton])
         searchStack.spacing = 10
         searchStack.alignment = .center
@@ -217,7 +219,6 @@ class TemplateListViewController: UIViewController {
             searchStack.trailingAnchor.constraint(equalTo: searchContainerView.trailingAnchor, constant: -16)
         ])
         
-        // Featured header
         let featuredStack = UIStackView(arrangedSubviews: [featuredLabel, viewAllButton])
         featuredStack.distribution = .equalSpacing
         featuredStack.alignment = .center
@@ -228,6 +229,7 @@ class TemplateListViewController: UIViewController {
         contentView.addSubview(categoryCollectionView)
         contentView.addSubview(featuredStack)
         contentView.addSubview(toursStackView)
+        contentView.addSubview(noResultsLabel)
         
         NSLayoutConstraint.activate([
             topBarStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
@@ -250,12 +252,20 @@ class TemplateListViewController: UIViewController {
             toursStackView.topAnchor.constraint(equalTo: featuredStack.bottomAnchor, constant: 16),
             toursStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             toursStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            toursStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -100)
+            toursStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -100),
+            
+            noResultsLabel.topAnchor.constraint(equalTo: toursStackView.topAnchor, constant: 40),
+            noResultsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            noResultsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
         ])
     }
     
-    private func buildTourCards() {
-        for (index, tour) in templates.enumerated() {
+    private func renderTourCards() {
+        noResultsLabel.isHidden = viewModel.numberOfTemplates > 0
+        toursStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        
+        for index in 0..<viewModel.numberOfTemplates {
+            let tour = viewModel.template(at: index)
             let card = TourCardView(tour: tour)
             card.tag = index
             let tap = UITapGestureRecognizer(target: self, action: #selector(tourTapped(_:)))
@@ -265,49 +275,50 @@ class TemplateListViewController: UIViewController {
         }
     }
     
+    // MARK: - Search
+    
+    @objc private func searchChanged() {
+        viewModel.updateSearch(query: searchTextField.text ?? "")
+    }
+    
     // MARK: - Actions
     
     @objc private func tourTapped(_ gesture: UITapGestureRecognizer) {
-        guard let index = gesture.view?.tag, index < templates.count else { return }
-        let tour = templates[index]
-        
-        onTemplateSelected?(tour)
+        guard let index = gesture.view?.tag, index < viewModel.numberOfTemplates else { return }
+        onTemplateSelected?(viewModel.template(at: index))
     }
     
     @objc private func viewAllTapped() {
-        selectedCategoryIndex = -1
+        viewModel.selectAllCategories()
         categoryCollectionView.reloadData()
-        templates = TripTemplate.allTemplates
-        toursStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        buildTourCards()
     }
 }
 
-    // MARK: - UICollectionView DataSource / Delegate
+// MARK: - UITextFieldDelegate
 
-    extension TemplateListViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-        func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-            categories.count
-        }
-        
-        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCell.reuseID, for: indexPath) as! CategoryCell
-            let cat = categories[indexPath.item]
-            cell.configure(icon: cat.2, title: cat.1, isSelected: indexPath.item == selectedCategoryIndex)
-            return cell
-        }
-        
-        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            selectedCategoryIndex = indexPath.item
-            collectionView.reloadData()
-            
-            let key = categories[indexPath.item].0
-            templates = TripTemplate.templates(for: key)
-            toursStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-            
-            buildTourCards()
-        }
+extension TemplateListViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
+}
 
+// MARK: - UICollectionView DataSource / Delegate
 
-  
+extension TemplateListViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        viewModel.numberOfCategories
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCell.reuseID, for: indexPath) as! CategoryCell
+        let cat = viewModel.category(at: indexPath.item)
+        cell.configure(icon: cat.iconName, title: cat.title, isSelected: viewModel.isCategorySelected(at: indexPath.item))
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        viewModel.selectCategory(at: indexPath.item)
+        collectionView.reloadData()
+    }
+}

@@ -17,7 +17,8 @@ class TemplatesCoordinator: Coordinator {
     }
     
     func start() {
-        let vc = TemplateListViewController(templates: TripTemplate.defaultTemplates)
+        let viewModel: TemplateListViewModel = TemplateListViewModel()
+        let vc = TemplateListViewController(viewModel: viewModel)
         
         vc.onTemplateSelected = { [weak self] template in
             self?.showPreviewTemplate(template: template)
