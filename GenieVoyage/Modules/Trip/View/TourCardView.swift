@@ -18,15 +18,6 @@ class TourCardView: UIView {
         return iv
     }()
     
-    private let favoriteButton: UIButton = {
-        let b = UIButton(type: .system)
-        b.backgroundColor = .white
-        b.layer.cornerRadius = 18
-        b.tintColor = UIColor(red: 0.9, green: 0.3, blue: 0.3, alpha: 1)
-        b.translatesAutoresizingMaskIntoConstraints = false
-        return b
-    }()
-    
     private let titleLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 19, weight: .semibold)
@@ -49,7 +40,7 @@ class TourCardView: UIView {
     }()
     
     private let starIcon: UIImageView = {
-        let iv = UIImageView(image: UIImage(systemName: "star"))
+        let iv = UIImageView(image: UIImage(systemName: "star.fill"))
         iv.tintColor = UIColor(red: 1, green: 0.75, blue: 0.1, alpha: 1)
         iv.widthAnchor.constraint(equalToConstant: 17).isActive = true
         iv.heightAnchor.constraint(equalToConstant: 17).isActive = true
@@ -90,18 +81,16 @@ class TourCardView: UIView {
         layer.shadowRadius = 12
         translatesAutoresizingMaskIntoConstraints = false
 
-        // Image gradient overlay
         let gradient = CAGradientLayer()
         gradient.colors = [UIColor.clear.cgColor, UIColor.black.withAlphaComponent(0.2).cgColor]
         gradient.cornerRadius = 16
 
-        imageView.backgroundColor = generatePlaceholderColor(for: tour.id)
-        addLabel(to: imageView, text: tour.title)
-
-        favoriteButton.setImage(
-            UIImage(systemName: tour.isFavorite ? "heart.fill" : "heart",
-                    withConfiguration: UIImage.SymbolConfiguration(pointSize: 14, weight: .medium)),
-            for: .normal)
+        if let image = UIImage(named: tour.imageName) {
+            imageView.image = image
+        } else {
+            imageView.backgroundColor = generatePlaceholderColor(for: tour.id)
+            addLabel(to: imageView, text: tour.title)
+        }
 
         titleLabel.text = tour.title
         locationLabel.text = tour.locationName
@@ -110,7 +99,6 @@ class TourCardView: UIView {
 
         // Layout
         addSubview(imageView)
-        imageView.addSubview(favoriteButton)
         let locationStack = UIStackView(arrangedSubviews: [pinIcon, locationLabel])
         locationStack.spacing = 4
         locationStack.alignment = .center
@@ -137,11 +125,6 @@ class TourCardView: UIView {
             imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
             imageView.heightAnchor.constraint(equalToConstant: 256),
-
-            favoriteButton.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 12),
-            favoriteButton.trailingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: -12),
-            favoriteButton.widthAnchor.constraint(equalToConstant: 36),
-            favoriteButton.heightAnchor.constraint(equalToConstant: 36),
 
             infoStack.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 14),
             infoStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),

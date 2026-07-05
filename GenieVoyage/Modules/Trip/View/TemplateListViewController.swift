@@ -13,7 +13,7 @@ class TemplateListViewController: UIViewController {
     
     private var templates: [TripTemplate]
     
-    init(templates: [TripTemplate]) {
+    init(templates: [TripTemplate] = TripTemplate.allTemplates) {
         self.templates = templates
         super.init(nibName: nil, bundle: nil)
     }
@@ -168,6 +168,7 @@ class TemplateListViewController: UIViewController {
         setupLayout()
         buildTourCards()
         categoryCollectionView.selectItem(at: IndexPath(item: 0, section: 0), animated: false, scrollPosition: .left)
+        viewAllButton.addTarget(self, action: #selector(viewAllTapped), for: .touchUpInside)
     }
     
     // MARK: - Layout
@@ -272,6 +273,14 @@ class TemplateListViewController: UIViewController {
         
         onTemplateSelected?(tour)
     }
+    
+    @objc private func viewAllTapped() {
+        selectedCategoryIndex = -1
+        categoryCollectionView.reloadData()
+        templates = TripTemplate.allTemplates
+        toursStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        buildTourCards()
+    }
 }
 
     // MARK: - UICollectionView DataSource / Delegate
@@ -291,6 +300,12 @@ class TemplateListViewController: UIViewController {
         func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
             selectedCategoryIndex = indexPath.item
             collectionView.reloadData()
+            
+            let key = categories[indexPath.item].0
+            templates = TripTemplate.templates(for: key)
+            toursStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+            
+            buildTourCards()
         }
     }
 

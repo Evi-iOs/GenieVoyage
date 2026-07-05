@@ -101,8 +101,7 @@ final class PreviewTemplateViewController: UIViewController {
     }()
 
     private lazy var backButton = makeCircleButton("chevron.left")
-    private lazy var favButton = makeCircleButton(trip.isFavorite ? "heart.fill" : "heart", tint: trip.isFavorite ? UIColor(hex: "EF4444") : UIColor(hex: "0F172A"))
-
+    
     private let card: UIView = {
         let v = UIView()
         v.backgroundColor = .white
@@ -148,7 +147,6 @@ final class PreviewTemplateViewController: UIViewController {
         return sv
     }()
 
-    //
     private let routeCard = RouteCardView()
 
     private lazy var addTripButton: UIButton = {
@@ -329,7 +327,7 @@ final class PreviewTemplateViewController: UIViewController {
         ])
 
         view.addSubview(navContainer)
-        [backButton, favButton].forEach { navContainer.addSubview($0) }
+        [backButton].forEach { navContainer.addSubview($0) }
         NSLayoutConstraint.activate([
             navContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             navContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -338,14 +336,9 @@ final class PreviewTemplateViewController: UIViewController {
             backButton.leadingAnchor.constraint(equalTo: navContainer.leadingAnchor, constant: 16),
             backButton.centerYAnchor.constraint(equalTo: navContainer.centerYAnchor),
             backButton.widthAnchor.constraint(equalToConstant: 42),
-            backButton.heightAnchor.constraint(equalToConstant: 42),
-            favButton.trailingAnchor.constraint(equalTo: navContainer.trailingAnchor, constant: -16),
-            favButton.centerYAnchor.constraint(equalTo: navContainer.centerYAnchor),
-            favButton.widthAnchor.constraint(equalToConstant: 42),
-            favButton.heightAnchor.constraint(equalToConstant: 42)
+            backButton.heightAnchor.constraint(equalToConstant: 42)
         ])
         backButton.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
-        favButton.addTarget(self, action: #selector(favTapped), for: .touchUpInside)
     }
 
     // MARK: - Populate
@@ -377,15 +370,6 @@ final class PreviewTemplateViewController: UIViewController {
     // MARK: - Actions
 
     @objc private func backTapped() { navigationController?.popViewController(animated: true) }
-
-    @objc private func favTapped() {
-        UIView.animate(withDuration: 0.12, animations: { self.favButton.transform = CGAffineTransform(scaleX: 1.3, y: 1.3) }) { _ in
-            UIView.animate(withDuration: 0.15) { self.favButton.transform = .identity }
-        }
-        favButton.setImage(UIImage(systemName: "heart.fill",
-            withConfiguration: UIImage.SymbolConfiguration(pointSize: 25, weight: .semibold)), for: .normal)
-        favButton.tintColor = UIColor(hex: "EF4444")
-    }
 
     @objc private func dayTapped(_ s: UIButton) {
         selectedDayIndex = s.tag
