@@ -29,17 +29,20 @@ final class MainCoordinator: Coordinator, TabBarControlling {
     func start() {
         let templatesNavigation = UINavigationController()
         let tripNavigation = UINavigationController()
+        let ticketsNavigation = UINavigationController()
         let profileNavigation = UINavigationController()
         
         let templatesCoordinator = TemplatesCoordinator(navigationController: templatesNavigation)
         let tripListCoordinator = TripListCoordinator(navigationController: tripNavigation, storage: storage, imageStorage: imageStorage)
-        let settingsCoordinator = SettingsCoordinator(navigationController: profileNavigation)
+        let ticketsCoordinator = TicketsCoordinator(navigationController: ticketsNavigation, tripStorage: storage)
+        let profileCoordinator = ProfileCoordinator(navigationController: profileNavigation)
 
         addChild(templatesCoordinator)
         addChild(tripListCoordinator)
-        addChild(settingsCoordinator)
+        addChild(ticketsCoordinator)
+        addChild(profileCoordinator)
 
-        tabBarController.viewControllers = [templatesNavigation, tripNavigation, profileNavigation]
+        tabBarController.viewControllers = [templatesNavigation, tripNavigation, ticketsNavigation, profileNavigation]
 
         // FAB action
         tabBarController.onFABTap = {
@@ -48,7 +51,8 @@ final class MainCoordinator: Coordinator, TabBarControlling {
 
         templatesCoordinator.start()
         tripListCoordinator.start()
-        settingsCoordinator.start()
+        ticketsCoordinator.start()
+        profileCoordinator.start()
 
         window.rootViewController = tabBarController
         window.makeKeyAndVisible()

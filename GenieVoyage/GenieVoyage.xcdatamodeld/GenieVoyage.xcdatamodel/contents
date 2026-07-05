@@ -14,6 +14,15 @@
         <attribute name="time" optional="YES" attributeType="String"/>
         <relationship name="day" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TripDayEntity" inverseName="events" inverseEntity="TripDayEntity"/>
     </entity>
+    <entity name="TicketFileEntity" representedClassName="TicketFileEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="dateAdded" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="eventID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="fileName" optional="YES" attributeType="String"/>
+        <attribute name="fileType" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="relativePath" optional="YES" attributeType="String"/>
+        <attribute name="tripID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+    </entity>
     <entity name="TripDayEntity" representedClassName="TripDayEntity" syncable="YES" codeGenerationType="class">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>

@@ -11,6 +11,7 @@ import CoreLocation
 
 final class TransferEditorViewModel: EventEditorConfigurable {
     var existingEvent: EventModel?
+    var eventID: UUID
     
     var category: EventCategory = .transfer
     let startDate: Date
@@ -23,11 +24,12 @@ final class TransferEditorViewModel: EventEditorConfigurable {
     init(existingEvent: EventModel? = nil, startDate: Date) {
         self.existingEvent = existingEvent
         self.startDate = startDate
+        self.eventID = existingEvent?.id ?? UUID()
     }
     
     func buildEvent() -> EventModel? {
         return EventModel(
-            id: existingEvent?.id ?? UUID(),
+            id: eventID,
             dateEvent: startDate,
             category: .transfer,
             time: DateFormatter.localizedString(from: startDate, dateStyle: .none, timeStyle: .short),

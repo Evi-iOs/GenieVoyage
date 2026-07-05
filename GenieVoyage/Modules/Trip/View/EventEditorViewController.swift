@@ -333,7 +333,7 @@ final class EventEditorViewController: UIViewController, UITextViewDelegate {
     
     @objc private func showPDFTapped() {
         guard selectedPDFURL != nil else { return }
-        showPDFPreview()
+      //  showPDFPreview()
     }
     
     @objc private func uploadPDFTapped() {
@@ -414,7 +414,18 @@ final class EventEditorViewController: UIViewController, UITextViewDelegate {
     }
 
     @objc private func closeTapped() {
-        dismiss(animated: true)
+        Task {
+            await cleanupOrphanedFileIfNeeded()
+            await MainActor.run { self.dismiss(animated: true) }
+        }
+    }
+    
+    private func cleanupOrphanedFileIfNeeded() async {
+        guard viewModel.existingEvent == nil else { return }
+        let orphaned = await CoreDataTicketFileStorage().loadFiles(forEventID: viewModel.eventID)
+        for file in orphaned {
+            await CoreDataTicketFileStorage().deleteFile(file)
+        }
     }
     
     @objc private func deleteTapped() {
@@ -497,41 +508,20 @@ extension EventEditorViewController: UIDocumentPickerDelegate {
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         guard let url = urls.first else { return }
         
-        let fileManager = FileManager.default
-        let documents = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let destURL = documents.appendingPathComponent(url.lastPathComponent)
-        
-        try? fileManager.removeItem(at: destURL)
-        do {
-            try fileManager.copyItem(at: url, to: destURL)
-            selectedPDFURL = destURL
-        } catch {
-            print("Error copying file: \(error)")
-            selectedPDFURL = url
-        }
-        
-        if let thumbnail = generatePDFThumbnail(from: selectedPDFURL!, size: CGSize(width: 50, height: 50)) {
-            pdfThumbnailView.image = thumbnail
-            pdfThumbnailView.isHidden = false
+        Task {
+            guard let saved = await CoreDataTicketFileStorage().saveFile(
+                from: url,
+                eventID: viewModel.eventID
+            ) else { return }
+            
+            await MainActor.run {
+                self.selectedPDFURL = CoreDataTicketFileStorage().absoluteURL(for: saved)
+                if let thumbnail = self.generatePDFThumbnail(from: self.selectedPDFURL!, size: CGSize(width: 50, height: 50)) {
+                    self.pdfThumbnailView.image = thumbnail
+                    self.pdfThumbnailView.isHidden = false
+                }
+            }
         }
     }
 }
 
-extension EventEditorViewController: QLPreviewControllerDataSource {
-    func showPDFPreview() {
-        let previewController = QLPreviewController()
-        previewController.dataSource = self
-        present(previewController, animated: true)
-    }
-    
-    func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
-        return selectedPDFURL == nil ? 0 : 1
-    }
-    
-    func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-        guard let pdfURL = selectedPDFURL else {
-            fatalError("Expected non-nil selectedPDFURL")
-        }
-        return pdfURL as NSURL
-    }
-}

@@ -44,7 +44,8 @@
 		D06C7F372DE7AB3B00402EA0 /* EventEditorFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F362DE7AB3B00402EA0 /* EventEditorFactory.swift */; };
 		D06C7F392DE7ABC300402EA0 /* EventEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F382DE7ABC300402EA0 /* EventEditorViewController.swift */; };
 		D07B678A2D2C6D8000842293 /* StartPlanningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07B67892D2C6D8000842293 /* StartPlanningViewController.swift */; };
-		D0A39AA72DFCBDD1007F3F9A /* SettingsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A39AA62DFCBDD1007F3F9A /* SettingsCoordinator.swift */; };
+		D092FE932FB5071E009F1DB2 /* FilePickerPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D092FE922FB5071E009F1DB2 /* FilePickerPresentable.swift */; };
+		D0A39AA72DFCBDD1007F3F9A /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A39AA62DFCBDD1007F3F9A /* ProfileCoordinator.swift */; };
 		D0A39AA92DFCBE37007F3F9A /* MapCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A39AA82DFCBE37007F3F9A /* MapCoordinator.swift */; };
 		D0A39AAB2E035FD2007F3F9A /* TabBarControlling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A39AAA2E035FD2007F3F9A /* TabBarControlling.swift */; };
 		D0A53A072F3A806500CA7D85 /* TemplateListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A53A062F3A806500CA7D85 /* TemplateListViewController.swift */; };
@@ -55,6 +56,10 @@
 		D0B0E1BD2F38F102000A390B /* AuthCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B0E1BC2F38F102000A390B /* AuthCoordinator.swift */; };
 		D0B5ADD32E1C6542009A74A5 /* TransportSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5ADD22E1C6542009A74A5 /* TransportSegmentControl.swift */; };
 		D0B5ADD52E20669C009A74A5 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5ADD42E20669C009A74A5 /* ProfileViewController.swift */; };
+		D0CC3DC32FF9AFF800E82C1C /* TicketFileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3DC22FF9AFF800E82C1C /* TicketFileStorage.swift */; };
+		D0CC3DC52FF9B0FA00E82C1C /* TicketFileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3DC42FF9B0FA00E82C1C /* TicketFileModel.swift */; };
+		D0CC3DC72FFA783B00E82C1C /* TicketsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3DC62FFA783B00E82C1C /* TicketsViewModel.swift */; };
+		D0CC3DC92FFA7EDA00E82C1C /* CoreDataTicketFileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3DC82FFA7EDA00E82C1C /* CoreDataTicketFileStorage.swift */; };
 		D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */; };
 		D0D192D42A6FFF9A000853B8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D32A6FFF9A000853B8 /* SceneDelegate.swift */; };
 		D0D192DC2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D0D192DA2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld */; };
@@ -80,6 +85,8 @@
 		D0FC22802DF7662A0074C9AF /* TripListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FC227F2DF7662A0074C9AF /* TripListViewController.swift */; };
 		D0FC22822DF77A300074C9AF /* EventCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FC22812DF77A300074C9AF /* EventCoordinator.swift */; };
 		D0FC22882DFA13BD0074C9AF /* TripViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FC22872DFA13BD0074C9AF /* TripViewControllerDelegate.swift */; };
+		D0FE9F5B2F962A5D00EBC8B9 /* TicketsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FE9F5A2F962A5D00EBC8B9 /* TicketsCoordinator.swift */; };
+		D0FE9F5D2F962AD200EBC8B9 /* TicketsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FE9F5C2F962AD200EBC8B9 /* TicketsViewController.swift */; };
 		E60A866E6B722F5F093D186B /* Pods_GenieVoyageTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 890A253B57967C505085FD95 /* Pods_GenieVoyageTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -157,7 +164,8 @@
 		D06C7F362DE7AB3B00402EA0 /* EventEditorFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEditorFactory.swift; sourceTree = "<group>"; };
 		D06C7F382DE7ABC300402EA0 /* EventEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEditorViewController.swift; sourceTree = "<group>"; };
 		D07B67892D2C6D8000842293 /* StartPlanningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartPlanningViewController.swift; sourceTree = "<group>"; };
-		D0A39AA62DFCBDD1007F3F9A /* SettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
+		D092FE922FB5071E009F1DB2 /* FilePickerPresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilePickerPresentable.swift; sourceTree = "<group>"; };
+		D0A39AA62DFCBDD1007F3F9A /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
 		D0A39AA82DFCBE37007F3F9A /* MapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCoordinator.swift; sourceTree = "<group>"; };
 		D0A39AAA2E035FD2007F3F9A /* TabBarControlling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarControlling.swift; sourceTree = "<group>"; };
 		D0A53A062F3A806500CA7D85 /* TemplateListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateListViewController.swift; sourceTree = "<group>"; };
@@ -168,6 +176,10 @@
 		D0B0E1BC2F38F102000A390B /* AuthCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCoordinator.swift; sourceTree = "<group>"; };
 		D0B5ADD22E1C6542009A74A5 /* TransportSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportSegmentControl.swift; sourceTree = "<group>"; };
 		D0B5ADD42E20669C009A74A5 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		D0CC3DC22FF9AFF800E82C1C /* TicketFileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketFileStorage.swift; sourceTree = "<group>"; };
+		D0CC3DC42FF9B0FA00E82C1C /* TicketFileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketFileModel.swift; sourceTree = "<group>"; };
+		D0CC3DC62FFA783B00E82C1C /* TicketsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketsViewModel.swift; sourceTree = "<group>"; };
+		D0CC3DC82FFA7EDA00E82C1C /* CoreDataTicketFileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataTicketFileStorage.swift; sourceTree = "<group>"; };
 		D0D192CE2A6FFF9A000853B8 /* GenieVoyage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GenieVoyage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D0D192D32A6FFF9A000853B8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -197,6 +209,8 @@
 		D0FC227F2DF7662A0074C9AF /* TripListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripListViewController.swift; sourceTree = "<group>"; };
 		D0FC22812DF77A300074C9AF /* EventCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCoordinator.swift; sourceTree = "<group>"; };
 		D0FC22872DFA13BD0074C9AF /* TripViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripViewControllerDelegate.swift; sourceTree = "<group>"; };
+		D0FE9F5A2F962A5D00EBC8B9 /* TicketsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketsCoordinator.swift; sourceTree = "<group>"; };
+		D0FE9F5C2F962AD200EBC8B9 /* TicketsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketsViewController.swift; sourceTree = "<group>"; };
 		EC48F7F4B016AF516F86CCCC /* Pods-GenieVoyageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GenieVoyageTests.release.xcconfig"; path = "Target Support Files/Pods-GenieVoyageTests/Pods-GenieVoyageTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -256,6 +270,8 @@
 			children = (
 				D023B3082E3FD422009B382C /* CoreDataManager.swift */,
 				D023B30A2E3FFD38009B382C /* TripStorage.swift */,
+				D0CC3DC22FF9AFF800E82C1C /* TicketFileStorage.swift */,
+				D0CC3DC82FFA7EDA00E82C1C /* CoreDataTicketFileStorage.swift */,
 				D023B30C2E3FFD63009B382C /* CoreDataTripStorage.swift */,
 				D0EBF10C2E5121E2002C76CD /* Mapping.swift */,
 				D0B0E1B62F32131A000A390B /* ImageStorageProtocol.swift */,
@@ -269,6 +285,8 @@
 				D0B0E1B82F37E984000A390B /* OnboardingViewController.swift */,
 				D06C7F1F2DBAC3CD00402EA0 /* SignInViewController.swift */,
 				D07B67892D2C6D8000842293 /* StartPlanningViewController.swift */,
+				D0FE9F5C2F962AD200EBC8B9 /* TicketsViewController.swift */,
+				D092FE922FB5071E009F1DB2 /* FilePickerPresentable.swift */,
 				D0A53A062F3A806500CA7D85 /* TemplateListViewController.swift */,
 				D068FE332F6C618700B7C9B7 /* TourCardView.swift */,
 				D068FE2D2F6AB74000B7C9B7 /* SearchCell.swift */,
@@ -300,6 +318,7 @@
 			isa = PBXGroup;
 			children = (
 				D023B3102E415854009B382C /* TripListViewModel.swift */,
+				D0CC3DC62FFA783B00E82C1C /* TicketsViewModel.swift */,
 				D04945B82D3EB26900232F26 /* TripViewModel.swift */,
 				D0D9590E2D9FC36A00B4B327 /* DayViewModel.swift */,
 				D06C7F352DE7AAD900402EA0 /* EventEditorModul */,
@@ -313,6 +332,7 @@
 				D0365DF02CFA6BE700D711A9 /* TripModel.swift */,
 				D04945B42D3A46FA00232F26 /* EventModel.swift */,
 				D023B30E2E414FBE009B382C /* TripDate.swift */,
+				D0CC3DC42FF9B0FA00E82C1C /* TicketFileModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -451,7 +471,8 @@
 				D0B0E1BC2F38F102000A390B /* AuthCoordinator.swift */,
 				D0FC22792DF764AC0074C9AF /* MainCoordinator.swift */,
 				D068FE2F2F6BFCBB00B7C9B7 /* CustomTabBarView.swift */,
-				D0A39AA62DFCBDD1007F3F9A /* SettingsCoordinator.swift */,
+				D0A39AA62DFCBDD1007F3F9A /* ProfileCoordinator.swift */,
+				D0FE9F5A2F962A5D00EBC8B9 /* TicketsCoordinator.swift */,
 				D068FE352F74738800B7C9B7 /* TemplatesCoordinator.swift */,
 				D0A39AA82DFCBE37007F3F9A /* MapCoordinator.swift */,
 				D0FC22732DF760A10074C9AF /* TripListCoordinator */,
@@ -698,9 +719,13 @@
 				D0A53A072F3A806500CA7D85 /* TemplateListViewController.swift in Sources */,
 				D0EBF10D2E5121E2002C76CD /* Mapping.swift in Sources */,
 				D0FC22652DE8AC430074C9AF /* TransportEditorViewModel.swift in Sources */,
+				D0CC3DC92FFA7EDA00E82C1C /* CoreDataTicketFileStorage.swift in Sources */,
 				D06C7F2C2DE6197600402EA0 /* Constants.swift in Sources */,
 				D023B30F2E414FBE009B382C /* TripDate.swift in Sources */,
+				D0CC3DC32FF9AFF800E82C1C /* TicketFileStorage.swift in Sources */,
+				D0CC3DC52FF9B0FA00E82C1C /* TicketFileModel.swift in Sources */,
 				D0FC22822DF77A300074C9AF /* EventCoordinator.swift in Sources */,
+				D092FE932FB5071E009F1DB2 /* FilePickerPresentable.swift in Sources */,
 				D023B30D2E3FFD63009B382C /* CoreDataTripStorage.swift in Sources */,
 				D06C7F1B2DB26C2600402EA0 /* DayCellDelegate.swift in Sources */,
 				D023B2F42E3584FB009B382C /* TemplateCell.swift in Sources */,
@@ -725,9 +750,12 @@
 				D0FC227C2DF764EA0074C9AF /* ProtocolCoordinator.swift in Sources */,
 				D043B43D2CFF6DDE00151ED0 /* TripViewController.swift in Sources */,
 				D068FE362F74738800B7C9B7 /* TemplatesCoordinator.swift in Sources */,
+				D0FE9F5D2F962AD200EBC8B9 /* TicketsViewController.swift in Sources */,
 				D0FC226C2DF2EFC40074C9AF /* DayTabCell.swift in Sources */,
 				D0D192DC2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld in Sources */,
 				D0FC227E2DF765850074C9AF /* TripListCoordinator.swift in Sources */,
+				D0FE9F5B2F962A5D00EBC8B9 /* TicketsCoordinator.swift in Sources */,
+				D0CC3DC72FFA783B00E82C1C /* TicketsViewModel.swift in Sources */,
 				D068FE342F6C618700B7C9B7 /* TourCardView.swift in Sources */,
 				D0FC22802DF7662A0074C9AF /* TripListViewController.swift in Sources */,
 				D06C7F322DE7A9C000402EA0 /* EventEditorConfigurable.swift in Sources */,
@@ -744,7 +772,7 @@
 				D0365DF12CFA6BEA00D711A9 /* TripModel.swift in Sources */,
 				D0FC22782DF7641B0074C9AF /* TripCoordinator.swift in Sources */,
 				D04945B92D3EB26900232F26 /* TripViewModel.swift in Sources */,
-				D0A39AA72DFCBDD1007F3F9A /* SettingsCoordinator.swift in Sources */,
+				D0A39AA72DFCBDD1007F3F9A /* ProfileCoordinator.swift in Sources */,
 				D0D9590F2D9FC36A00B4B327 /* DayViewModel.swift in Sources */,
 				D0FC227A2DF764AC0074C9AF /* MainCoordinator.swift in Sources */,
 				D0FC22632DE8AC090074C9AF /* TransferEditorViewModel.swift in Sources */,
@@ -924,6 +952,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GenieVoyage/Info.plist;
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "The app needs access to the calendar to display events";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera access is required to take a photo of the document.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Used to show your current location on the map when creating a trip.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We use your photo library to add photos to your trip.";
@@ -957,6 +986,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GenieVoyage/Info.plist;
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "The app needs access to the calendar to display events";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera access is required to take a photo of the document.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Used to show your current location on the map when creating a trip.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We use your photo library to add photos to your trip.";

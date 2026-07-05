@@ -130,3 +130,33 @@ extension EventEntity {
         }
     }
 }
+
+extension TicketFileEntity {
+    func update(from model: TicketFileModel) {
+        self.id = model.id
+        self.fileName = model.fileName
+        self.relativePath = model.relativePath
+        self.fileType = model.fileType
+        self.dateAdded = model.dateAdded
+        self.eventID = model.eventID
+        self.tripID = model.tripID
+    }
+    
+    func toModel() -> TicketFileModel? {
+        guard let id = id,
+              let fileName = fileName,
+              let relativePath = relativePath,
+              let fileType = fileType,
+              let dateAdded = dateAdded else { return nil }
+        
+        return TicketFileModel(
+            id: id,
+            fileName: fileName,
+            relativePath: relativePath,
+            fileType: fileType,
+            dateAdded: dateAdded,
+            eventID: eventID,
+            tripID: tripID
+        )
+    }
+}

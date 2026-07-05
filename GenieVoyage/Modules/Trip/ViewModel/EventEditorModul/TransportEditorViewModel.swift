@@ -11,6 +11,7 @@ import CoreLocation
 
 final class TransportEditorViewModel: EventEditorConfigurable {
     var existingEvent: EventModel?
+    var eventID: UUID
     
     var category: EventCategory = .transport
     let startDate: Date
@@ -23,11 +24,12 @@ final class TransportEditorViewModel: EventEditorConfigurable {
     init(existingEvent: EventModel? = nil, startDate: Date) {
         self.existingEvent = existingEvent
         self.startDate = startDate
+        self.eventID = existingEvent?.id ?? UUID()
     }
     
     func buildEvent() -> EventModel? {
         return EventModel(
-            id: existingEvent?.id ?? UUID(),
+            id: eventID,
             dateEvent: startDate,
             category: .transport,
             time: DateFormatter.localizedString(from: startDate, dateStyle: .none, timeStyle: .short),

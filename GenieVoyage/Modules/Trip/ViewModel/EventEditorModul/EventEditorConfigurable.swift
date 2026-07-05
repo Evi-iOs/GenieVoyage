@@ -19,6 +19,7 @@ protocol EventEditorConfigurable {
     var coordinate: CLLocationCoordinate2D? { get }
 
     var existingEvent: EventModel? { get }
+    var eventID: UUID { get }
 
     func buildEvent() -> EventModel?
 }

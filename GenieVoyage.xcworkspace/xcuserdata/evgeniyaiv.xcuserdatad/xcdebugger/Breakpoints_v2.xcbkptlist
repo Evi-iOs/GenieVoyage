@@ -125,10 +125,10 @@
             filePath = "GenieVoyage/Modules/Trip/ViewModel/EventEditorModul/HotelEditorViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
-            landmarkName = "buildEvent()"
-            landmarkType = "7">
+            startingLineNumber = "42"
+            endingLineNumber = "42"
+            landmarkName = "HotelEditorViewModel"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -349,8 +349,8 @@
             filePath = "GenieVoyage/Modules/Trip/ViewModel/EventEditorModul/PointEventEditorViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
             landmarkName = "buildEvent()"
             landmarkType = "7">
          </BreakpointContent>
@@ -365,8 +365,8 @@
             filePath = "GenieVoyage/Modules/Trip/ViewModel/EventEditorModul/PointEventEditorViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
             landmarkName = "buildEvent()"
             landmarkType = "7">
          </BreakpointContent>
@@ -573,52 +573,6 @@
             endingLineNumber = "195"
             landmarkName = "showBookingLink(_:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "95104DB8-A934-4599-9200-6C884A7FEE75"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "GenieVoyage/Modules/Trip/View/EventEditorViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "206"
-            endingLineNumber = "206"
-            landmarkName = "bookingEditingDidEnd()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "95104DB8-A934-4599-9200-6C884A7FEE75 - 4ab8b1557afae464"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GenieVoyage.EventEditorViewController.bookingEditingDidEnd() -&gt; ()"
-                  moduleName = "GenieVoyage.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/evgeniyaiv/Documents/APP/GenieVoyage/GenieVoyage/Modules/Trip/View/EventEditorViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "206"
-                  endingLineNumber = "206">
-               </Location>
-               <Location
-                  uuid = "95104DB8-A934-4599-9200-6C884A7FEE75 - 4ab8b1557afae464"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GenieVoyage.EventEditorViewController.bookingEditingDidEnd() -&gt; ()"
-                  moduleName = "GenieVoyage.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/evgeniyaiv/Documents/APP/GenieVoyage/GenieVoyage/Modules/Trip/View/EventEditorViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "206"
-                  endingLineNumber = "206">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

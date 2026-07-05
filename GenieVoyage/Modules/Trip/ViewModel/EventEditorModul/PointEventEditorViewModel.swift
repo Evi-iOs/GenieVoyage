@@ -12,6 +12,7 @@ import CoreLocation
 final class PointEventEditorViewModel: EventEditorConfigurable {
     
     var existingEvent: EventModel?
+    let eventID: UUID
     
     var category: EventCategory = .point
     let startDate: Date
@@ -24,11 +25,12 @@ final class PointEventEditorViewModel: EventEditorConfigurable {
     init(existingEvent: EventModel? = nil, startDate: Date) {
         self.existingEvent = existingEvent
         self.startDate = startDate
+        self.eventID = existingEvent?.id ?? UUID()
     }
     
     func buildEvent() -> EventModel? {
         return EventModel(
-            id: existingEvent?.id ?? UUID(),
+            id: eventID,
             dateEvent: startDate,
             category: .point,
             time: DateFormatter.localizedString(from: startDate, dateStyle: .none, timeStyle: .short),

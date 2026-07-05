@@ -9,7 +9,7 @@ import CoreData
 import UIKit
 
 final class CoreDataTripStorage: TripStorage {
-   
+    
     private let context: NSManagedObjectContext
     private let imageStorage: ImageStorageProtocol
     
@@ -43,7 +43,7 @@ final class CoreDataTripStorage: TripStorage {
     func loadTrips() async -> [TripModel] {
         let context = self.context
         let coversDirectory = self.imageStorage.coversDirectory
-
+        
         return await context.perform {
             let fetchRequest: NSFetchRequest<TripEntity> = TripEntity.fetchRequest()
             do {
@@ -55,7 +55,7 @@ final class CoreDataTripStorage: TripStorage {
             }
         }
     }
-
+    
     func deleteTrip(_ trip: TripModel) async {
         let context = self.context
         await context.perform {
@@ -86,7 +86,7 @@ final class CoreDataTripStorage: TripStorage {
                     print("❌ TripEntity not found, сначала сохрани Trip")
                     return
                 }
-
+                
                 var calendar = Calendar.current
                 calendar.timeZone = .current
                 let dayStart = calendar.startOfDay(for: event.dateEvent)
@@ -100,28 +100,28 @@ final class CoreDataTripStorage: TripStorage {
                     newDay.trip = tripEntity
                     return newDay
                 }()
-
+                
                 let eventRequest: NSFetchRequest<EventEntity> = EventEntity.fetchRequest()
                 eventRequest.predicate = NSPredicate(format: "id == %@", event.id as CVarArg)
-
+                
                 let eventEntity = (try? context.fetch(eventRequest).first) ?? EventEntity(context: context)
                 eventEntity.update(from: event)
-
+                
                 eventEntity.day = tripDayEntity
-
+                
                 try context.save()
                 print("✅ Event \(event.id) saved on day \(tripDayEntity.date ?? Date())")
                 let cal = Calendar.current
                 print("📅 event local day:", cal.component(.day, from: event.dateEvent))
                 print("📦 tripDay local day:", cal.component(.day, from: tripDayEntity.date!))
-
+                
             } catch {
                 print("❌ saveEvent error: \(error)")
             }
         }
     }
-
-
+    
+    
     func loadEvents(for trip: TripModel) async -> [EventModel] {
         let context = self.context
         return await context.perform { () -> [EventModel] in
@@ -133,7 +133,7 @@ final class CoreDataTripStorage: TripStorage {
                     print("❌ TripEntity not found")
                     return []
                 }
-
+                
                 if let dayEntities = tripEntity.days as? Set<TripDayEntity> {
                     for day in dayEntities {
                         if let events = day.events as? Set<EventEntity> {
@@ -144,14 +144,14 @@ final class CoreDataTripStorage: TripStorage {
                         }
                     }
                 }
-
+                
                 let dayEntities = tripEntity.days?.allObjects as? [TripDayEntity] ?? []
                 let allEvents: [EventModel] = dayEntities.flatMap { day in
                     (day.events?.allObjects as? [EventEntity])?.map { $0.toModel() } ?? []
                 }
-
+                
                 return allEvents
-
+                
             } catch {
                 print("❌ loadEvents error: \(error)")
                 return []
@@ -166,16 +166,16 @@ final class CoreDataTripStorage: TripStorage {
                 let tripRequest: NSFetchRequest<TripEntity> = TripEntity.fetchRequest()
                 tripRequest.predicate = NSPredicate(format: "id == %@", trip.id as CVarArg)
                 guard let tripEntity = try context.fetch(tripRequest).first else { return [] }
-
+                
                 let calendar = Calendar.current
                 let targetDayStart = calendar.startOfDay(for: date)
-
+                
                 let existingDays = (tripEntity.days?.allObjects as? [TripDayEntity]) ?? []
                 guard let dayEntity = existingDays.first(where: { calendar.isDate($0.date ?? Date(), inSameDayAs: targetDayStart) }) else {
                     return []
                 }
                 return (dayEntity.events?.allObjects as? [EventEntity])?.map { $0.toModel() } ?? []
-
+                
             } catch {
                 print("❌ loadEvents error: \(error)")
                 return []
@@ -196,6 +196,37 @@ final class CoreDataTripStorage: TripStorage {
                 }
             } catch {
                 print("❌ deleteEvent error: \(error)")
+            }
+        }
+    }
+    
+    func loadEvent(byID id: UUID) async -> EventModel? {
+        let context = self.context
+        return await context.perform {
+            let request: NSFetchRequest<EventEntity> = EventEntity.fetchRequest()
+            request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+            request.fetchLimit = 1
+            do {
+                return try context.fetch(request).first?.toModel()
+            } catch {
+                print("❌ loadEvent(byID:) error: \(error)")
+                return nil
+            }
+        }
+    }
+    
+    func loadTrip(byID id: UUID) async -> TripModel? {
+        let context = self.context
+        let coversDirectory = self.imageStorage.coversDirectory
+        return await context.perform {
+            let request: NSFetchRequest<TripEntity> = TripEntity.fetchRequest()
+            request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+            request.fetchLimit = 1
+            do {
+                return try context.fetch(request).first?.toModel(coversDirectory: coversDirectory)
+            } catch {
+                print("❌ loadTrip(byID:) error: \(error)")
+                return nil
             }
         }
     }

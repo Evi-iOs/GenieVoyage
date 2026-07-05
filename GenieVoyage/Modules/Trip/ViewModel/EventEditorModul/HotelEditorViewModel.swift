@@ -12,6 +12,7 @@ import CoreLocation
 
 final class HotelEditorViewModel: EventEditorConfigurable {
     var existingEvent: EventModel?
+    var eventID: UUID
     
     var category: EventCategory = .hotel
     var startDate: Date
@@ -23,12 +24,13 @@ final class HotelEditorViewModel: EventEditorConfigurable {
     
     init(existingEvent: EventModel? = nil, startDate: Date) {
         self.existingEvent = existingEvent
+        self.eventID = existingEvent?.id ?? UUID()
         self.startDate = startDate
     }
     
     func buildEvent() -> EventModel? {
         return EventModel(
-            id: existingEvent?.id ?? UUID(),
+            id: eventID,
             dateEvent: startDate,
             category: .hotel,
             time: DateFormatter.localizedString(from: startDate, dateStyle: .none, timeStyle: .short),

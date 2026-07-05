@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class SettingsCoordinator: Coordinator {
+class ProfileCoordinator: Coordinator {
     var navigationController: UINavigationController
     var childCoordinators = [Coordinator]()
     
