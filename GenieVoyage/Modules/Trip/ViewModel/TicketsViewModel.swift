@@ -11,10 +11,13 @@ final class TicketsViewModel {
     
     private let ticketFileStorage: TicketFileStorage
     private let tripStorage: TripStorage
+    private var allItems: [TicketFileDisplayItem] = []
     
     private(set) var displayItems: [TicketFileDisplayItem] = [] {
         didSet { onItemsUpdated?() }
     }
+    
+    private var searchQuery: String = ""
     
     var onItemsUpdated: (() -> Void)?
     
@@ -22,12 +25,12 @@ final class TicketsViewModel {
         self.ticketFileStorage = ticketFileStorage
         self.tripStorage = tripStorage
     }
-        
+    
     @MainActor
     func loadFiles() async {
         let files = await ticketFileStorage.loadAllFiles()
-        let items = await resolveSourceLabels(for: files)
-        self.displayItems = items
+        allItems = await resolveSourceLabels(for: files)
+        applyFilter()
     }
     
     private func resolveSourceLabels(for files: [TicketFileModel]) async -> [TicketFileDisplayItem] {
@@ -44,13 +47,42 @@ final class TicketsViewModel {
         return items
     }
     
+    // MARK: - Search
+    
+    func updateSearch(query: String) {
+        searchQuery = query
+        applyFilter()
+    }
+    
+    func clearSearch() {
+        searchQuery = ""
+        applyFilter()
+    }
+    
+    private func applyFilter() {
+        let trimmed = searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            displayItems = allItems
+        } else {
+            displayItems = allItems.filter { item in
+                item.file.fileName.localizedCaseInsensitiveContains(trimmed) ||
+                (item.sourceLabel?.localizedCaseInsensitiveContains(trimmed) ?? false)
+            }
+        }
+    }
+    
+    var isSearchActive: Bool {
+        !searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+    
     // MARK: - Adding
     
     @MainActor
     func addFile(from url: URL) async {
         guard let saved = await ticketFileStorage.saveFile(from: url, eventID: nil, tripID: nil) else { return }
         let item = TicketFileDisplayItem(file: saved, sourceLabel: nil)
-        displayItems.insert(item, at: 0)
+        allItems.insert(item, at: 0)
+        applyFilter()
     }
     
     // MARK: - Deleting
@@ -60,9 +92,9 @@ final class TicketsViewModel {
         guard displayItems.indices.contains(index) else { return }
         let file = displayItems[index].file
         await ticketFileStorage.deleteFile(file)
-        displayItems.remove(at: index)
+        allItems.removeAll { $0.file.id == file.id } 
+        applyFilter()
     }
-    
     
     var numberOfItems: Int {
         displayItems.count

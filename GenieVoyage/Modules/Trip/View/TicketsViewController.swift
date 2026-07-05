@@ -58,37 +58,31 @@ final class TicketsViewController: UIViewController, FilePickerPresentable {
         }
         
     private func updateEmptyState() {
-            let isEmpty = viewModel.numberOfItems == 0
-            emptyStateView.isHidden = !isEmpty
-            tableView.isHidden = isEmpty
-            tableViewHeightConstraint.constant = isEmpty ? 0 : CGFloat(viewModel.numberOfItems) * TicketFileCell.rowHeight
-        }
+        let isEmpty = viewModel.numberOfItems == 0
+        emptyStateView.isHidden = !isEmpty
+        tableView.isHidden = isEmpty
+        tableViewHeightConstraint.constant = isEmpty ? 0 : CGFloat(viewModel.numberOfItems) * TicketFileCell.rowHeight
         
-    
-//    private func resolveSourceLabels(for files: [TicketFileModel]) async -> [TicketFileDisplayItem] {
-//        var items: [TicketFileDisplayItem] = []
-//        for file in files {
-//            var label: String? = nil
-//            if let eventID = file.eventID {
-//                label = await eventLabel(for: eventID)
-//            } else if let tripID = file.tripID {
-//                label = await tripLabel(for: tripID)
-//            }
-//            items.append(TicketFileDisplayItem(file: file, sourceLabel: label))
-//        }
-//        return items
-//    }
-//    
-//    private func eventLabel(for eventID: UUID) async -> String? {
-//        // подставьте ваш реальный способ получить Event по id, например через EventStorage
-//        // return event?.locationName
-//        nil
-//    }
-
-//    private func tripLabel(for tripID: UUID) async -> String? {
-//        // return trip?.name
-//        nil
-//    }
+        guard isEmpty else { return }
+        
+        if viewModel.isSearchActive {
+            emptyStateIconView.image = UIImage(
+                systemName: "magnifyingglass",
+                withConfiguration: UIImage.SymbolConfiguration(pointSize: 52, weight: .light)
+            )
+            emptyStateTitleLabel.text = "No results"
+            emptyStateSubtitleLabel.text = "Try a different search term"
+            emptyStateUploadButton.isHidden = true
+        } else {
+            emptyStateIconView.image = UIImage(
+                systemName: "doc.badge.plus",
+                withConfiguration: UIImage.SymbolConfiguration(pointSize: 52, weight: .light)
+            )
+            emptyStateTitleLabel.text = "No tickets yet"
+            emptyStateSubtitleLabel.text = "Add your flight, hotel confirmation\nor personal documents"
+            emptyStateUploadButton.isHidden = false
+        }
+    }
     
     private var displayItems: [TicketFileDisplayItem] = [] {
         didSet {
@@ -167,11 +161,49 @@ final class TicketsViewController: UIViewController, FilePickerPresentable {
         return v
     }()
     
+    private let emptyStateIconView: UIImageView = {
+            let iv = UIImageView()
+            let cfg = UIImage.SymbolConfiguration(pointSize: 52, weight: .light)
+            iv.image = UIImage(systemName: "doc.badge.plus", withConfiguration: cfg)
+            iv.tintColor = AppTheme.Colors.textGray
+            iv.contentMode = .scaleAspectFit
+            iv.translatesAutoresizingMaskIntoConstraints = false
+            return iv
+        }()
+        
+        private let emptyStateTitleLabel: UILabel = {
+            let l = UILabel()
+            l.font = .systemFont(ofSize: 20, weight: .semibold)
+            l.textColor = .label
+            l.textAlignment = .center
+            return l
+        }()
+        
+        private let emptyStateSubtitleLabel: UILabel = {
+            let l = UILabel()
+            l.font = .systemFont(ofSize: 15)
+            l.textColor = AppTheme.Colors.textGray
+            l.textAlignment = .center
+            l.numberOfLines = 2
+            return l
+        }()
+        
+        private let emptyStateUploadButton: UIButton = {
+            let b = UIButton(type: .system)
+            b.setTitle("Upload PDF", for: .normal)
+            b.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
+            b.setTitleColor(.white, for: .normal)
+            b.backgroundColor = AppTheme.Colors.primaryDarkBlue
+            b.layer.cornerRadius = 16
+            b.translatesAutoresizingMaskIntoConstraints = false
+            return b
+        }()
+    
     private let tableView: UITableView = {
         let tv = UITableView(frame: .zero, style: .plain)
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.separatorStyle = .none
-        tv.isScrollEnabled = false // scrolling handled by outer scrollView
+        tv.isScrollEnabled = false
         tv.backgroundColor = .clear
         tv.register(TicketFileCell.self, forCellReuseIdentifier: TicketFileCell.reuseID)
         return tv
@@ -242,55 +274,34 @@ final class TicketsViewController: UIViewController, FilePickerPresentable {
     }
     
     private func buildEmptyState() {
-        let iconView = UIImageView()
-        let cfg = UIImage.SymbolConfiguration(pointSize: 52, weight: .light)
-        iconView.image = UIImage(systemName: "doc.badge.plus", withConfiguration: cfg)
-        iconView.tintColor = AppTheme.Colors.textGray
-        iconView.contentMode = .scaleAspectFit
-        iconView.translatesAutoresizingMaskIntoConstraints = false
+        emptyStateTitleLabel.text = "No tickets yet"
+        emptyStateSubtitleLabel.text = "Add your flight, hotel confirmation\nor personal documents"
+        emptyStateUploadButton.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
         
-        let titleLbl = UILabel()
-        titleLbl.text = "No tickets yet"
-        titleLbl.font = .systemFont(ofSize: 20, weight: .semibold)
-        titleLbl.textColor = .label
-        titleLbl.textAlignment = .center
-        
-        let subtitleLbl = UILabel()
-        subtitleLbl.text = "Add your flight, hotel confirmation\nor personal documents"
-        subtitleLbl.font = .systemFont(ofSize: 15)
-        subtitleLbl.textColor = AppTheme.Colors.textGray
-        subtitleLbl.textAlignment = .center
-        subtitleLbl.numberOfLines = 2
-        
-        let uploadBtn = UIButton(type: .system)
-        uploadBtn.setTitle("Upload PDF", for: .normal)
-        uploadBtn.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
-        uploadBtn.setTitleColor(.white, for: .normal)
-        uploadBtn.backgroundColor = AppTheme.Colors.primaryDarkBlue
-        uploadBtn.layer.cornerRadius = 16
-        uploadBtn.translatesAutoresizingMaskIntoConstraints = false
-        uploadBtn.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
-        
-        let stack = UIStackView(arrangedSubviews: [iconView, titleLbl, subtitleLbl, uploadBtn])
+        let stack = UIStackView(arrangedSubviews: [
+            emptyStateIconView,
+            emptyStateTitleLabel,
+            emptyStateSubtitleLabel,
+            emptyStateUploadButton
+        ])
         stack.axis = .vertical
         stack.alignment = .center
         stack.spacing = 12
-        stack.setCustomSpacing(24, after: subtitleLbl)
+        stack.setCustomSpacing(24, after: emptyStateSubtitleLabel)
         stack.translatesAutoresizingMaskIntoConstraints = false
         
         emptyStateView.addSubview(stack)
         NSLayoutConstraint.activate([
-            iconView.heightAnchor.constraint(equalToConstant: 72),
+            emptyStateIconView.heightAnchor.constraint(equalToConstant: 72),
             stack.topAnchor.constraint(equalTo: emptyStateView.topAnchor),
             stack.bottomAnchor.constraint(equalTo: emptyStateView.bottomAnchor),
             stack.centerXAnchor.constraint(equalTo: emptyStateView.centerXAnchor),
             stack.leadingAnchor.constraint(greaterThanOrEqualTo: emptyStateView.leadingAnchor),
             stack.trailingAnchor.constraint(lessThanOrEqualTo: emptyStateView.trailingAnchor),
-            uploadBtn.heightAnchor.constraint(equalToConstant: 50),
-            uploadBtn.widthAnchor.constraint(equalToConstant: 180)
+            emptyStateUploadButton.heightAnchor.constraint(equalToConstant: 50),
+            emptyStateUploadButton.widthAnchor.constraint(equalToConstant: 180)
         ])
     }
-    
     
     // MARK: - Actions
        
@@ -303,18 +314,21 @@ final class TicketsViewController: UIViewController, FilePickerPresentable {
     
     private func setupActions() {
         addButton.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
-        clearButton.addTarget(self, action: #selector(clearSearch), for: .touchUpInside)
+        clearButton.addTarget(self, action: #selector(clearSearchTapped), for: .touchUpInside)
         searchTextField.addTarget(self, action: #selector(searchChanged), for: .editingChanged)
     }
     
-    @objc private func clearSearch() {
+    @objc private func searchChanged() {
+        let text = searchTextField.text ?? ""
+        clearButton.isHidden = text.isEmpty
+        viewModel.updateSearch(query: text)
+    }
+
+    @objc private func clearSearchTapped() {
         searchTextField.text = ""
         clearButton.isHidden = true
         searchTextField.resignFirstResponder()
-    }
-
-    @objc private func searchChanged() {
-        clearButton.isHidden = searchTextField.text?.isEmpty ?? true
+        viewModel.clearSearch()
     }
 }
 
