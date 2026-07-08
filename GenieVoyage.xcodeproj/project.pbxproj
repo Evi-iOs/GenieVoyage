@@ -61,6 +61,8 @@
 		D0CC3DC72FFA783B00E82C1C /* TicketsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3DC62FFA783B00E82C1C /* TicketsViewModel.swift */; };
 		D0CC3DC92FFA7EDA00E82C1C /* CoreDataTicketFileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3DC82FFA7EDA00E82C1C /* CoreDataTicketFileStorage.swift */; };
 		D0CC3DCB2FFAF8B300E82C1C /* TemplateListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3DCA2FFAF8B300E82C1C /* TemplateListViewModel.swift */; };
+		D0CC3DCD2FFEBA7000E82C1C /* TimelineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3DCC2FFEBA7000E82C1C /* TimelineCell.swift */; };
+		D0CC3DCF2FFEBA9F00E82C1C /* RouteCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3DCE2FFEBA9F00E82C1C /* RouteCardView.swift */; };
 		D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */; };
 		D0D192D42A6FFF9A000853B8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D32A6FFF9A000853B8 /* SceneDelegate.swift */; };
 		D0D192DC2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D0D192DA2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld */; };
@@ -182,6 +184,8 @@
 		D0CC3DC62FFA783B00E82C1C /* TicketsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketsViewModel.swift; sourceTree = "<group>"; };
 		D0CC3DC82FFA7EDA00E82C1C /* CoreDataTicketFileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataTicketFileStorage.swift; sourceTree = "<group>"; };
 		D0CC3DCA2FFAF8B300E82C1C /* TemplateListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateListViewModel.swift; sourceTree = "<group>"; };
+		D0CC3DCC2FFEBA7000E82C1C /* TimelineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineCell.swift; sourceTree = "<group>"; };
+		D0CC3DCE2FFEBA9F00E82C1C /* RouteCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteCardView.swift; sourceTree = "<group>"; };
 		D0D192CE2A6FFF9A000853B8 /* GenieVoyage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GenieVoyage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D0D192D32A6FFF9A000853B8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -296,6 +300,8 @@
 				D023B2F92E3585BF009B382C /* TripTemplate.swift */,
 				D023B2F32E3584FB009B382C /* TemplateCell.swift */,
 				D0A53A082F3D04EE00CA7D85 /* PreviewTemplateViewController.swift */,
+				D0CC3DCE2FFEBA9F00E82C1C /* RouteCardView.swift */,
+				D0CC3DCC2FFEBA7000E82C1C /* TimelineCell.swift */,
 				D06C7F382DE7ABC300402EA0 /* EventEditorViewController.swift */,
 				D068FE372F7AD5C900B7C9B7 /* MapPlaceholderView.swift */,
 				D0FC227F2DF7662A0074C9AF /* TripListViewController.swift */,
@@ -765,6 +771,7 @@
 				D06C7F322DE7A9C000402EA0 /* EventEditorConfigurable.swift in Sources */,
 				D068FE302F6BFCBB00B7C9B7 /* CustomTabBarView.swift in Sources */,
 				D0A39AAB2E035FD2007F3F9A /* TabBarControlling.swift in Sources */,
+				D0CC3DCF2FFEBA9F00E82C1C /* RouteCardView.swift in Sources */,
 				D0FC22672DE8AC720074C9AF /* FoodEditorViewModel.swift in Sources */,
 				D0A53A092F3D04EE00CA7D85 /* PreviewTemplateViewController.swift in Sources */,
 				D0FC225F2DE7AF6F0074C9AF /* PointEventEditorView.swift in Sources */,
@@ -780,6 +787,7 @@
 				D0D9590F2D9FC36A00B4B327 /* DayViewModel.swift in Sources */,
 				D0FC227A2DF764AC0074C9AF /* MainCoordinator.swift in Sources */,
 				D0FC22632DE8AC090074C9AF /* TransferEditorViewModel.swift in Sources */,
+				D0CC3DCD2FFEBA7000E82C1C /* TimelineCell.swift in Sources */,
 				D068FE2C2F6AB11600B7C9B7 /* CategoryCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

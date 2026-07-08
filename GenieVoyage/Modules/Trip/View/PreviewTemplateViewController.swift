@@ -15,6 +15,11 @@ final class PreviewTemplateViewController: UIViewController {
     private let heroBaseHeight: CGFloat = 450
     private var heroHeightConstraint: NSLayoutConstraint!
     private var heroTopConstraint: NSLayoutConstraint!
+    
+    private var selectedDay: TripDay? {
+        guard trip.days.indices.contains(selectedDayIndex) else { return nil }
+        return trip.days[selectedDayIndex]
+    }
 
     init(trip: TripTemplate) {
         self.trip = trip
@@ -341,29 +346,47 @@ final class PreviewTemplateViewController: UIViewController {
         backButton.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
     }
 
-    // MARK: - Populate
-
     private func populate() {
         heroTitleLabel.text = trip.title
-        heroSubtitleLabel.text = trip.subtitle
-        locationLabel.text = trip.locationName.uppercased()
-        heroImageView.image = UIImage(named: trip.imageName)
+           heroSubtitleLabel.text = trip.subtitle
+           locationLabel.text = trip.locationName.uppercased()
+           heroImageView.image = UIImage(named: trip.imageName)
 
-        ratingCol.set(caption: "RATING",   value: "\(trip.rating) ★", amber: true)
-        durationCol.set(caption: "DURATION", value: trip.durationLabel)
-        levelCol.set(caption: "LEVEL",     value: trip.levelLabel)
+           ratingCol.set(caption: "RATING",   value: "\(trip.rating) ★", amber: true)
+           durationCol.set(caption: "DURATION", value: trip.durationLabel)
+           levelCol.set(caption: "LEVEL",     value: trip.levelLabel)
 
-        trip.days.enumerated().forEach { i, day in
-            let pill = DayPill(number: day.date.description.count, selected: i == 0)
-            pill.tag = i
-            pill.addTarget(self, action: #selector(dayTapped(_:)), for: .touchUpInside)
-            daysStack.addArrangedSubview(pill)
+           trip.days.enumerated().forEach { i, day in
+               let pill = DayPill(number: i + 1, selected: i == 0)
+               pill.tag = i
+               pill.addTarget(self, action: #selector(dayTapped(_:)), for: .touchUpInside)
+               daysStack.addArrangedSubview(pill)
+           }
+
+           renderTimeline()
+    }
+    
+    private func renderTimeline() {
+        timelineTitleLbl.text = "Day \(String(format: "%02d", selectedDayIndex + 1)) Timeline"
+        
+        timelineStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        
+        guard let events = selectedDay?.itineraryEvents, !events.isEmpty else {
+            return
         }
-
-        timelineTitleLbl.text = "Day 01 Timeline"
-        trip.steps.enumerated().forEach { i, step in
-            timelineStack.addArrangedSubview(
-                TimelineCell(step: step, isLast: i == trip.steps.count - 1))
+        
+        let sortedEvents = events.sorted { $0.startMinutes < $1.startMinutes }
+        
+        sortedEvents.enumerated().forEach { i, event in
+            let cell = TimelineCell(
+                iconSystemName: event.category.iconSystemName,
+                iconTintColor: event.category.color,
+                time: event.startTimeEvent,
+                title: event.locationName ?? "Untitled",
+                subtitle: event.notes ?? "",
+                isLast: i == sortedEvents.count - 1
+            )
+            timelineStack.addArrangedSubview(cell)
         }
     }
 
@@ -374,15 +397,15 @@ final class PreviewTemplateViewController: UIViewController {
     @objc private func dayTapped(_ s: UIButton) {
         selectedDayIndex = s.tag
         daysStack.arrangedSubviews.compactMap { $0 as? DayPill }.forEach { $0.setOn($0.tag == selectedDayIndex) }
-        timelineTitleLbl.text = "Day \(String(format: "%02d", selectedDayIndex + 1)) Timeline"
+        renderTimeline()
     }
 
     @objc private func addTripButtonTapped() {
         UIView.animate(withDuration: 0.1,
                        animations: {
             self.addTripButton.transform = CGAffineTransform(scaleX: 0.97, y: 0.97) }) { _ in
-            UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.5) { self.addTripButton.transform = .identity }
-        }
+                UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.5) { self.addTripButton.transform = .identity }
+            }
     }
 
     // MARK: - Factory
@@ -552,143 +575,6 @@ final class DayPill: UIButton {
         dayLbl?.textColor   = on ? UIColor.white.withAlphaComponent(0.55) : UIColor(hex: "94A3B8")
         numLbl?.textColor   = on ? .white : UIColor(hex: "0F172A")
     }
-}
-
-// MARK: - TimelineCell
-
-final class TimelineCell: UIView {
-    init(step: TripStep, isLast: Bool) {
-        super.init(frame: .zero); build(step, isLast)
-    }
-    required init?(coder: NSCoder) { fatalError() }
-
-    private func build(_ step: TripStep, _ isLast: Bool) {
-        let iconBg = UIView()
-        iconBg.backgroundColor = UIColor.white
-        iconBg.layer.cornerRadius = 16
-        iconBg.layer.borderWidth = 1
-        iconBg.layer.borderColor = UIColor(hex: "E2E8F0").cgColor
-        iconBg.translatesAutoresizingMaskIntoConstraints = false
-        iconBg.widthAnchor.constraint(equalToConstant: 32).isActive = true
-        iconBg.heightAnchor.constraint(equalToConstant: 32).isActive = true
-
-        let iv = UIImageView()
-        iv.image = UIImage(systemName: step.icon, withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .medium))
-        iv.tintColor = .black
-        iv.contentMode = .scaleAspectFit
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        iconBg.addSubview(iv)
-        NSLayoutConstraint.activate([iv.centerXAnchor.constraint(equalTo: iconBg.centerXAnchor),
-                                     iv.centerYAnchor.constraint(equalTo: iconBg.centerYAnchor),
-                                     iv.widthAnchor.constraint(equalToConstant: 16),
-                                     iv.heightAnchor.constraint(equalToConstant: 16)])
-
-        let line = UIView();
-        line.backgroundColor = UIColor(hex: "E2E8F0")
-        line.isHidden = false
-        line.translatesAutoresizingMaskIntoConstraints = false
-        line.widthAnchor.constraint(equalToConstant: 1.5).isActive = true
-
-        let left = UIView()
-        left.translatesAutoresizingMaskIntoConstraints = false
-        left.widthAnchor.constraint(equalToConstant: 32).isActive = true
-        left.addSubview(iconBg)
-        left.addSubview(line)
-        
-        NSLayoutConstraint.activate([
-            iconBg.topAnchor.constraint(equalTo: left.topAnchor, constant: 18),
-            iconBg.centerXAnchor.constraint(equalTo: left.centerXAnchor),
-            line.topAnchor.constraint(equalTo: iconBg.bottomAnchor, constant: 6),
-            line.centerXAnchor.constraint(equalTo: left.centerXAnchor),
-            line.bottomAnchor.constraint(equalTo: left.bottomAnchor)
-        ])
-
-        func lbl(_ txt: String, font: UIFont, color: UIColor, lines: Int = 1) -> UILabel {
-            let l = UILabel(); l.text = txt; l.font = font; l.textColor = color; l.numberOfLines = lines
-            return l
-        }
-
-        let time  = lbl(step.time, font: UIFont.systemFont(ofSize: 13, weight: .bold), color: UIColor(hex: "94A3B8"))
-        let title = lbl(step.title, font: UIFont.systemFont(ofSize: 18, weight: .semibold), color: UIColor(hex: "0F172A"))
-        let desc  = lbl(step.subtitle, font: UIFont.systemFont(ofSize: 14), color: UIColor(hex: "64748B"), lines: 0)
-
-        var views: [UIView] = [time, title, desc]
-
-        if step.hasImage {
-            let img = UIImageView()
-            img.backgroundColor = UIColor(hex: "2A5480"); img.layer.cornerRadius = 12; img.clipsToBounds = true
-            img.contentMode = .scaleAspectFill
-            img.image = UIImage(named: step.imageName ?? "")
-            img.translatesAutoresizingMaskIntoConstraints = false
-            img.heightAnchor.constraint(equalToConstant: 150).isActive = true
-            views.append(img)
-        }
-
-        let right = UIStackView(arrangedSubviews: views)
-        right.axis = .vertical; right.spacing = 4
-        if step.hasImage { right.setCustomSpacing(10, after: desc) }
-        right.translatesAutoresizingMaskIntoConstraints = false
-
-        let row = UIStackView(arrangedSubviews: [left, right])
-        row.axis = .horizontal; row.spacing = 12; row.alignment = .top
-        row.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(row)
-        NSLayoutConstraint.activate([
-            row.topAnchor.constraint(equalTo: topAnchor),
-            row.leadingAnchor.constraint(equalTo: leadingAnchor),
-            row.trailingAnchor.constraint(equalTo: trailingAnchor),
-            row.bottomAnchor.constraint(equalTo: bottomAnchor, constant: isLast ? -8 : -24),
-            left.heightAnchor.constraint(greaterThanOrEqualTo: row.heightAnchor)
-        ])
-    }
-}
-
-// MARK: - RouteCardView
-
-final class RouteCardView: UIView {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = UIColor(hex: "F1F5F9")
-        layer.cornerRadius = 16
-        layer.borderWidth = 1; layer.borderColor = UIColor(hex: "E2E8F0").cgColor
-
-        let mapIV = UIImageView(image: UIImage(systemName: "map",
-            withConfiguration: UIImage.SymbolConfiguration(pointSize: 13, weight: .semibold)))
-        mapIV.tintColor = UIColor(hex: "0F172A")
-        mapIV.setContentHuggingPriority(.required, for: .horizontal)
-
-        let title = UILabel(); title.text = "Route Overview"
-        title.font = UIFont.systemFont(ofSize: 15, weight: .bold)
-        title.textColor = UIColor(hex: "0F172A")
-
-        let leftStack = UIStackView(arrangedSubviews: [mapIV, title])
-        leftStack.spacing = 6; leftStack.alignment = .center
-
-        let expand = UILabel()
-        expand.attributedText = NSAttributedString(string: "EXPAND MAP", attributes: [
-            .font: UIFont.systemFont(ofSize: 10, weight: .bold),
-            .foregroundColor: UIColor(hex: "64748B"), .kern: 1.0])
-
-        let header = UIStackView(arrangedSubviews: [leftStack, expand])
-        header.distribution = .equalSpacing; header.alignment = .center
-        header.translatesAutoresizingMaskIntoConstraints = false
-
-        let map = MapPlaceholderView()
-        map.layer.cornerRadius = 10; map.clipsToBounds = true
-        map.translatesAutoresizingMaskIntoConstraints = false
-
-        addSubview(header); addSubview(map)
-        NSLayoutConstraint.activate([
-            header.topAnchor.constraint(equalTo: topAnchor, constant: 14),
-            header.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 14),
-            header.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -14),
-            map.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 10),
-            map.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            map.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            map.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
-        ])
-    }
-    required init?(coder: NSCoder) { fatalError() }
 }
 
 
