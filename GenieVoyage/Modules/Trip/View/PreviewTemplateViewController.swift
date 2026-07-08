@@ -25,7 +25,10 @@ final class PreviewTemplateViewController: UIViewController {
         self.trip = trip
         super.init(nibName: nil, bundle: nil)
     }
-    required init?(coder: NSCoder) { fatalError() }
+    
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
 
     private lazy var scrollView: UIScrollView = {
         let sv = UIScrollView()
@@ -178,6 +181,9 @@ final class PreviewTemplateViewController: UIViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
         buildLayout()
         heroGradient.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: heroBaseHeight)
+        routeCard.onExpandTapped = { [weak self] in
+            self?.presentFullScreenMap()
+        }
         populate()
     }
     
@@ -348,27 +354,34 @@ final class PreviewTemplateViewController: UIViewController {
 
     private func populate() {
         heroTitleLabel.text = trip.title
-           heroSubtitleLabel.text = trip.subtitle
-           locationLabel.text = trip.locationName.uppercased()
-           heroImageView.image = UIImage(named: trip.imageName)
-
-           ratingCol.set(caption: "RATING",   value: "\(trip.rating) ★", amber: true)
-           durationCol.set(caption: "DURATION", value: trip.durationLabel)
-           levelCol.set(caption: "LEVEL",     value: trip.levelLabel)
-
-           trip.days.enumerated().forEach { i, day in
-               let pill = DayPill(number: i + 1, selected: i == 0)
-               pill.tag = i
-               pill.addTarget(self, action: #selector(dayTapped(_:)), for: .touchUpInside)
-               daysStack.addArrangedSubview(pill)
-           }
-
-           renderTimeline()
+        heroSubtitleLabel.text = trip.subtitle
+        locationLabel.text = trip.locationName.uppercased()
+        heroImageView.image = UIImage(named: trip.imageName)
+        
+        ratingCol.set(caption: "RATING",   value: "\(trip.rating) ★", amber: true)
+        durationCol.set(caption: "DURATION", value: trip.durationLabel)
+        levelCol.set(caption: "LEVEL",     value: trip.levelLabel)
+        
+        trip.days.enumerated().forEach { i, day in
+            let pill = DayPill(number: i + 1, selected: i == 0)
+            pill.tag = i
+            pill.addTarget(self, action: #selector(dayTapped(_:)), for: .touchUpInside)
+            daysStack.addArrangedSubview(pill)
+        }
+        
+        renderTimeline()
+        routeCard.configure(with: selectedDay?.itineraryEvents ?? [])
+    }
+    
+    private func presentFullScreenMap() {
+        guard let events = selectedDay?.itineraryEvents else { return }
+        let dayTitle = "Day \(String(format: "%02d", selectedDayIndex + 1)) Route"
+        let mapVC = FullScreenRouteMapViewController(events: events, dayTitle: dayTitle)
+        present(mapVC, animated: true)
     }
     
     private func renderTimeline() {
         timelineTitleLbl.text = "Day \(String(format: "%02d", selectedDayIndex + 1)) Timeline"
-        
         timelineStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
         guard let events = selectedDay?.itineraryEvents, !events.isEmpty else {
@@ -392,12 +405,15 @@ final class PreviewTemplateViewController: UIViewController {
 
     // MARK: - Actions
 
-    @objc private func backTapped() { navigationController?.popViewController(animated: true) }
+    @objc private func backTapped() {
+        navigationController?.popViewController(animated: true)
+    }
 
     @objc private func dayTapped(_ s: UIButton) {
         selectedDayIndex = s.tag
         daysStack.arrangedSubviews.compactMap { $0 as? DayPill }.forEach { $0.setOn($0.tag == selectedDayIndex) }
         renderTimeline()
+        routeCard.configure(with: selectedDay?.itineraryEvents ?? [])
     }
 
     @objc private func addTripButtonTapped() {

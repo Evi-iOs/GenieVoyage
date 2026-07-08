@@ -34,7 +34,6 @@
 		D068FE322F6BFFCB00B7C9B7 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D068FE312F6BFFCB00B7C9B7 /* AppTheme.swift */; };
 		D068FE342F6C618700B7C9B7 /* TourCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D068FE332F6C618700B7C9B7 /* TourCardView.swift */; };
 		D068FE362F74738800B7C9B7 /* TemplatesCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D068FE352F74738800B7C9B7 /* TemplatesCoordinator.swift */; };
-		D068FE382F7AD5C900B7C9B7 /* MapPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D068FE372F7AD5C900B7C9B7 /* MapPlaceholderView.swift */; };
 		D06C7F1B2DB26C2600402EA0 /* DayCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F1A2DB26C1B00402EA0 /* DayCellDelegate.swift */; };
 		D06C7F202DBAC3CD00402EA0 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F1F2DBAC3CD00402EA0 /* SignInViewController.swift */; };
 		D06C7F2A2DE24BA600402EA0 /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06C7F292DE24BA600402EA0 /* EventView.swift */; };
@@ -63,6 +62,7 @@
 		D0CC3DCB2FFAF8B300E82C1C /* TemplateListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3DCA2FFAF8B300E82C1C /* TemplateListViewModel.swift */; };
 		D0CC3DCD2FFEBA7000E82C1C /* TimelineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3DCC2FFEBA7000E82C1C /* TimelineCell.swift */; };
 		D0CC3DCF2FFEBA9F00E82C1C /* RouteCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3DCE2FFEBA9F00E82C1C /* RouteCardView.swift */; };
+		D0CC3DD12FFED6B800E82C1C /* FullScreenRouteMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3DD02FFED6B800E82C1C /* FullScreenRouteMapViewController.swift */; };
 		D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */; };
 		D0D192D42A6FFF9A000853B8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D32A6FFF9A000853B8 /* SceneDelegate.swift */; };
 		D0D192DC2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D0D192DA2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld */; };
@@ -157,7 +157,6 @@
 		D068FE312F6BFFCB00B7C9B7 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		D068FE332F6C618700B7C9B7 /* TourCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourCardView.swift; sourceTree = "<group>"; };
 		D068FE352F74738800B7C9B7 /* TemplatesCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplatesCoordinator.swift; sourceTree = "<group>"; };
-		D068FE372F7AD5C900B7C9B7 /* MapPlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPlaceholderView.swift; sourceTree = "<group>"; };
 		D06C7F1A2DB26C1B00402EA0 /* DayCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCellDelegate.swift; sourceTree = "<group>"; };
 		D06C7F1F2DBAC3CD00402EA0 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		D06C7F292DE24BA600402EA0 /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
@@ -186,6 +185,7 @@
 		D0CC3DCA2FFAF8B300E82C1C /* TemplateListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateListViewModel.swift; sourceTree = "<group>"; };
 		D0CC3DCC2FFEBA7000E82C1C /* TimelineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineCell.swift; sourceTree = "<group>"; };
 		D0CC3DCE2FFEBA9F00E82C1C /* RouteCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteCardView.swift; sourceTree = "<group>"; };
+		D0CC3DD02FFED6B800E82C1C /* FullScreenRouteMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenRouteMapViewController.swift; sourceTree = "<group>"; };
 		D0D192CE2A6FFF9A000853B8 /* GenieVoyage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GenieVoyage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D0D192D32A6FFF9A000853B8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -301,9 +301,9 @@
 				D023B2F32E3584FB009B382C /* TemplateCell.swift */,
 				D0A53A082F3D04EE00CA7D85 /* PreviewTemplateViewController.swift */,
 				D0CC3DCE2FFEBA9F00E82C1C /* RouteCardView.swift */,
+				D0CC3DD02FFED6B800E82C1C /* FullScreenRouteMapViewController.swift */,
 				D0CC3DCC2FFEBA7000E82C1C /* TimelineCell.swift */,
 				D06C7F382DE7ABC300402EA0 /* EventEditorViewController.swift */,
-				D068FE372F7AD5C900B7C9B7 /* MapPlaceholderView.swift */,
 				D0FC227F2DF7662A0074C9AF /* TripListViewController.swift */,
 				D043B43C2CFF6DDE00151ED0 /* TripViewController.swift */,
 				D0FC22692DEA406A0074C9AF /* MapEventsViewController.swift */,
@@ -717,6 +717,7 @@
 				D023B2F62E358530009B382C /* MyTripCell.swift in Sources */,
 				D0FC22882DFA13BD0074C9AF /* TripViewControllerDelegate.swift in Sources */,
 				D0FC22612DE8ABD90074C9AF /* HotelEditorViewModel.swift in Sources */,
+				D0CC3DD12FFED6B800E82C1C /* FullScreenRouteMapViewController.swift in Sources */,
 				D04945B52D3A46FA00232F26 /* EventModel.swift in Sources */,
 				D0EBF10F2E585ADC002C76CD /* AppCoordinator.swift in Sources */,
 				D07B678A2D2C6D8000842293 /* StartPlanningViewController.swift in Sources */,
@@ -779,7 +780,6 @@
 				D0B0E1BD2F38F102000A390B /* AuthCoordinator.swift in Sources */,
 				D023B2F82E35858C009B382C /* HeaderView.swift in Sources */,
 				D023B30B2E3FFD38009B382C /* TripStorage.swift in Sources */,
-				D068FE382F7AD5C900B7C9B7 /* MapPlaceholderView.swift in Sources */,
 				D0365DF12CFA6BEA00D711A9 /* TripModel.swift in Sources */,
 				D0FC22782DF7641B0074C9AF /* TripCoordinator.swift in Sources */,
 				D04945B92D3EB26900232F26 /* TripViewModel.swift in Sources */,
