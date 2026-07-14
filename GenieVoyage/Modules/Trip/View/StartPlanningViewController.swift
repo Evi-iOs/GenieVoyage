@@ -525,7 +525,7 @@ class StartPlanningViewController: UIViewController {
         let start = cal.startOfDay(for: startDate)
         let end = cal.startOfDay(for: rangeEndDate ?? startDate)
 
-        let days: [TripDay] = template?.days ?? []
+        let days: [TripDay] = remapTemplateDays(template?.days ?? [], to: start, calendar: cal)
 
         let updatedTrip: TripModel
         if var existing = existingTrip {
@@ -550,6 +550,30 @@ class StartPlanningViewController: UIViewController {
             self.onSave?(updatedTrip)
         }
         dismiss(animated: true)
+    }
+    
+    private func remapTemplateDays(_ templateDays: [TripDay], to newStartDate: Date, calendar: Calendar) -> [TripDay] {
+        templateDays.enumerated().map { index, templateDay in
+            let newDayDate = calendar.date(byAdding: .day, value: index, to: newStartDate) ?? newStartDate
+            
+            let remappedEvents = templateDay.itineraryEvents.map { event -> EventModel in
+                EventModel(
+                    id: UUID(),
+                    dateEvent: newDayDate,
+                    category: event.category,
+                    time: event.time,
+                    startMinutes: event.startMinutes,
+                    duration: event.duration,
+                    locationName: event.locationName,
+                    coordinate: event.coordinate,
+                    notes: event.notes,
+                    bookingLink: event.bookingLink,
+                    pdfFileURL: nil
+                )
+            }
+            
+            return TripDay(date: newDayDate, itineraryEvents: remappedEvents)
+        }
     }
 
     @objc private func textFieldDidChange() {

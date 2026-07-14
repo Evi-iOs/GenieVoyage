@@ -26,6 +26,13 @@ final class TripListViewModel: ObservableObject {
     
     func addTrip(_ trip: TripModel) async {
         await storage.saveTrip(trip)
+        
+        for day in trip.days {
+            for event in day.itineraryEvents {
+                await storage.saveEvent(event, to: trip)
+            }
+        }
+        
         await loadTrips()
     }
     

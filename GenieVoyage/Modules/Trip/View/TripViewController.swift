@@ -20,7 +20,6 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     private let viewModel: TripViewModel
     private var cancellables = Set<AnyCancellable>()
     
-    // MARK: UI elements
     private let destinationLabel = UILabel()
     private let titleText = UITextView()
     private let stackView = UIStackView()
@@ -67,7 +66,6 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         super.viewDidAppear(animated)
         view.setNeedsLayout()
         view.layoutIfNeeded()
-        showFloatingMapButton()
     }
     
     override func viewDidLayoutSubviews() {
@@ -91,22 +89,29 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         
         navigationItem.title = "Trip to \(viewModel.trip.title)"
         
-        destinationLabel.text = "Destination"
-        destinationLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        destinationLabel.textColor = UIColor.gray
+        destinationLabel.text = "DESTINATION"
+        destinationLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
+        destinationLabel.textColor = .systemGray
+        destinationLabel.letterSpacing(1.2)
         destinationLabel.translatesAutoresizingMaskIntoConstraints = false
         
         titleText.text = viewModel.trip.title
-        titleText.font = UIFont.boldSystemFont(ofSize: 18)
-        titleText.isScrollEnabled = true
-        titleText.textContainer.lineBreakMode = .byWordWrapping
-        titleText.translatesAutoresizingMaskIntoConstraints = false
+        titleText.font = UIFont.boldSystemFont(ofSize: 19)
+        titleText.isScrollEnabled = false
+        titleText.textColor = .black
         titleText.delegate = self
-        titleText.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+        titleText.textContainer.lineFragmentPadding = 0
+        titleText.textContainerInset = .zero
+        titleText.backgroundColor = .clear
+        titleText.isEditable = true
+        titleText.translatesAutoresizingMaskIntoConstraints = false
+        titleText.setContentHuggingPriority(.defaultLow, for: .vertical)
+        titleText.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         
         datesLabel.text = "\(viewModel.trip.startDate.formattedDateWeekDay()) - \(viewModel.trip.endDate.formattedDateWeekDay())"
-        datesLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        datesLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         datesLabel.translatesAutoresizingMaskIntoConstraints = false
+        datesLabel.textColor = .systemGray
         
         startDatePicker.datePickerMode = .date
         startDatePicker.preferredDatePickerStyle = .automatic
@@ -117,8 +122,10 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         endDatePicker.translatesAutoresizingMaskIntoConstraints = false
         
         coverImageView.contentMode = .scaleAspectFill
-        coverImageView.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
-        coverImageView.layer.cornerRadius = 8
+        coverImageView.backgroundColor = UIColor(white: 0.96, alpha: 1.0)
+        coverImageView.layer.cornerRadius = 16
+        coverImageView.layer.borderWidth = 1
+        coverImageView.layer.borderColor = UIColor(hex: "#EDEDED").cgColor
         coverImageView.clipsToBounds = true
         coverImageView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -129,8 +136,14 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         addCoverButton.isHidden = false
         addCoverButton.alpha = 1
         
-        saveButton.bigBlackButtonStyle(text: "Save")
+        saveButton.setTitle("Save", for: .normal)
+        saveButton.setTitleColor(.white, for: .normal)
+        saveButton.titleLabel?.font = .systemFont(ofSize: 15, weight: .semibold)
+        saveButton.backgroundColor = .black
+        saveButton.layer.cornerRadius = 8
+        saveButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
         saveButton.translatesAutoresizingMaskIntoConstraints = false
+        saveButton.setContentHuggingPriority(.required, for: .horizontal)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         
         view.addSubview(destinationLabel)
@@ -201,51 +214,48 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
     // MARK: - Setup Constraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            //Cover Image
-            coverImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+            coverImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             coverImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            coverImageView.heightAnchor.constraint(equalToConstant: 85),
             coverImageView.widthAnchor.constraint(equalToConstant: 85),
+            coverImageView.heightAnchor.constraint(equalToConstant: 85),
             
-            //Add Cover Button
             addCoverButton.topAnchor.constraint(equalTo: coverImageView.topAnchor),
             addCoverButton.leadingAnchor.constraint(equalTo: coverImageView.leadingAnchor),
             addCoverButton.trailingAnchor.constraint(equalTo: coverImageView.trailingAnchor),
             addCoverButton.bottomAnchor.constraint(equalTo: coverImageView.bottomAnchor),
             
-            //Title
-            destinationLabel.leadingAnchor.constraint(equalTo: coverImageView.trailingAnchor, constant: 20),
-            destinationLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
-            
-            titleText.topAnchor.constraint(equalTo: destinationLabel.bottomAnchor, constant: 3),
-            titleText.leadingAnchor.constraint(equalTo: coverImageView.trailingAnchor, constant: 20),
-            titleText.trailingAnchor.constraint(equalTo: datesLabel.leadingAnchor, constant: -20),
-            titleText.bottomAnchor.constraint(equalTo: coverImageView.bottomAnchor),
-            
-            datesLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
-            datesLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            
-            // Save Button
-            saveButton.bottomAnchor.constraint(equalTo: coverImageView.bottomAnchor),
+            saveButton.topAnchor.constraint(equalTo: coverImageView.topAnchor),
             saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            saveButton.leadingAnchor.constraint(equalTo: datesLabel.leadingAnchor),
+            saveButton.heightAnchor.constraint(equalToConstant: 36),
             
-            stackView.topAnchor.constraint(equalTo: coverImageView.bottomAnchor, constant: 20),
+            destinationLabel.topAnchor.constraint(equalTo: coverImageView.topAnchor),
+            destinationLabel.leadingAnchor.constraint(equalTo: coverImageView.trailingAnchor, constant: 16),
+            destinationLabel.trailingAnchor.constraint(lessThanOrEqualTo: saveButton.leadingAnchor, constant: -12),
+            
+            titleText.topAnchor.constraint(equalTo: destinationLabel.bottomAnchor, constant: 2),
+            titleText.leadingAnchor.constraint(equalTo: coverImageView.trailingAnchor, constant: 16),
+            titleText.trailingAnchor.constraint(lessThanOrEqualTo: saveButton.leadingAnchor, constant: -12),
+
+            datesLabel.topAnchor.constraint(equalTo: titleText.bottomAnchor, constant: 4),
+            datesLabel.leadingAnchor.constraint(equalTo: coverImageView.trailingAnchor, constant: 16),
+            datesLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -12),
+            
+            stackView.topAnchor.constraint(equalTo: datesLabel.bottomAnchor, constant: 18),
+            stackView.topAnchor.constraint(greaterThanOrEqualTo: coverImageView.bottomAnchor, constant: 16),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
             segmentedControl.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 20),
             segmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            segmentedControl.heightAnchor.constraint(equalToConstant: 60),
+            segmentedControl.heightAnchor.constraint(equalToConstant: 44),
             
-            // CollectionView below segmented control
             daysCollectionView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor),
             daysCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             daysCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             daysCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -35),
             
-            //MapButton
+            // MapButton
             floatingMapButton.widthAnchor.constraint(equalToConstant: 60),
             floatingMapButton.heightAnchor.constraint(equalToConstant: 60),
             floatingMapButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
@@ -374,29 +384,6 @@ class TripViewController: UIViewController, UIImagePickerControllerDelegate, Seg
         return button
     }()
     
-    private func showFloatingMapButton() {
-        guard floatingMapButton.alpha != 1 else { return }
-        
-        floatingMapButton.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-        floatingMapButton.layer.shadowColor = UIColor.gray.cgColor
-        floatingMapButton.layer.shadowOpacity = 0.6
-        floatingMapButton.layer.shadowOffset = CGSize(width: 0, height: 8)
-        floatingMapButton.layer.shadowRadius = 8
-        
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.8, options: .curveEaseInOut) {
-            self.floatingMapButton.alpha = 0.7
-            self.floatingMapButton.transform = .identity
-        }
-    }
-    
-    private func hideFloatingMapButton() {
-        guard floatingMapButton.alpha != 0 else { return }
-        
-        UIView.animate(withDuration: 0.2) {
-            self.floatingMapButton.alpha = 0
-        }
-    }
-    
     // MARK: - UIImagePickerControllerDelegate
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let selectedImage = info[.originalImage] as? UIImage {
@@ -475,11 +462,6 @@ extension TripViewController: UICollectionViewDataSource, UICollectionViewDelega
         let newOffset = CGPoint(x: index * cellWidthIncludingSpacing - scrollView.contentInset.left, y: 0)
         targetContentOffset.pointee = newOffset
     }
-    
-    func textViewDidChange(_ textView: UITextView) {
-        let size = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
-        textView.heightAnchor.constraint(equalToConstant: size.height).isActive = true
-    }
 }
 
 //MARK: Drag icons
@@ -552,6 +534,6 @@ extension TripViewController: DayCellDelegate {
     }
 
     func dayCellDidScroll(upward: Bool) {
-        upward ? showFloatingMapButton() : hideFloatingMapButton()
+        
     }
 }

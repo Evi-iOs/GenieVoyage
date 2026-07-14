@@ -12,6 +12,8 @@ class TemplatesCoordinator: Coordinator {
     var navigationController: UINavigationController
     var childCoordinators = [Coordinator]()
     
+    var createTrip: ((TripTemplate) -> Void)?
+    
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
@@ -29,6 +31,9 @@ class TemplatesCoordinator: Coordinator {
     private func showPreviewTemplate(template: TripTemplate) {
         let vc = PreviewTemplateViewController(trip: template)
         vc.hidesBottomBarWhenPushed = true
+        vc.onAddTrip = { [weak self] template in
+            self?.createTrip?(template)
+        }
         navigationController.pushViewController(vc, animated: true)
     }
 }

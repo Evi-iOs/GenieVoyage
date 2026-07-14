@@ -26,10 +26,17 @@ class SegmentedControlView: UIView, UICollectionViewDelegate, UICollectionViewDa
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = .systemGray6
+        collectionView.backgroundColor = .white
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(SegmentCell.self, forCellWithReuseIdentifier: SegmentCell.identifier)
         return collectionView
+    }()
+    
+    private let bottomDivider: UIView = {
+        let v = UIView()
+        v.backgroundColor = UIColor(hex: "#EDEDED")
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
     }()
 
     init(items: [String]) {
@@ -44,12 +51,18 @@ class SegmentedControlView: UIView, UICollectionViewDelegate, UICollectionViewDa
 
     private func setupView() {
         addSubview(collectionView)
-
+        addSubview(bottomDivider)
+        
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            
+            bottomDivider.leadingAnchor.constraint(equalTo: leadingAnchor),
+            bottomDivider.trailingAnchor.constraint(equalTo: trailingAnchor),
+            bottomDivider.bottomAnchor.constraint(equalTo: bottomAnchor),
+            bottomDivider.heightAnchor.constraint(equalToConstant: 1)
         ])
     }
     

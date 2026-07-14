@@ -8,6 +8,8 @@
 import UIKit
 
 final class PreviewTemplateViewController: UIViewController {
+    
+    var onAddTrip: ((TripTemplate) -> Void)?
 
     private let trip: TripTemplate
     private var selectedDayIndex = 0
@@ -422,6 +424,7 @@ final class PreviewTemplateViewController: UIViewController {
             self.addTripButton.transform = CGAffineTransform(scaleX: 0.97, y: 0.97) }) { _ in
                 UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.5) { self.addTripButton.transform = .identity }
             }
+        onAddTrip?(trip)
     }
 
     // MARK: - Factory

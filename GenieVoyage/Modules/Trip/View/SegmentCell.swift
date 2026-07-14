@@ -20,7 +20,8 @@ class SegmentCell: UICollectionViewCell {
     
     private let underlineView: UIView = {
         let view = UIView()
-        view.backgroundColor = .darkGray 
+        view.backgroundColor = .darkGray
+        view.layer.cornerRadius = 1
         view.translatesAutoresizingMaskIntoConstraints = false
         view.isHidden = true
         return view
@@ -32,13 +33,15 @@ class SegmentCell: UICollectionViewCell {
         contentView.addSubview(underlineView)
         
         NSLayoutConstraint.activate([
-            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 2),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -2),
             
-            underlineView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            underlineView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
             underlineView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            underlineView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.8),
-            underlineView.heightAnchor.constraint(equalToConstant: 3)
+            underlineView.widthAnchor.constraint(equalTo: titleLabel.widthAnchor),
+            underlineView.heightAnchor.constraint(equalToConstant: 2),
+            underlineView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor)
         ])
     }
     

@@ -34,6 +34,11 @@ final class MainCoordinator: Coordinator, TabBarControlling {
         
         let templatesCoordinator = TemplatesCoordinator(navigationController: templatesNavigation)
         let tripListCoordinator = TripListCoordinator(navigationController: tripNavigation, storage: storage, imageStorage: imageStorage)
+        
+        templatesCoordinator.createTrip = { template in
+            tripListCoordinator.startPlanning(template: template)
+        }
+        
         let ticketsCoordinator = TicketsCoordinator(navigationController: ticketsNavigation, tripStorage: storage)
         let profileCoordinator = ProfileCoordinator(navigationController: profileNavigation)
 
