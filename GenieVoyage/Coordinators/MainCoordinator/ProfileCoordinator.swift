@@ -12,12 +12,18 @@ class ProfileCoordinator: Coordinator {
     var navigationController: UINavigationController
     var childCoordinators = [Coordinator]()
     
-    init(navigationController: UINavigationController) {
+    private let tripStorage: TripStorage
+    private let ticketStorage: TicketFileStorage
+    
+    init(navigationController: UINavigationController, tripStorage: TripStorage, ticketStorage: TicketFileStorage) {
         self.navigationController = navigationController
+        self.ticketStorage = ticketStorage
+        self.tripStorage = tripStorage
     }
     
     func start() {
-        let vc = ProfileViewController()
+        let viewModel = ProfileViewModel(tripStorage: tripStorage, ticketFileStorage: ticketStorage)
+        let vc = ProfileViewController(viewModel: viewModel)
         navigationController.viewControllers = [vc]
     }
 }

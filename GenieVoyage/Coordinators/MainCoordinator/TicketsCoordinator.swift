@@ -13,14 +13,15 @@ class TicketsCoordinator: Coordinator {
     var childCoordinators = [Coordinator]()
     
     private let tripStorage: TripStorage
-    
-    init(navigationController: UINavigationController, tripStorage: TripStorage) {
+    private let ticketFileStorage: CoreDataTicketFileStorage
+
+    init(navigationController: UINavigationController, tripStorage: TripStorage, ticketFileStorage: CoreDataTicketFileStorage) {
         self.navigationController = navigationController
         self.tripStorage = tripStorage
+        self.ticketFileStorage = ticketFileStorage
     }
     
     func start() {
-        let ticketFileStorage = CoreDataTicketFileStorage()
         let viewModel = TicketsViewModel(ticketFileStorage: ticketFileStorage, tripStorage: self.tripStorage)
         let vc = TicketsViewController(viewModel: viewModel)
         navigationController.viewControllers = [vc]

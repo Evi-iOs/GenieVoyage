@@ -26,7 +26,7 @@ final class MyTripCell: UICollectionViewCell {
     }
 
     private func setup() {
-        contentView.backgroundColor = .systemGroupedBackground
+        contentView.backgroundColor = AppTheme.Colors.backgroundGray
         contentView.layer.cornerRadius = 10
         contentView.layer.masksToBounds = true
 

@@ -63,6 +63,7 @@
 		D0CC3DCD2FFEBA7000E82C1C /* TimelineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3DCC2FFEBA7000E82C1C /* TimelineCell.swift */; };
 		D0CC3DCF2FFEBA9F00E82C1C /* RouteCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3DCE2FFEBA9F00E82C1C /* RouteCardView.swift */; };
 		D0CC3DD12FFED6B800E82C1C /* FullScreenRouteMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3DD02FFED6B800E82C1C /* FullScreenRouteMapViewController.swift */; };
+		D0CC3DD33006E73800E82C1C /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3DD23006E73800E82C1C /* ProfileViewModel.swift */; };
 		D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */; };
 		D0D192D42A6FFF9A000853B8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D32A6FFF9A000853B8 /* SceneDelegate.swift */; };
 		D0D192DC2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D0D192DA2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld */; };
@@ -186,6 +187,7 @@
 		D0CC3DCC2FFEBA7000E82C1C /* TimelineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineCell.swift; sourceTree = "<group>"; };
 		D0CC3DCE2FFEBA9F00E82C1C /* RouteCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteCardView.swift; sourceTree = "<group>"; };
 		D0CC3DD02FFED6B800E82C1C /* FullScreenRouteMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenRouteMapViewController.swift; sourceTree = "<group>"; };
+		D0CC3DD23006E73800E82C1C /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		D0D192CE2A6FFF9A000853B8 /* GenieVoyage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GenieVoyage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D0D192D32A6FFF9A000853B8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -326,6 +328,7 @@
 			isa = PBXGroup;
 			children = (
 				D023B3102E415854009B382C /* TripListViewModel.swift */,
+				D0CC3DD23006E73800E82C1C /* ProfileViewModel.swift */,
 				D0CC3DC62FFA783B00E82C1C /* TicketsViewModel.swift */,
 				D04945B82D3EB26900232F26 /* TripViewModel.swift */,
 				D0CC3DCA2FFAF8B300E82C1C /* TemplateListViewModel.swift */,
@@ -772,6 +775,7 @@
 				D06C7F322DE7A9C000402EA0 /* EventEditorConfigurable.swift in Sources */,
 				D068FE302F6BFCBB00B7C9B7 /* CustomTabBarView.swift in Sources */,
 				D0A39AAB2E035FD2007F3F9A /* TabBarControlling.swift in Sources */,
+				D0CC3DD33006E73800E82C1C /* ProfileViewModel.swift in Sources */,
 				D0CC3DCF2FFEBA9F00E82C1C /* RouteCardView.swift in Sources */,
 				D0FC22672DE8AC720074C9AF /* FoodEditorViewModel.swift in Sources */,
 				D0A53A092F3D04EE00CA7D85 /* PreviewTemplateViewController.swift in Sources */,

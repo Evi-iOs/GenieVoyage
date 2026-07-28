@@ -19,6 +19,8 @@ final class MainCoordinator: Coordinator, TabBarControlling {
     private let window: UIWindow
     private let storage: TripStorage
     private let imageStorage: ImageStorageProtocol
+    
+    let ticketFileStorage = CoreDataTicketFileStorage()
 
     init(window: UIWindow, storage: TripStorage, imageStorage: ImageStorageProtocol) {
         self.window = window
@@ -39,8 +41,9 @@ final class MainCoordinator: Coordinator, TabBarControlling {
             tripListCoordinator.startPlanning(template: template)
         }
         
-        let ticketsCoordinator = TicketsCoordinator(navigationController: ticketsNavigation, tripStorage: storage)
-        let profileCoordinator = ProfileCoordinator(navigationController: profileNavigation)
+        let ticketsCoordinator = TicketsCoordinator(navigationController: ticketsNavigation, tripStorage: storage, ticketFileStorage: ticketFileStorage)
+
+        let profileCoordinator = ProfileCoordinator(navigationController: profileNavigation, tripStorage: storage, ticketStorage: ticketFileStorage)
 
         addChild(templatesCoordinator)
         addChild(tripListCoordinator)
@@ -67,5 +70,4 @@ final class MainCoordinator: Coordinator, TabBarControlling {
         tabBarController.setCustomTabBar(hidden: hidden, animated: animated)
     }
 }
-
 

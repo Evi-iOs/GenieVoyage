@@ -6,8 +6,24 @@
 //
 
 import UIKit
+import PhotosUI
 
 class ProfileViewController: UIViewController {
+    
+    private let viewModel: ProfileViewModel
+    
+    init(viewModel: ProfileViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) { fatalError() }
+    
+    var onPersonalInfoTapped: (() -> Void)?
+    var onPreferencesTapped: (() -> Void)?
+    var onExportDataTapped: (() -> Void)?
+    var onHelpTapped: (() -> Void)?
+    var onPrivacyPolicyTapped: (() -> Void)?
+    var onTermsTapped: (() -> Void)?
     
     private let scrollView: UIScrollView = {
         let sv = UIScrollView()
@@ -33,15 +49,6 @@ class ProfileViewController: UIViewController {
         return l
     }()
     
-    private let settingsButton: UIButton = {
-        let b = UIButton(type: .system)
-        let cfg = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
-        b.setImage(UIImage(systemName: "gearshape", withConfiguration: cfg), for: .normal)
-        b.tintColor = UIColor(hex: "0F172A")
-        b.translatesAutoresizingMaskIntoConstraints = false
-        return b
-    }()
-    
     // MARK: - Avatar
     
     private let avatarImageView: UIImageView = {
@@ -56,7 +63,7 @@ class ProfileViewController: UIViewController {
         return iv
     }()
     
-    private let editAvatarButton: UIButton = {
+    private lazy var editAvatarButton: UIButton = {
         let b = UIButton(type: .system)
         b.backgroundColor = UIColor(hex: "0F172A")
         b.layer.cornerRadius = 14
@@ -66,6 +73,7 @@ class ProfileViewController: UIViewController {
         b.setImage(UIImage(systemName: "pencil", withConfiguration: cfg), for: .normal)
         b.tintColor = .white
         b.translatesAutoresizingMaskIntoConstraints = false
+        b.addTarget(self, action: #selector(editAvatarTapped), for: .touchUpInside)
         return b
     }()
     
@@ -74,15 +82,7 @@ class ProfileViewController: UIViewController {
         l.font = UIFont.systemFont(ofSize: 22, weight: .bold)
         l.textColor = UIColor(hex: "0F172A")
         l.textAlignment = .center
-        l.translatesAutoresizingMaskIntoConstraints = false
-        return l
-    }()
-    
-    private let emailLabel: UILabel = {
-        let l = UILabel()
-        l.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        l.textColor = UIColor(hex: "64748B")
-        l.textAlignment = .center
+        l.isUserInteractionEnabled = true
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()
@@ -108,6 +108,10 @@ class ProfileViewController: UIViewController {
         return l
     }()
     
+    private var tripsValueLabel: UILabel?
+    private var daysValueLabel: UILabel?
+    private var ticketsValueLabel: UILabel?
+    
     // MARK: - Menu
     
     private let menuCard: UIView = {
@@ -118,51 +122,69 @@ class ProfileViewController: UIViewController {
         return v
     }()
     
-    private let menuItems: [(icon: String, title: String)] = [
-        ("person.crop.circle", "Personal Information"),
-        ("bell", "Notifications"),
-        ("shield", "Security"),
-        ("questionmark.circle","Help & Support")
+    private enum MenuAction {
+        case personalInfo, preferences, exportData, help
+    }
+    
+    private let menuItems: [(icon: String, title: String, action: MenuAction)] = [
+        ("person.crop.circle", "Personal Information", .personalInfo),
+        ("slider.horizontal.3", "Preferences", .preferences),
+        ("square.and.arrow.up", "Export Data", .exportData),
+        ("questionmark.circle", "Help & Support", .help)
     ]
     
-    // MARK: - Logout
+    // MARK: - Data & About
     
-    private let logoutButton: UIButton = {
+    private let dataCard: UIView = {
+        let v = UIView()
+        v.backgroundColor = .white
+        v.layer.cornerRadius = 16
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+    
+    private lazy var deleteAllDataButton: UIButton = {
         let b = UIButton(type: .system)
-        b.setTitle("Log Out", for: .normal)
-        b.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
-        b.setTitleColor(.white, for: .normal)
-        b.backgroundColor = UIColor(hex: "0F172A")
-        b.layer.cornerRadius = 18
+        b.setTitle("Delete All Data", for: .normal)
+        b.setTitleColor(.systemRed, for: .normal)
+        b.titleLabel?.font = .systemFont(ofSize: 15, weight: .semibold)
+        b.contentHorizontalAlignment = .left
+        b.contentEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         b.translatesAutoresizingMaskIntoConstraints = false
-        b.addTarget(ProfileViewController.self, action: #selector(logoutTapped), for: .touchUpInside)
+        b.addTarget(self, action: #selector(deleteAllDataTapped), for: .touchUpInside)
         return b
     }()
     
+    private lazy var privacyPolicyButton = makeLinkButton(title: "Privacy Policy", action: #selector(privacyPolicyTapped))
+    private lazy var termsButton = makeLinkButton(title: "Terms of Use", action: #selector(termsTapped))
+    
     private let versionLabel: UILabel = {
         let l = UILabel()
-        l.attributedText = NSAttributedString(string: "TRAVEL APP VERSION 2.4.0", attributes: [
-            .font: UIFont.systemFont(ofSize: 10, weight: .medium),
-            .foregroundColor: UIColor(hex: "94A3B8"),
-            .kern: 1.2
-        ])
+        l.font = .systemFont(ofSize: 12, weight: .medium)
+        l.textColor = UIColor(hex: "94A3B8")
         l.textAlignment = .center
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()
-    
-    // MARK: - Lifecycle
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(hex: "F1F5F9")
         navigationController?.setNavigationBarHidden(true, animated: false)
         buildLayout()
         populate()
+        
+        let nameTap = UITapGestureRecognizer(target: self, action: #selector(nameLabelTapped))
+        nameLabel.addGestureRecognizer(nameTap)
     }
     
-    // MARK: - Layout
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        Task {
+            await viewModel.loadStats()
+        }
+    }
+        
     private func buildLayout() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
@@ -178,16 +200,10 @@ class ProfileViewController: UIViewController {
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
         
-        // Nav bar
         contentView.addSubview(titleLabel)
-        contentView.addSubview(settingsButton)
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            settingsButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
-            settingsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            settingsButton.widthAnchor.constraint(equalToConstant: 36),
-            settingsButton.heightAnchor.constraint(equalToConstant: 36)
+            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
         ])
         
         // Avatar container
@@ -197,7 +213,6 @@ class ProfileViewController: UIViewController {
         avatarContainer.addSubview(avatarImageView)
         avatarContainer.addSubview(editAvatarButton)
         avatarContainer.addSubview(nameLabel)
-        avatarContainer.addSubview(emailLabel)
         
         NSLayoutConstraint.activate([
             avatarContainer.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
@@ -217,21 +232,16 @@ class ProfileViewController: UIViewController {
             nameLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 14),
             nameLabel.leadingAnchor.constraint(equalTo: avatarContainer.leadingAnchor, constant: 20),
             nameLabel.trailingAnchor.constraint(equalTo: avatarContainer.trailingAnchor, constant: -20),
-            
-            emailLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
-            emailLabel.leadingAnchor.constraint(equalTo: avatarContainer.leadingAnchor, constant: 20),
-            emailLabel.trailingAnchor.constraint(equalTo: avatarContainer.trailingAnchor, constant: -20),
-            emailLabel.bottomAnchor.constraint(equalTo: avatarContainer.bottomAnchor)
+            nameLabel.bottomAnchor.constraint(equalTo: avatarContainer.bottomAnchor)
         ])
         
-        // Stats section label
+        // Stats
         contentView.addSubview(statsSectionLabel)
         NSLayoutConstraint.activate([
             statsSectionLabel.topAnchor.constraint(equalTo: avatarContainer.bottomAnchor, constant: 28),
             statsSectionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
         ])
         
-        // Stats card
         contentView.addSubview(statsCard)
         NSLayoutConstraint.activate([
             statsCard.topAnchor.constraint(equalTo: statsSectionLabel.bottomAnchor, constant: 10),
@@ -239,7 +249,6 @@ class ProfileViewController: UIViewController {
             statsCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             statsCard.heightAnchor.constraint(equalToConstant: 88)
         ])
-        
         buildStatsCard()
         
         // Menu card
@@ -251,34 +260,35 @@ class ProfileViewController: UIViewController {
         ])
         buildMenuCard()
         
-        // Logout
-        contentView.addSubview(logoutButton)
+        // Data & About card
+        contentView.addSubview(dataCard)
         NSLayoutConstraint.activate([
-            logoutButton.topAnchor.constraint(equalTo: menuCard.bottomAnchor, constant: 24),
-            logoutButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            logoutButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            logoutButton.heightAnchor.constraint(equalToConstant: 56)
+            dataCard.topAnchor.constraint(equalTo: menuCard.bottomAnchor, constant: 20),
+            dataCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            dataCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
         ])
+        buildDataCard()
         
         // Version
         contentView.addSubview(versionLabel)
         NSLayoutConstraint.activate([
-            versionLabel.topAnchor.constraint(equalTo: logoutButton.bottomAnchor, constant: 20),
+            versionLabel.topAnchor.constraint(equalTo: dataCard.bottomAnchor, constant: 20),
             versionLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             versionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -32)
         ])
     }
     
     private func buildStatsCard() {
-        let stats: [(value: String, label: String)] = [
-            ("24", "TRIPS"),
-            ("12", "COUNTRIES"),
-            ("458", "PHOTOS")
-        ]
+        let tripsVal = UILabel()
+        let daysVal = UILabel()
+        let ticketsVal = UILabel()
+        tripsValueLabel = tripsVal
+        daysValueLabel = daysVal
+        ticketsValueLabel = ticketsVal
         
-        let col1 = makeStatCol(value: stats[0].value, label: stats[0].label)
-        let col2 = makeStatCol(value: stats[1].value, label: stats[1].label)
-        let col3 = makeStatCol(value: stats[2].value, label: stats[2].label)
+        let col1 = makeStatCol(valueLabel: tripsVal, caption: "TRIPS")
+        let col2 = makeStatCol(valueLabel: daysVal, caption: "DAYS TRAVELED")
+        let col3 = makeStatCol(valueLabel: ticketsVal, caption: "TICKETS")
         let div1 = vDiv()
         let div2 = vDiv()
         
@@ -292,7 +302,6 @@ class ProfileViewController: UIViewController {
             col1.bottomAnchor.constraint(equalTo: statsCard.bottomAnchor),
             col1.leadingAnchor.constraint(equalTo: statsCard.leadingAnchor),
             
-            // div1
             div1.centerYAnchor.constraint(equalTo: statsCard.centerYAnchor),
             div1.leadingAnchor.constraint(equalTo: col1.trailingAnchor),
             
@@ -301,7 +310,6 @@ class ProfileViewController: UIViewController {
             col2.leadingAnchor.constraint(equalTo: div1.trailingAnchor),
             col2.widthAnchor.constraint(equalTo: col1.widthAnchor),
             
-            // div2
             div2.centerYAnchor.constraint(equalTo: statsCard.centerYAnchor),
             div2.leadingAnchor.constraint(equalTo: col2.trailingAnchor),
             
@@ -327,8 +335,9 @@ class ProfileViewController: UIViewController {
         
         for (i, item) in menuItems.enumerated() {
             let row = makeMenuRow(icon: item.icon, title: item.title)
+            row.tag = i
             menuCard.addSubview(row)
-                        
+            
             NSLayoutConstraint.activate([
                 row.leadingAnchor.constraint(equalTo: menuCard.leadingAnchor),
                 row.trailingAnchor.constraint(equalTo: menuCard.trailingAnchor),
@@ -344,7 +353,6 @@ class ProfileViewController: UIViewController {
             if i == menuItems.count - 1 {
                 row.bottomAnchor.constraint(equalTo: menuCard.bottomAnchor).isActive = true
             } else {
-                // Separator
                 let sep = UIView()
                 sep.backgroundColor = UIColor(hex: "F1F5F9")
                 sep.translatesAutoresizingMaskIntoConstraints = false
@@ -361,32 +369,93 @@ class ProfileViewController: UIViewController {
         }
     }
     
+    private func buildDataCard() {
+        let privacySep = UIView()
+        let termsSep = UIView()
+        [privacySep, termsSep].forEach {
+            $0.backgroundColor = UIColor(hex: "F1F5F9")
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        [deleteAllDataButton, privacySep, privacyPolicyButton, termsSep, termsButton].forEach {
+            dataCard.addSubview($0)
+        }
+        
+        NSLayoutConstraint.activate([
+            deleteAllDataButton.topAnchor.constraint(equalTo: dataCard.topAnchor),
+            deleteAllDataButton.leadingAnchor.constraint(equalTo: dataCard.leadingAnchor),
+            deleteAllDataButton.trailingAnchor.constraint(equalTo: dataCard.trailingAnchor),
+            deleteAllDataButton.heightAnchor.constraint(equalToConstant: 52),
+            
+            privacySep.topAnchor.constraint(equalTo: deleteAllDataButton.bottomAnchor),
+            privacySep.leadingAnchor.constraint(equalTo: dataCard.leadingAnchor, constant: 16),
+            privacySep.trailingAnchor.constraint(equalTo: dataCard.trailingAnchor, constant: -16),
+            privacySep.heightAnchor.constraint(equalToConstant: 1),
+            
+            privacyPolicyButton.topAnchor.constraint(equalTo: privacySep.bottomAnchor),
+            privacyPolicyButton.leadingAnchor.constraint(equalTo: dataCard.leadingAnchor),
+            privacyPolicyButton.trailingAnchor.constraint(equalTo: dataCard.trailingAnchor),
+            privacyPolicyButton.heightAnchor.constraint(equalToConstant: 52),
+            
+            termsSep.topAnchor.constraint(equalTo: privacyPolicyButton.bottomAnchor),
+            termsSep.leadingAnchor.constraint(equalTo: dataCard.leadingAnchor, constant: 16),
+            termsSep.trailingAnchor.constraint(equalTo: dataCard.trailingAnchor, constant: -16),
+            termsSep.heightAnchor.constraint(equalToConstant: 1),
+            
+            termsButton.topAnchor.constraint(equalTo: termsSep.bottomAnchor),
+            termsButton.leadingAnchor.constraint(equalTo: dataCard.leadingAnchor),
+            termsButton.trailingAnchor.constraint(equalTo: dataCard.trailingAnchor),
+            termsButton.heightAnchor.constraint(equalToConstant: 52),
+            termsButton.bottomAnchor.constraint(equalTo: dataCard.bottomAnchor)
+        ])
+    }
+    
     // MARK: - Populate
     
     private func populate() {
-        nameLabel.text  = "Julian Anderson"
-        emailLabel.text = "julian.travels@icloud.com"
-        avatarImageView.backgroundColor = UIColor(hex: "94A3B8")
+        nameLabel.text = viewModel.userName
+        avatarImageView.image = viewModel.avatarImage
+        if viewModel.avatarImage == nil {
+            avatarImageView.backgroundColor = UIColor(hex: "94A3B8")
+        }
+        
+        let bundleVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
+        versionLabel.attributedText = NSAttributedString(string: "VERSION \(bundleVersion) (\(build))", attributes: [
+            .kern: 1.0
+        ])
+        
+        updateStatsLabels()
+        viewModel.onStatsUpdated = { [weak self] in
+            self?.updateStatsLabels()
+        }
+    }
+    
+    private func updateStatsLabels() {
+        tripsValueLabel?.text = "\(viewModel.tripsCount)"
+        daysValueLabel?.text = "\(viewModel.daysTraveled)"
+        ticketsValueLabel?.text = "\(viewModel.ticketsCount)"
     }
     
     // MARK: - Factory
     
-    private func makeStatCol(value: String, label: String) -> UIView {
-        let valLbl = UILabel()
-        valLbl.text = value
-        valLbl.font = UIFont.systemFont(ofSize: 26, weight: .bold)
-        valLbl.textColor = UIColor(hex: "0F172A")
-        valLbl.textAlignment = .center
+    private func makeStatCol(valueLabel: UILabel, caption: String) -> UIView {
+        valueLabel.font = .systemFont(ofSize: 26, weight: .bold)
+        valueLabel.textColor = UIColor(hex: "0F172A")
+        valueLabel.textAlignment = .center
+        valueLabel.text = "0"
         
         let capLbl = UILabel()
-        capLbl.attributedText = NSAttributedString(string: label, attributes: [
+        capLbl.attributedText = NSAttributedString(string: caption, attributes: [
             .font: UIFont.systemFont(ofSize: 10, weight: .semibold),
             .foregroundColor: UIColor(hex: "94A3B8"),
             .kern: 0.8
         ])
         capLbl.textAlignment = .center
+        capLbl.numberOfLines = 1
+        capLbl.adjustsFontSizeToFitWidth = true
         
-        let stack = UIStackView(arrangedSubviews: [valLbl, capLbl])
+        let stack = UIStackView(arrangedSubviews: [valueLabel, capLbl])
         stack.axis = .vertical; stack.spacing = 4; stack.alignment = .center
         stack.translatesAutoresizingMaskIntoConstraints = false
         
@@ -394,7 +463,9 @@ class ProfileViewController: UIViewController {
         container.addSubview(stack)
         NSLayoutConstraint.activate([
             stack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            stack.centerYAnchor.constraint(equalTo: container.centerYAnchor)
+            stack.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+            stack.leadingAnchor.constraint(greaterThanOrEqualTo: container.leadingAnchor, constant: 4),
+            stack.trailingAnchor.constraint(lessThanOrEqualTo: container.trailingAnchor, constant: -4)
         ])
         return container
     }
@@ -413,7 +484,7 @@ class ProfileViewController: UIViewController {
         
         let titleLbl = UILabel()
         titleLbl.text = title
-        titleLbl.font = UIFont.systemFont(ofSize: 15, weight: .medium)
+        titleLbl.font = .systemFont(ofSize: 15, weight: .medium)
         titleLbl.textColor = UIColor(hex: "0F172A")
         titleLbl.translatesAutoresizingMaskIntoConstraints = false
         
@@ -440,27 +511,113 @@ class ProfileViewController: UIViewController {
             chevron.centerYAnchor.constraint(equalTo: container.centerYAnchor)
         ])
         
-        // Tap highlight
         let tap = UITapGestureRecognizer(target: self, action: #selector(menuRowTapped(_:)))
         container.addGestureRecognizer(tap)
         
         return container
     }
     
+    private func makeLinkButton(title: String, action: Selector) -> UIButton {
+        let b = UIButton(type: .system)
+        b.setTitle(title, for: .normal)
+        b.setTitleColor(UIColor(hex: "0F172A"), for: .normal)
+        b.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
+        b.contentHorizontalAlignment = .left
+        b.contentEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        b.translatesAutoresizingMaskIntoConstraints = false
+        b.addTarget(self, action: action, for: .touchUpInside)
+        return b
+    }
+    
     // MARK: - Actions
     
-    @objc private func logoutTapped() {
-        UIView.animate(withDuration: 0.1, animations: {
-            self.logoutButton.transform = CGAffineTransform(scaleX: 0.97, y: 0.97)
-        }) { _ in
-            UIView.animate(withDuration: 0.15) { self.logoutButton.transform = .identity }
+    @objc private func editAvatarTapped() {
+        let status = PHPhotoLibrary.authorizationStatus()
+        if status == .authorized || status == .limited {
+            presentPhotoPicker()
+        } else if status == .notDetermined {
+            PHPhotoLibrary.requestAuthorization { [weak self] newStatus in
+                DispatchQueue.main.async {
+                    if newStatus == .authorized || newStatus == .limited {
+                        self?.presentPhotoPicker()
+                    }
+                }
+            }
         }
+    }
+    
+    private func presentPhotoPicker() {
+        var config = PHPickerConfiguration()
+        config.filter = .images
+        config.selectionLimit = 1
+        let picker = PHPickerViewController(configuration: config)
+        picker.delegate = self
+        present(picker, animated: true)
+    }
+    
+    @objc private func nameLabelTapped() {
+        let alert = UIAlertController(title: "Edit Name", message: nil, preferredStyle: .alert)
+        alert.addTextField { [weak self] tf in
+            tf.text = self?.viewModel.userName
+            tf.autocapitalizationType = .words
+        }
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Save", style: .default) { [weak self, weak alert] _ in
+            guard let text = alert?.textFields?.first?.text else { return }
+            self?.viewModel.updateName(text)
+            self?.nameLabel.text = self?.viewModel.userName
+        })
+        present(alert, animated: true)
+    }
+    
+    @objc private func deleteAllDataTapped() {
+        let alert = UIAlertController(
+            title: "Delete All Data?",
+            message: "This will permanently delete all your trips, events, and tickets. This action cannot be undone.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+            Task {
+                await self?.viewModel.deleteAllData()
+            }
+        })
+        present(alert, animated: true)
+    }
+    
+    @objc private func privacyPolicyTapped() {
+        onPrivacyPolicyTapped?()
+    }
+    
+    @objc private func termsTapped() {
+        onTermsTapped?()
     }
     
     @objc private func menuRowTapped(_ gesture: UITapGestureRecognizer) {
         guard let v = gesture.view else { return }
         UIView.animate(withDuration: 0.1, animations: { v.alpha = 0.5 }) { _ in
             UIView.animate(withDuration: 0.15) { v.alpha = 1 }
+        }
+        
+        switch menuItems[v.tag].action {
+        case .personalInfo: onPersonalInfoTapped?()
+        case .preferences: onPreferencesTapped?()
+        case .exportData: onExportDataTapped?()
+        case .help: onHelpTapped?()
+        }
+    }
+}
+
+extension ProfileViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+        guard let provider = results.first?.itemProvider, provider.canLoadObject(ofClass: UIImage.self) else { return }
+        provider.loadObject(ofClass: UIImage.self) { [weak self] object, _ in
+            guard let image = object as? UIImage else { return }
+            DispatchQueue.main.async {
+                self?.viewModel.updateAvatar(image)
+                self?.avatarImageView.image = image
+            }
         }
     }
 }
