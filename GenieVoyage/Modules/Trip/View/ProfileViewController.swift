@@ -100,8 +100,8 @@ class ProfileViewController: UIViewController {
     private let statsSectionLabel: UILabel = {
         let l = UILabel()
         l.attributedText = NSAttributedString(string: "MY STATS", attributes: [
-            .font: UIFont.systemFont(ofSize: 11, weight: .bold),
-            .foregroundColor: UIColor(hex: "94A3B8"),
+            .font: UIFont.systemFont(ofSize: 15, weight: .bold),
+            .foregroundColor: AppTheme.Colors.textGray,
             .kern: 1.5
         ])
         l.translatesAutoresizingMaskIntoConstraints = false
@@ -147,7 +147,7 @@ class ProfileViewController: UIViewController {
         let b = UIButton(type: .system)
         b.setTitle("Delete All Data", for: .normal)
         b.setTitleColor(.systemRed, for: .normal)
-        b.titleLabel?.font = .systemFont(ofSize: 15, weight: .semibold)
+        b.titleLabel?.font = .boldSystemFont(ofSize: 17)
         b.contentHorizontalAlignment = .left
         b.contentEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         b.translatesAutoresizingMaskIntoConstraints = false
@@ -161,7 +161,7 @@ class ProfileViewController: UIViewController {
     private let versionLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 12, weight: .medium)
-        l.textColor = UIColor(hex: "94A3B8")
+        l.textColor = AppTheme.Colors.textGray
         l.textAlignment = .center
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
@@ -447,8 +447,8 @@ class ProfileViewController: UIViewController {
         
         let capLbl = UILabel()
         capLbl.attributedText = NSAttributedString(string: caption, attributes: [
-            .font: UIFont.systemFont(ofSize: 10, weight: .semibold),
-            .foregroundColor: UIColor(hex: "94A3B8"),
+            .font: UIFont.systemFont(ofSize: 12, weight: .semibold),
+            .foregroundColor: AppTheme.Colors.textGray,
             .kern: 0.8
         ])
         capLbl.textAlignment = .center
@@ -478,14 +478,13 @@ class ProfileViewController: UIViewController {
         let iconIV = UIImageView()
         let cfg = UIImage.SymbolConfiguration(pointSize: 18, weight: .regular)
         iconIV.image = UIImage(systemName: icon, withConfiguration: cfg)
-        iconIV.tintColor = UIColor(hex: "64748B")
+        iconIV.tintColor = AppTheme.Colors.textGray
         iconIV.contentMode = .scaleAspectFit
         iconIV.translatesAutoresizingMaskIntoConstraints = false
         
         let titleLbl = UILabel()
         titleLbl.text = title
-        titleLbl.font = .systemFont(ofSize: 15, weight: .medium)
-        titleLbl.textColor = UIColor(hex: "0F172A")
+        titleLbl.font = .boldSystemFont(ofSize: 17)
         titleLbl.translatesAutoresizingMaskIntoConstraints = false
         
         let chevron = UIImageView()
@@ -521,7 +520,7 @@ class ProfileViewController: UIViewController {
         let b = UIButton(type: .system)
         b.setTitle(title, for: .normal)
         b.setTitleColor(UIColor(hex: "0F172A"), for: .normal)
-        b.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
+        b.titleLabel?.font = .boldSystemFont(ofSize: 17)
         b.contentHorizontalAlignment = .left
         b.contentEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         b.translatesAutoresizingMaskIntoConstraints = false

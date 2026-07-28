@@ -41,7 +41,7 @@ class TemplateListViewController: UIViewController {
         let l = UILabel()
         l.text = "EXPLORE THE WORLD"
         l.font = .systemFont(ofSize: 12, weight: .semibold)
-        l.textColor = .systemGray
+        l.textColor = AppTheme.Colors.textGray
         l.letterSpacing(1.5)
         return l
     }()

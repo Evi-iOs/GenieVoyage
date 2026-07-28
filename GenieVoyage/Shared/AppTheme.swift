@@ -34,7 +34,7 @@ enum AppTheme {
         // Text
         static let textPrimary    = UIColor(hex: "0F172A")
         static let textSecondary  = UIColor(hex: "64748B")
-        static let textGray       = UIColor(hex: "94A3B8")
+        static let textGray       = UIColor.systemGray
         static let textOnDark     = UIColor.white
 
         // Status
