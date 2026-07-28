@@ -26,7 +26,7 @@ final class HeaderView: UICollectionReusableView {
     }
 
     private func setup() {
-        titleLabel.font = .boldSystemFont(ofSize: 18)
+        titleLabel.font = .systemFont(ofSize: 28, weight: .bold)
         titleLabel.textColor = .label
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
 

@@ -29,9 +29,8 @@ final class TripListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Trips"
         view.backgroundColor = .systemBackground
-        navigationController?.navigationBar.tintColor = .darkGray
+        navigationController?.setNavigationBarHidden(true, animated: false)
         setupCollectionView()
         bindViewModel()
         loadMyTrips()
