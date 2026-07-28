@@ -36,6 +36,7 @@ class TemplateListViewController: UIViewController {
     }()
     
     private let headerView = UIView()
+    
     private let exploreLabel: UILabel = {
         let l = UILabel()
         l.text = "EXPLORE THE WORLD"
@@ -44,6 +45,7 @@ class TemplateListViewController: UIViewController {
         l.letterSpacing(1.5)
         return l
     }()
+    
     private let discoverLabel: UILabel = {
         let l = UILabel()
         l.text = "Discover"
@@ -51,16 +53,10 @@ class TemplateListViewController: UIViewController {
         l.textColor = .label
         return l
     }()
-    private let notificationButton: UIButton = {
-        let b = UIButton(type: .system)
-        let img = UIImage(systemName: "bell", withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .medium))
-        b.setImage(img, for: .normal)
-        b.tintColor = .label
-        return b
-    }()
+    
     private let avatarImageView: UIImageView = {
         let iv = UIImageView()
-        iv.backgroundColor = UIColor.red
+        iv.backgroundColor = UIColor(hex: "CBD5E1")
         iv.layer.cornerRadius = 18
         iv.clipsToBounds = true
         iv.widthAnchor.constraint(equalToConstant: 36).isActive = true
@@ -154,9 +150,7 @@ class TemplateListViewController: UIViewController {
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()
-    
-    // MARK: - Lifecycle
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -176,6 +170,12 @@ class TemplateListViewController: UIViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        avatarImageView.image = viewModel.loadAvatarFromDisk()
+    }
+    
     // MARK: - Layout
     
     private func setupLayout() {
@@ -193,15 +193,11 @@ class TemplateListViewController: UIViewController {
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
         
-        let headerStack = UIStackView(arrangedSubviews: [notificationButton, avatarImageView])
-        headerStack.spacing = 12
-        headerStack.alignment = .center
-        
         let titleStack = UIStackView(arrangedSubviews: [exploreLabel, discoverLabel])
         titleStack.axis = .vertical
         titleStack.spacing = 2
         
-        let topBarStack = UIStackView(arrangedSubviews: [titleStack, headerStack])
+        let topBarStack = UIStackView(arrangedSubviews: [titleStack, avatarImageView])
         topBarStack.alignment = .center
         topBarStack.distribution = .equalSpacing
         topBarStack.translatesAutoresizingMaskIntoConstraints = false

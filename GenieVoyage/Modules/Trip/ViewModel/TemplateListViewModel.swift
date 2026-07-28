@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 final class TemplateListViewModel {
     
@@ -56,6 +57,15 @@ final class TemplateListViewModel {
         selectedCategoryIndex = -1
         categoryTemplates = TripTemplate.allTemplates
         applySearch()
+    }
+    
+    private func avatarURL() -> URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            .appendingPathComponent("profile_avatar.jpg")
+    }
+    
+    func loadAvatarFromDisk() -> UIImage? {
+        UIImage(contentsOfFile: avatarURL().path)
     }
     
     // MARK: - Search
