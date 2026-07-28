@@ -28,14 +28,14 @@ class ProfileViewController: UIViewController {
     private let scrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.showsVerticalScrollIndicator = false
-        sv.backgroundColor = UIColor(hex: "F1F5F9")
+        sv.backgroundColor = AppTheme.Colors.backgroundGray
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
     
     private let contentView: UIView = {
         let v = UIView()
-        v.backgroundColor = UIColor(hex: "F1F5F9")
+        v.backgroundColor = AppTheme.Colors.backgroundGray
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
@@ -169,7 +169,7 @@ class ProfileViewController: UIViewController {
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(hex: "F1F5F9")
+        view.backgroundColor = AppTheme.Colors.backgroundGray
         navigationController?.setNavigationBarHidden(true, animated: false)
         buildLayout()
         populate()

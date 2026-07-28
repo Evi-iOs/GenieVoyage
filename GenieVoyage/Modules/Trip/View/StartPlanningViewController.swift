@@ -80,7 +80,7 @@ class StartPlanningViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(white: 0.97, alpha: 1)
+        view.backgroundColor = AppTheme.Colors.backgroundGray
 
         setupSearchCompleter()
         setupNavBar()
@@ -211,7 +211,7 @@ class StartPlanningViewController: UIViewController {
 
         destinationTextField.placeholder = "Destination name"
         destinationTextField.font = UIFont.systemFont(ofSize: 16)
-        destinationTextField.backgroundColor = UIColor(white: 0.93, alpha: 1)
+        destinationTextField.backgroundColor = AppTheme.Colors.surface
         destinationTextField.layer.cornerRadius = 12
         destinationTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 50))
         destinationTextField.leftViewMode = .always

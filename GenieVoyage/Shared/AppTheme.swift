@@ -27,7 +27,7 @@ enum AppTheme {
         static let accentDark     = UIColor(hex: "1D4ED8")
 
         // Background
-        static let backgroundGray = UIColor(hex: "F1F5F9")
+        static let backgroundGray = UIColor(white: 0.97, alpha: 1)
         static let surface        = UIColor.white
         static let grayFill  = UIColor(hex: "64748B")
 
