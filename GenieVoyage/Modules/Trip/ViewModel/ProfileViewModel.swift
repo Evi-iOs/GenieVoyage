@@ -21,6 +21,10 @@ final class ProfileViewModel {
         didSet { saveAvatar() }
     }
     
+    private(set) var userEmail: String {
+        didSet { UserDefaults.standard.set(userEmail, forKey: "profile.userEmail") }
+    }
+    
     private(set) var tripsCount: Int = 0
     private(set) var daysTraveled: Int = 0
     private(set) var ticketsCount: Int = 0
@@ -31,6 +35,7 @@ final class ProfileViewModel {
         self.tripStorage = tripStorage
         self.ticketFileStorage = ticketFileStorage
         self.userName = UserDefaults.standard.string(forKey: "profile.userName") ?? "Traveler"
+        self.userEmail = UserDefaults.standard.string(forKey: "profile.userEmail") ?? ""
         self.avatarImage = Self.loadAvatarFromDisk()
     }
     
@@ -54,6 +59,11 @@ final class ProfileViewModel {
     
     func updateAvatar(_ image: UIImage) {
         avatarImage = image
+    }
+    
+    func refreshProfileInfo() {
+        userName = UserDefaults.standard.string(forKey: "profile.userName") ?? userName
+        userEmail = UserDefaults.standard.string(forKey: "profile.userEmail") ?? userEmail
     }
     
     // MARK: - Avatar persistence

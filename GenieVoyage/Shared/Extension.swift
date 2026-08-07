@@ -90,14 +90,21 @@ extension UIButton {
     
     func bigBlackButtonStyle(text: String) {
         self.backgroundColor = .black
-        self.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        self.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         self.titleLabel?.textAlignment = .center
         self.setTitle(text, for: .normal)
         self.setTitleColor(.white, for: .normal)
-        self.layer.cornerRadius = 8
-        self.heightAnchor.constraint(equalToConstant: 32).isActive = true
-        self.titleLabel?.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
-        self.titleLabel?.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16).isActive = true
+        self.layer.cornerRadius = 18
+        self.backgroundColor = AppTheme.Colors.primaryDarkBlue
+        self.layer.shadowColor = UIColor(red: 0.08, green: 0.18, blue: 0.35, alpha: 0.45).cgColor
+        self.layer.shadowOffset = CGSize(width: 0, height: 6)
+        self.layer.shadowRadius = 14
+        self.layer.shadowOpacity = 1
+        self.translatesAutoresizingMaskIntoConstraints = false
+        
+//        self.heightAnchor.constraint(equalToConstant: 32).isActive = true
+//        self.titleLabel?.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
+//        self.titleLabel?.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16).isActive = true
     }
     
     func mapsButton(image: String) {
