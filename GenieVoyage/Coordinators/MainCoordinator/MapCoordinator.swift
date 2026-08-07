@@ -57,6 +57,7 @@ final class MapCoordinator: Coordinator {
         }
 
         if push {
+            mapVC.hidesBottomBarWhenPushed = true
             navigationController.pushViewController(mapVC, animated: true)
         } else {
             navigationController.viewControllers = [mapVC]
