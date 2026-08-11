@@ -18,9 +18,7 @@ class DayViewModel: ObservableObject {
     let hours = (0...23).map { String(format: "%02d:00", $0) }
     
     private let calendar: Calendar
-    
-    // MARK: - Init
-    
+        
     init(dateDay: Date, calendar: Calendar = .current) {
         var calendar = calendar
         calendar.timeZone = .current
