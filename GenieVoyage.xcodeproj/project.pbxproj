@@ -76,6 +76,11 @@
 		D0CC3DE7301EB63600E82C1C /* LegalContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3DE6301EB63600E82C1C /* LegalContent.swift */; };
 		D0CC3DE930267DE500E82C1C /* FAQCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3DE830267DE500E82C1C /* FAQCell.swift */; };
 		D0CC3DEB30267E2500E82C1C /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3DEA30267E2500E82C1C /* ContactCell.swift */; };
+		D0CC3E08302B6CC600E82C1C /* TicketsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3E07302B6CC600E82C1C /* TicketsViewModelTests.swift */; };
+		D0CC3E0A302B6D7A00E82C1C /* MockTicketFileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3E09302B6D7A00E82C1C /* MockTicketFileStorage.swift */; };
+		D0CC3E0C302B6FFC00E82C1C /* MockImageStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3E0B302B6FFC00E82C1C /* MockImageStorage.swift */; };
+		D0CC3E0E302B707C00E82C1C /* TestCoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3E0D302B707C00E82C1C /* TestCoreDataStack.swift */; };
+		D0CC3E10302B711800E82C1C /* CoreDataTripStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CC3E0F302B711800E82C1C /* CoreDataTripStorageTests.swift */; };
 		D0D192D22A6FFF9A000853B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */; };
 		D0D192D42A6FFF9A000853B8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D192D32A6FFF9A000853B8 /* SceneDelegate.swift */; };
 		D0D192DC2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D0D192DA2A6FFF9A000853B8 /* GenieVoyage.xcdatamodeld */; };
@@ -212,6 +217,11 @@
 		D0CC3DE6301EB63600E82C1C /* LegalContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegalContent.swift; sourceTree = "<group>"; };
 		D0CC3DE830267DE500E82C1C /* FAQCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQCell.swift; sourceTree = "<group>"; };
 		D0CC3DEA30267E2500E82C1C /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
+		D0CC3E07302B6CC600E82C1C /* TicketsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketsViewModelTests.swift; sourceTree = "<group>"; };
+		D0CC3E09302B6D7A00E82C1C /* MockTicketFileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTicketFileStorage.swift; sourceTree = "<group>"; };
+		D0CC3E0B302B6FFC00E82C1C /* MockImageStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockImageStorage.swift; sourceTree = "<group>"; };
+		D0CC3E0D302B707C00E82C1C /* TestCoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCoreDataStack.swift; sourceTree = "<group>"; };
+		D0CC3E0F302B711800E82C1C /* CoreDataTripStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataTripStorageTests.swift; sourceTree = "<group>"; };
 		D0D192CE2A6FFF9A000853B8 /* GenieVoyage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GenieVoyage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0D192D12A6FFF9A000853B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D0D192D32A6FFF9A000853B8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -636,6 +646,11 @@
 			isa = PBXGroup;
 			children = (
 				D0D192EB2A6FFF9B000853B8 /* GenieVoyageTests.swift */,
+				D0CC3E09302B6D7A00E82C1C /* MockTicketFileStorage.swift */,
+				D0CC3E07302B6CC600E82C1C /* TicketsViewModelTests.swift */,
+				D0CC3E0B302B6FFC00E82C1C /* MockImageStorage.swift */,
+				D0CC3E0D302B707C00E82C1C /* TestCoreDataStack.swift */,
+				D0CC3E0F302B711800E82C1C /* CoreDataTripStorageTests.swift */,
 			);
 			path = GenieVoyageTests;
 			sourceTree = "<group>";
@@ -1024,7 +1039,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0CC3E08302B6CC600E82C1C /* TicketsViewModelTests.swift in Sources */,
+				D0CC3E0E302B707C00E82C1C /* TestCoreDataStack.swift in Sources */,
+				D0CC3E0C302B6FFC00E82C1C /* MockImageStorage.swift in Sources */,
+				D0CC3E0A302B6D7A00E82C1C /* MockTicketFileStorage.swift in Sources */,
 				D0D192EC2A6FFF9B000853B8 /* GenieVoyageTests.swift in Sources */,
+				D0CC3E10302B711800E82C1C /* CoreDataTripStorageTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
