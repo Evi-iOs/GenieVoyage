@@ -48,17 +48,19 @@
 
 ## Screenshots
 
-<img width="1206" height="2622" alt="StartView" src="https://github.com/user-attachments/assets/57f4022f-bd4a-4dec-81d4-f3dc80c38003" />
+<img width="147" height="320" alt="StartView  " src="https://github.com/user-attachments/assets/eb8fd766-b300-4137-9636-6694003be60c" />
 
-<img width="1206" height="2622" alt="WhereToGoView" src="https://github.com/user-attachments/assets/a6373eb9-b0e2-495a-b938-e8926f97b42c" />
-<img width="1206" height="2622" alt="TicketsView" src="https://github.com/user-attachments/assets/7844366e-c22c-4569-9d25-3f96376fc58c" />
-<img width="1206" height="2622" alt="SantoriniView" src="https://github.com/user-attachments/assets/c898d9fe-e599-4970-b453-a736e0b6f94e" />
-<img width="1206" height="2622" alt="ProfileView" src="https://github.com/user-attachments/assets/e9e5044c-8c87-4f2e-bc51-c8ef0df6f22a" />
-<img width="1206" height="2622" alt="ParisDetail" src="https://github.com/user-attachments/assets/9b632f4e-d78a-4ff2-9b84-f79c2348ad59" />
-<img width="1206" height="2622" alt="MyTripView" src="https://github.com/user-attachments/assets/bf80ba53-3945-4a00-99a1-101c5df3a938" />
-<img width="1206" height="2622" alt="MapView" src="https://github.com/user-attachments/assets/d12eef77-d4e5-4ce5-b5a0-1dc3bc4329a6" />
-<img width="1206" height="2622" alt="DiscoverView" src="https://github.com/user-attachments/assets/4bd8000b-0355-4646-b912-d5eb5622fd74" />
-<img width="1206" height="2622" alt="DiscoverDesertView" src="https://github.com/user-attachments/assets/9fa4b61e-5928-49ac-9314-ef8b60a4b065" />
+<img width="147" height="320" alt="DiscoverView  " src="https://github.com/user-attachments/assets/5ae0f481-8068-4210-9ec0-e17c275f960d" />
+
+<img width="147" height="320" alt="MapView  " src="https://github.com/user-attachments/assets/b235429a-7e97-44d2-9525-7526f5ce957b" />
+
+<img width="147" height="320" alt="MyTripView  " src="https://github.com/user-attachments/assets/0c0d59aa-8197-4ed7-88b6-d750b7020290" />
+
+<img width="147" height="320" alt="ParisDetail  " src="https://github.com/user-attachments/assets/39eb0401-d51f-4635-80a1-d05a6c1cd52f" />
+
+<img width="147" height="320" alt="WhereToGoView  " src="https://github.com/user-attachments/assets/62e1ce11-846f-45c1-9fb1-b5a1f225c827" />
+
+<img width="147" height="320" alt="TicketsView  " src="https://github.com/user-attachments/assets/22fa144b-044c-479b-a3fb-150d7765eb2e" />
 
 
 ---
