@@ -27,15 +27,23 @@
 
 ## Tech Stack
 
-| Technology | Usage |
-|-----------|-------|
-| Swift | 
-| UIKit | UI framework |
-| CoreData | Local data persistence |
-| MapKit | Interactive maps |
-| CoreLocation | User location |
-| UIKit Drag & Drop | Event rearrangement |
-
+- **Language:** Swift
+- **UI Framework:** UIKit, 100% programmatic Auto Layout — no Storyboards
+- **Architecture:** MVVM + Coordinator pattern
+- **Persistence:**
+  - CoreData for trip and event data
+  - UserDefaults for single-user profile data (name, email, preferences)
+  - Local file storage for avatar image and attached tickets/documents
+- **Frameworks:**
+  - MapKit — `MKMapView`, custom `MKAnnotation` pins, polyline route overlays
+  - PDFKit / `UIGraphicsPDFRenderer` — PDF report generation
+  - `QLPreviewController` / `UIDocumentPickerDelegate` — file/document handling
+  - `PHPickerViewController` — photo picker for avatar selection
+  - `MFMailComposeViewController` — in-app email support
+  - Combine — reactive bindings between ViewModel and ViewController (`@Published`, `AnyCancellable`)
+- **Testing:** XCTest — unit tests with mock storages and an in-memory `NSPersistentContainer` for CoreData isolation
+- **Design System:** Centralized `AppTheme` (colors, typography, spacing, shadows)
+- **Localization/Compliance:** Built for the German market — `Impressum` (§5 DDG) and `Datenschutzerklärung` (DSGVO) available offline in-app
 ---
 
 ## Requirements
