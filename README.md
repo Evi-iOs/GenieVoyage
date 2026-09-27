@@ -48,19 +48,17 @@
 
 ## Screenshots
 
-<img width="147" height="320" alt="StartView  " src="https://github.com/user-attachments/assets/eb8fd766-b300-4137-9636-6694003be60c" />
+<img width="147" height="320" alt="StartView    " src="https://github.com/user-attachments/assets/0d473db2-4ae1-4ea7-8219-196d0aae05c8" />
 
-<img width="147" height="320" alt="DiscoverView  " src="https://github.com/user-attachments/assets/5ae0f481-8068-4210-9ec0-e17c275f960d" />
+<img width="147" height="320" alt="DiscoverView    " src="https://github.com/user-attachments/assets/9ff3310d-23d1-4346-be98-4479f9bb10c0" />
 
-<img width="147" height="320" alt="MapView  " src="https://github.com/user-attachments/assets/b235429a-7e97-44d2-9525-7526f5ce957b" />
+<img width="147" height="320" alt="SantoriniView    " src="https://github.com/user-attachments/assets/e6b2f490-59c7-4ac3-934e-81db5ed1f7fb" />
 
-<img width="147" height="320" alt="MyTripView  " src="https://github.com/user-attachments/assets/0c0d59aa-8197-4ed7-88b6-d750b7020290" />
+<img width="147" height="320" alt="MyTripView    " src="https://github.com/user-attachments/assets/c1c18876-1544-4d43-bde6-b6910c1b4cbc" />
 
-<img width="147" height="320" alt="ParisDetail  " src="https://github.com/user-attachments/assets/39eb0401-d51f-4635-80a1-d05a6c1cd52f" />
+<img width="147" height="320" alt="MapView    " src="https://github.com/user-attachments/assets/1cb00ea2-437e-433e-81f4-4d98403063a5" />
 
-<img width="147" height="320" alt="WhereToGoView  " src="https://github.com/user-attachments/assets/62e1ce11-846f-45c1-9fb1-b5a1f225c827" />
-
-<img width="147" height="320" alt="TicketsView  " src="https://github.com/user-attachments/assets/22fa144b-044c-479b-a3fb-150d7765eb2e" />
+<img width="147" height="320" alt="TicketsView    " src="https://github.com/user-attachments/assets/7c2e2ae0-0b03-408b-a61d-e2f0fd00d0b7" />
 
 
 ---
